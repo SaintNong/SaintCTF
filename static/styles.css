@@ -18,8 +18,7 @@ body {
     color: #fff;
     text-align: center;
     padding: 20px 0;
-    background-color: #333;
-    border-bottom: 2px solid #444;
+    background-color: #222;
 }
 
 /* Section styling */
@@ -46,7 +45,7 @@ body {
 }
 
 .challenge h2 {
-    color: #4a90e2;
+    color: #964ae2; /* Stylish purple color for numbers to match headers */
 }
 
 .description {
@@ -119,7 +118,7 @@ body {
 #flag-form input[type="submit"] {
     padding: 8px 16px;
     border: none;
-    background-color: #0e6ee5;
+    background-color: #964ae2;
     color: white;
     text-transform: uppercase;
     border-radius: 4px;
@@ -128,7 +127,7 @@ body {
 }
 
 #flag-form input[type="submit"]:hover {
-    background-color: #2196F3;
+    background-color: #b266ff;
 }
 
 /* Section where flag submission form is stored */
@@ -145,7 +144,7 @@ body {
 }
 
 /* Rules */
-#rules-section {
+#rules-section, #home-section {
     text-align: left; /* Align text to the left for better readability */
     padding: 20px; /* Add padding around the section for spacing */
     margin-top: 20px; /* Extra top margin to separate from any elements above */
@@ -185,12 +184,12 @@ ol li:last-child {
 ol li:before {
     content: counter(item) ". "; /* Adds a period after the number */
     counter-increment: item; /* Automatically increments the numbers */
-    color: #4a90e2; /* Stylish blue color for numbers to match headers */
+    color: #964ae2; /* Stylish purple color for numbers to match headers */
     font-weight: bold; /* Makes the numbers bold */
     margin-right: 10px; /* Space between the number and text */
 }
 
 body {
-    background-image: url("/static/miku.png")
+    /*background-image: url("/static/images/miku.png")*/
 }
 

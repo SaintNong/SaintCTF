@@ -43,14 +43,27 @@ def rules():
     return render_template('rules.html')
 
 
+# Favicon
 @app.route('/favicon.ico')
 def favicon():
-    return send_from_directory(STATIC_FOLDER, 'favicon.ico', mimetype='image/vnd.microsoft.icon')
+    return send_from_directory(STATIC_FOLDER, 'images/favicon.ico', mimetype='image/vnd.microsoft.icon')
+
+
+# Robots challenge
+@app.route('/robots.txt')
+def robots():
+    return send_from_directory(STATIC_FOLDER, 'robots.txt')
+
+
+@app.route('/owo_secret.html')
+def owo_secret():
+    return send_from_directory(STATIC_FOLDER, 'owo_secret.html')
 
 
 @app.route('/')
 def index():
     return render_template('index.html')
+
 
 
 if __name__ == '__main__':

@@ -1,9 +1,11 @@
 /* Navigation Bar Styling */
 #main-nav {
-    background-color: #333;
+    background-color: #222222;
     color: #fff;
     padding: 10px 20px;
     text-align: center;
+
+    border-bottom: 1px solid black;
 }
 
 #main-nav ul {
