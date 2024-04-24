@@ -1,0 +1,123 @@
+/* Reset some default styling */
+body, h1, h2, p, ul, li {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+/* Basic body styling */
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: #ddd;
+    background-color: #121212;
+    padding: 20px;
+}
+
+/* Header styling */
+#main-header h1 {
+    color: #fff;
+    text-align: center;
+    padding: 20px 0;
+    background-color: #333;
+    border-bottom: 2px solid #444;
+}
+
+/* Section styling */
+#challenge-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;  /* Keep to space-between to handle most items */
+    padding: 20px;
+    gap: 20px;
+}
+
+/* Individual challenge styling */
+.challenge {
+    flex: 1 1 45%;
+    background-color: #1e1e1e;
+    border: 1px solid #333;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    min-width: 280px;
+    box-sizing: border-box;
+}
+
+.challenge h2 {
+    color: #4a90e2;
+}
+
+.description {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.category, .points, .files, .difficulty {
+
+}
+
+.files ul {
+    padding-left: 20px;
+}
+
+.files li {
+    margin-bottom: 5px;
+}
+
+.files a {
+    color: #4a90e2;
+    text-decoration: none;
+}
+
+.files a:hover {
+    text-decoration: underline;
+}
+
+/* Additional rule for the very last item if alone in a row */
+.challenge:last-child:not(:nth-last-child(2)) {
+    flex-basis: 100%;
+    max-width: 45%;  /* Limit its width to align with others */
+    margin: 0 auto;  /* Center the element */
+}
+
+/* Flag Submission Form Styling */
+#flag-form {
+    display: flex;
+    align-items: center; /* Aligns items vertically in the middle */
+    justify-content: start; /* Aligns items to the start of the form */
+    max-width: 100%; /* Ensures the form does not exceed the container width */
+    margin: 20px 0;
+}
+
+#flag-form input[type="text"] {
+    flex-grow: 1; /* Allows the text input to grow and fill available space */
+    padding: 8px;
+    border: 1px solid #333;
+    background-color: #333;
+    color: #ddd;
+    border-radius: 4px;
+    margin-right: 5px; /* Space between text input and submit button */
+}
+
+#flag-form input[type="text"]:focus {
+    outline: none;
+    border-color: #555;
+}
+
+#flag-form input[type="submit"] {
+    padding: 8px 16px;
+    border: none;
+    background-color: #0e6ee5;
+    color: white;
+    text-transform: uppercase;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#flag-form input[type="submit"]:hover {
+    background-color: #2196F3;
+}
+
+

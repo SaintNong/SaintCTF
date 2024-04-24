@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SaintCTF - Challenges</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+    <!-- Sweet alert -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5/dark.css" />
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>    <!-- as lazy as normal alerts, better than you could make them yourself -->
+
+    <!-- Jquery 3.6.0 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+        $('#flag-form').submit(function(e) {
+                e.preventDefault(); // Prevents default form submission
+                var form = $(this);
+                $.ajax({
+                    type: 'POST',
+                    url: '/submit-flag',
+                    data: form.serialize(),
+                    success: function(response) {
+                        // Using alert to display the response message
+                        Swal.fire({
+                            title: "Correct flag!",
+                            text: response.message,
+                            icon: "success"
+                        });
+                    },
+                    error: function(xhr) {
+                        // Handling error scenario
+                        Swal.fire({
+                            title: "Wrong flag!",
+                            text: "Your flag was wrong.",
+                            icon: "error"
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <header id="main-header">
+        <h1>Challenges</h1>
+    </header>
+
+    <!-- Flag submission form -->
+    <form action="/submit-flag" id="flag-form" method="post">
+        <label for="flag"></label><input type="text" id="flag" name="flag" placeholder="Enter your flag here:">
+        <input type="submit" value="Submit Flag">
+
+        <!-- Response message area -->
+        <p class="responseMessage"></p>
+    </form>
+
+    <section id="challenge-list">
+        {% for challenge in challenges %}
+        <article class="challenge">
+            <!-- Challenge info -->
+            <h2>{{ challenge.name }}</h2>
+            <p class="description"> {{ challenge.description | safe }} </p>
+            <p class="category"><strong>Category:</strong> {{ challenge.category }}</p>
+            <p class="difficulty"><strong>Difficulty:</strong> {{ challenge.difficulty }}</p>
+            <p class="points"><strong>Points:</strong> {{ challenge.points }}</p>
+
+            <!-- Challenge downloads -->
+            <div class="files">
+                <strong>Files:</strong>
+                <ul>
+                {% for file in challenge.files %}
+                    <li><a href="{{ file.url }}" download="{{ file.name }}">{{ file.name }}</a></li>
+                {% endfor %}
+                </ul>
+            </div>
+
+
+        </article>
+        {% endfor %}
+    </section>
+</body>
+</html>
