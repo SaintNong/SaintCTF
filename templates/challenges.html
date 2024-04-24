@@ -13,10 +13,13 @@
     <!-- Jquery 3.6.0 -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
+        // OH MY GOD ITS JQUERY RUNNNNNN
         $(document).ready(function() {
         $('#flag-form').submit(function(e) {
                 e.preventDefault(); // Prevents default form submission
-                var form = $(this);
+                let form = $(this);
+                let input = $('#flag')
+
                 $.ajax({
                     type: 'POST',
                     url: '/submit-flag',
@@ -28,14 +31,20 @@
                             text: response.message,
                             icon: "success"
                         });
+
+                        // Clear input
+                        input.val('');
                     },
                     error: function(xhr) {
                         // Handling error scenario
                         Swal.fire({
-                            title: "Wrong flag!",
-                            text: "Your flag was wrong.",
-                            icon: "error"
+                            title: "Incorrect!",
+                            text:  "This flag is invalid!",
+                            icon:  "error"
                         });
+
+                        // Clear input
+                        input.val('');
                     }
                 });
             });
@@ -47,14 +56,18 @@
         <h1>Challenges</h1>
     </header>
 
-    <!-- Flag submission form -->
-    <form action="/submit-flag" id="flag-form" method="post">
-        <label for="flag"></label><input type="text" id="flag" name="flag" placeholder="Enter your flag here:">
-        <input type="submit" value="Submit Flag">
 
-        <!-- Response message area -->
-        <p class="responseMessage"></p>
-    </form>
+    <section id="flag-section">
+        <h2>Submit Flags here:</h2>
+        <!-- Flag submission form -->
+        <form action="/submit-flag" id="flag-form" method="post">
+            <label for="flag"></label><input type="text" id="flag" name="flag" placeholder="Enter your flag here:">
+            <input type="submit" value="Submit Flag">
+
+            <!-- Response message area -->
+            <p class="responseMessage"></p>
+        </form>
+    </section>
 
     <section id="challenge-list">
         {% for challenge in challenges %}
@@ -66,15 +79,17 @@
             <p class="difficulty"><strong>Difficulty:</strong> {{ challenge.difficulty }}</p>
             <p class="points"><strong>Points:</strong> {{ challenge.points }}</p>
 
-            <!-- Challenge downloads -->
-            <div class="files">
-                <strong>Files:</strong>
-                <ul>
-                {% for file in challenge.files %}
-                    <li><a href="{{ file.url }}" download="{{ file.name }}">{{ file.name }}</a></li>
-                {% endfor %}
-                </ul>
-            </div>
+            {% if challenge.files%}
+                <!-- Challenge downloads -->
+                <div class="files">
+                    <ul>
+                        {% for file in challenge.files %}
+                            <li><a href="{{ file.url }}" download="{{ file.name }}">{{ file.name }}</a></li>
+
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
 
 
         </article>

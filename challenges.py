@@ -1,40 +1,30 @@
 CHALLENGES = [
     {
-        'name': 'Download file',
+        'name': 'Download File',
+        'author': 'ning',
         'description': "They said not to click links from strangers right?",
-        'category': 'web',
-        'difficulty': 'easy',
-        'points': 10,
+        'category': 'misc',
+        'difficulty': 'free',
+        'points': 15,
         'hosted_onsite': True,
         'folder': 'download_file',
         'files': [{'name': 'flag.txt'}],
         'flag': 'saint{w0w_y0u_d0wnl04d3d_s0m3th1ng!}'
-},
-    {
-        'name': 'testing123',
-        'description': 'insert theoretical cryptography here',
-        'category': 'crypto',
-        'difficulty': 'easy',
-        'points': 16000,
-        'hosted_onsite': True,
-        'folder': 'testing123',
-        'files': [{'name': 'test.txt'}],
-
-        'flag': 'saint{ctf}'
-
-
     },
     {
-        'name': 'test',
-        'description': 'I am a wide boi <br> make me not wide',
-        'category': 'web',
-        'difficulty': 'HOW TO DO THIS HELPPP',
-        'points': 102349830342598,
-        'hosted_onsite': False,
-        'folder': 'test',
-        'files': [{'name': 'haha', 'url': 'https://google.com'}],
+        'name': 'Flag format',
+        'author': 'ning',
+        'description': 'Hey, uh I forgot the flag format...\nCould you please find it for me?',
+        'category': 'misc',
+        'difficulty': 'free',
+        'points': 10,
+        'hosted_onsite': True,
+        'folder': 'flag_format',
+        'files': [],
 
-        'flag': 'saint{ctf}'
+        'flag': 'saint{FLAG_FORMAT}'
+
+
     },
 ]
 

@@ -30,5 +30,10 @@ def challenges():
     return render_template('challenges.html', challenges=challenge_manager.challenges)
 
 
+@app.route('/rules')
+def rules():
+    return render_template('rules.html')
+
+
 if __name__ == '__main__':
     app.run(debug=True)

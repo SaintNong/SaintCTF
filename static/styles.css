@@ -32,6 +32,8 @@ body {
     gap: 20px;
 }
 
+
+
 /* Individual challenge styling */
 .challenge {
     flex: 1 1 45%;
@@ -49,21 +51,30 @@ body {
 }
 
 .description {
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin-top: 5px;
+    margin-bottom: 15px;
 }
 
 .category, .points, .files, .difficulty {
 
 }
 
+
 .files ul {
-    padding-left: 20px;
+    padding-top: 15px; /* Separate file downloads from the rest of the challenge */
+
+    padding-left: 0; /* Removes the default padding */
+    display: flex; /* Enables flexbox layout */
+    flex-wrap: wrap; /* Allows items to wrap to the next line if needed */
+    list-style: none; /* Removes default list styling */
+    margin: 0; /* Removes default margin */
 }
 
 .files li {
-    margin-bottom: 5px;
+    margin-right: 20px; /* Adds some space between file links */
+    white-space: nowrap; /* Prevents the text from wrapping */
 }
+
 
 .files a {
     color: #4a90e2;
@@ -73,6 +84,7 @@ body {
 .files a:hover {
     text-decoration: underline;
 }
+
 
 /* Additional rule for the very last item if alone in a row */
 .challenge:last-child:not(:nth-last-child(2)) {
@@ -120,4 +132,61 @@ body {
     background-color: #2196F3;
 }
 
+/* Section where flag submission form is stored */
+#flag-section {
+    width: 400px;
+    float: right;
+    height: 100vh;
 
+    gap: 20px;
+    padding: 30px;
+
+    background-color: #1e1e1e;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* Rules */
+#rules-section {
+    text-align: left; /* Align text to the left for better readability */
+    padding: 20px; /* Add padding around the section for spacing */
+    margin-top: 20px; /* Extra top margin to separate from any elements above */
+    background-color: #1e1e1e; /* Dark background similar to .challenge for consistency */
+    border-radius: 8px; /* Rounded corners for a modern look */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5); /* Subtle shadow for depth */
+    max-width: 800px; /* Restricting maximum width for better line length control */
+    margin-left: auto; /* Center align the section horizontally */
+    margin-right: auto; /* Center align the section horizontally */
+    color: #ddd
+}
+
+#rules-section h1 {
+    padding-left: 50px;
+}
+
+/* Ordered List Styling */
+ol {
+    counter-reset: item;
+    margin: 20px 0; /* Adds vertical space around the list */
+    padding-left: 40px; /* Offset for numbering */
+    list-style-type: decimal; /* Default decimal numbering */
+    color: #ccc; /* Light grey text for better readability against the dark background */
+}
+
+ol li {
+    padding: 10px 0; /* Padding for each list item to space them out */
+    border-bottom: 1px solid #333; /* Subtle border for each item */
+    line-height: 1.8; /* Slightly larger line height for readability */
+}
+
+ol li:last-child {
+    border-bottom: none; /* No border for the last item */
+}
+
+/* Enhancing the number styling */
+ol li:before {
+    content: counter(item) ". "; /* Adds a period after the number */
+    counter-increment: item; /* Automatically increments the numbers */
+    color: #4a90e2; /* Stylish blue color for numbers to match headers */
+    font-weight: bold; /* Makes the numbers bold */
+    margin-right: 10px; /* Space between the number and text */
+}
