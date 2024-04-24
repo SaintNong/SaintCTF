@@ -1,0 +1,27 @@
+/* Navigation Bar Styling */
+#main-nav {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+    text-align: center;
+}
+
+#main-nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+#main-nav ul li {
+    display: inline;
+    margin-right: 10px;
+}
+
+#main-nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+#main-nav ul li a:hover {
+    text-decoration: underline;
+}

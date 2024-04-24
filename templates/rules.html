@@ -3,26 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SaintCTF - Rules</title>
+    <title>Rules | SaintCTF</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='nav.css') }}">
 </head>
 <body>
     <header id="main-header">
-        <h1>SaintCTF Rules</h1>
+        <h1>Rules</h1>
+
+        <nav id="main-nav">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/rules">Rules</a></li>
+                <li><a href="/challenges">Challenges</a></li>
+            </ul>
+        </nav>
     </header>
 
     <section id="rules-section">
-        <h1>The Rules</h1>
+        <h1>Da Rules</h1>
         <article class="rules">
             <h2></h2>
             <ol>
                 <li>The flag format is saint{FLAG_FORMAT}</li>
-                <li>Please don't share flags with other teams, because it would.</li>
+                <li>Please don't just share flags with your friends, tell them how you got the flag in the first place.</li>
+                <li>If you are stuck, consult Mr Mackenzie (or me).</li>
                 <li>Please don't attack the infrastructure (i.e. Ning's computer), that would make him sad.</li>
                 <li>Please DO NOT DDoS the website.</li>
                 <li>Scanning and brute force tools are not required to solve a challenge unless explicitly stated so.</li>
                 <li>This is a game, please have fun.</li>
-                <li>The winners are better than everyone else though.</li>
+                <li>The winners do get (weak) bragging rights though.</li>
             </ol>
         </article>
 

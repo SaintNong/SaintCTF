@@ -1,4 +1,6 @@
-from flask import Flask, request, jsonify, make_response, render_template, send_from_directory
+import os
+
+from flask import Flask, request, jsonify, url_for, render_template, send_from_directory
 from challenges import ChallengeManager
 
 app = Flask(__name__)
@@ -6,6 +8,12 @@ challenge_manager = ChallengeManager()
 
 DATA_FILE = 'users.json'
 DOWNLOAD_FOLDER = 'downloads'
+STATIC_FOLDER = 'static'
+
+
+@app.route('/downloads/')
+def empty_download():
+    return "Nice try, not gonna work tho"
 
 
 # Setup downloads folder
@@ -25,7 +33,7 @@ def submit_flag():
     return jsonify({'success': False, 'message': 'Incorrect flag. Try again!'}), 400
 
 
-@app.route('/')
+@app.route('/challenges')
 def challenges():
     return render_template('challenges.html', challenges=challenge_manager.challenges)
 
@@ -33,6 +41,16 @@ def challenges():
 @app.route('/rules')
 def rules():
     return render_template('rules.html')
+
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(STATIC_FOLDER, 'favicon.ico', mimetype='image/vnd.microsoft.icon')
+
+
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 
 if __name__ == '__main__':

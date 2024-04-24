@@ -11,7 +11,6 @@ body {
     line-height: 1.6;
     color: #ddd;
     background-color: #121212;
-    padding: 20px;
 }
 
 /* Header styling */
@@ -190,3 +189,8 @@ ol li:before {
     font-weight: bold; /* Makes the numbers bold */
     margin-right: 10px; /* Space between the number and text */
 }
+
+body {
+    background-image: url("/static/miku.png")
+}
+

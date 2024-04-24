@@ -12,7 +12,7 @@ CHALLENGES = [
         'flag': 'saint{w0w_y0u_d0wnl04d3d_s0m3th1ng!}'
     },
     {
-        'name': 'Flag format',
+        'name': 'Flag Format',
         'author': 'ning',
         'description': 'Hey, uh I forgot the flag format...\nCould you please find it for me?',
         'category': 'misc',
