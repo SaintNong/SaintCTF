@@ -17,34 +17,43 @@
         // OH MY GOD ITS JQUERY RUNNNNNN
         $(document).ready(function() {
         $('#flag-form').submit(function(e) {
-                e.preventDefault(); // Prevents default form submission
+                // Prevents default ugly form submission
+                e.preventDefault();
+
+                // Extract data
                 let form = $(this);
-                let input = $('#flag')
 
                 $.ajax({
                     type: 'POST',
                     url: '/submit-flag',
-                    data: form.serialize(),
+                    data: form.serialize(), // Pass the form data to the endpoint
+
+                    // When the response comes back
                     success: function(response) {
-                        // Using alert to display the response message
-                        Swal.fire({
-                            title: "Correct flag!",
-                            text: response.message,
-                            icon: "success"
-                        });
+                        console.log(response)
 
-                        // Clear input
-                        input.val('');
+                        // If the flag was correct
+                        if (response.success) {
+                            // Nice checkbox alert
+                            Swal.fire({
+                                title: "Correct flag!",
+                                text: response.message,
+                                icon: "success"
+                            });
+                        } else {
+                            // Nice checkbox alert
+                            Swal.fire({
+                                title: "Wrong flag!",
+                                text: response.message,
+                                icon: "error"
+                            });
+                        }
+
                     },
-                    error: function(xhr) {
-                        // Handling error scenario
-                        Swal.fire({
-                            title: "Incorrect!",
-                            text:  "This flag is invalid!",
-                            icon:  "error"
-                        });
 
-                        // Clear input
+                    // After its all done, we clear the flag input field
+                    complete: function(data) {
+                        let input = $('#flag')
                         input.val('');
                     }
                 });
