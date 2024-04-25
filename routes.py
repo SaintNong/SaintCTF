@@ -51,9 +51,13 @@ def register_routes(app, db, bcrypt, challenge_manager):
             user.password = hashed_password
             user.score = 0
 
+            # Add user to database
             db.session.add(user)
             db.session.commit()
-            return redirect('/')
+
+            # Login the user and send them to the challenges
+            login_user(user)
+            return redirect('/challenges')
 
         else:
             return render_template('register.html')
@@ -73,7 +77,7 @@ def register_routes(app, db, bcrypt, challenge_manager):
             # Check if hashes match
             if bcrypt.check_password_hash(user.password, password):
                 login_user(user)
-                return redirect('/')
+                return redirect('/challenges')
             else:
                 return 'failed'
 

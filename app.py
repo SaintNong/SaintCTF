@@ -6,7 +6,6 @@ from routes import register_routes
 
 from flask_login import UserMixin, LoginManager
 from flask_bcrypt import Bcrypt
-from flask_sqlalchemy import SQLAlchemy
 
 def create_app(test_config=None):
     app = Flask(__name__, template_folder='templates')

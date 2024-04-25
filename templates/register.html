@@ -2,13 +2,28 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Register</title>
+    <title>Register | SaintCTF</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='nav.css') }}">
 </head>
 <body>
+    <header id="main-header">
+        <h1>SaintCTF</h1>
+
+        <nav id="main-nav">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/rules">Rules</a></li>
+                <li><a href="/challenges">Challenges</a></li>
+                <li><a href="/login">Login</a></li>
+                <li><a class="navbar-selected" href="/register">Register</a></li>
+            </ul>
+        </nav>
+    </header>
     <h1>Register</h1>
     <form action="/register" method="POST">
         <input type="text" name="username" placeholder="Username:" required="required"> <br>
-        <input type="text" name="password" placeholder="Password:" required="required">
+        <input type="password" name="password" placeholder="Password:" required="required">
         <input type="submit" value="Sign up">
     </form>
 </body>

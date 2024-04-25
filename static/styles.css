@@ -21,6 +21,7 @@ body {
     background-color: #222;
 }
 
+
 /* Section styling */
 #challenge-list {
     display: flex;
@@ -144,17 +145,25 @@ body {
 }
 
 /* Rules */
-#rules-section, #home-section {
-    text-align: left; /* Align text to the left for better readability */
-    padding: 20px; /* Add padding around the section for spacing */
-    margin-top: 20px; /* Extra top margin to separate from any elements above */
-    background-color: #1e1e1e; /* Dark background similar to .challenge for consistency */
-    border-radius: 8px; /* Rounded corners for a modern look */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5); /* Subtle shadow for depth */
-    max-width: 800px; /* Restricting maximum width for better line length control */
-    margin-left: auto; /* Center align the section horizontally */
-    margin-right: auto; /* Center align the section horizontally */
+#rules-section {
+    text-align: center;
+    padding: 20px;
+    margin-top: 20px;
+    background-color: #1e1e1e;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
     color: #ddd
+}
+
+/* Home page */
+#home-section {
+    text-align: center;
+    margin-top: 50px;
+    padding: 20px;
+
 }
 
 #rules-section h1 {
