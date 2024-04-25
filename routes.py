@@ -15,7 +15,10 @@ def register_routes(app, db, bcrypt, challenge_manager):
     @app.route('/challenges')
     @login_required
     def challenges():
-        return render_template('challenges.html', challenges=challenge_manager.challenges, user=current_user)
+        # Filter out unsolved challenges before passing the challenges to be rendered
+        unsolved_challenges = [challenge for challenge in challenge_manager.challenges
+                               if current_user.username not in challenge['solvers']]
+        return render_template('challenges.html', challenges=unsolved_challenges, user=current_user)
 
     @app.route('/rules')
     def rules():
@@ -44,6 +47,11 @@ def register_routes(app, db, bcrypt, challenge_manager):
             username = request.form.get('username')
             password = request.form.get('password')
 
+            # Make sure user doesn't exist
+            user = User.query.filter(User.username == username).first()
+            if user:
+                return jsonify(status='error', message='That username is taken.')
+
             # Hash password before storing
             hashed_password = bcrypt.generate_password_hash(password)
             user = User()
@@ -55,9 +63,10 @@ def register_routes(app, db, bcrypt, challenge_manager):
             db.session.add(user)
             db.session.commit()
 
-            # Login the user and send them to the challenges
+            # Login the user into the account they created
             login_user(user)
-            return redirect('/challenges')
+
+            return jsonify(status='success', message='User created')
 
         else:
             return render_template('register.html')
@@ -72,15 +81,14 @@ def register_routes(app, db, bcrypt, challenge_manager):
             # Look for specified user
             user = User.query.filter(User.username == username).first()
             if user is None:
-                return 'not registered'
+                return jsonify(status='error', message='Either the username or password is incorrect')
 
             # Check if hashes match
             if bcrypt.check_password_hash(user.password, password):
                 login_user(user)
-                return redirect('/challenges')
+                return jsonify(status='success', message='Logged in successfully')
             else:
-                return 'failed'
-
+                return jsonify(status='error', message='Either the username or password is incorrect')
         else:
             return render_template('login.html')
 
@@ -102,14 +110,14 @@ def register_routes(app, db, bcrypt, challenge_manager):
 
                     challenge['solvers'].append(current_user.username)
 
-                    return jsonify({'success': True, 'message': response_message})
+                    return jsonify({'status': 'correct', 'message': response_message})
 
                 # User is trying to resubmit a flag they already submitted
                 else:
-                    return jsonify({'success': False, 'message': "You've already submitted that flag!"})
+                    return jsonify({'status': 'already_submitted', 'message': "You've already submitted that flag!"})
 
         # No hits on any challenges, wrong flag.
-        return jsonify({'success': False, 'message': 'Incorrect flag. Try again!'})
+        return jsonify({'status': 'wrong', 'message': 'Incorrect flag. Try again!'})
 
     # ==== Misc ====
     # Favicon

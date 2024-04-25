@@ -7,10 +7,16 @@ body, h1, h2, p, ul, li {
 
 /* Basic body styling */
 body {
+    height: 100%; /* Make body fill entire page, but dont extend further */
     font-family: Arial, sans-serif;
     line-height: 1.6;
     color: #ddd;
     background-color: #121212;
+}
+
+/* Disable scroll on the page, except when we want it */
+html, body {
+    overflow: hidden;
 }
 
 /* Header styling */
@@ -24,29 +30,19 @@ body {
 
 /* Section styling */
 #challenge-list {
-    display: flex;
-    flex-wrap: wrap;
+    /*display: flex;*/
+    /*flex-wrap: wrap;*/
     justify-content: space-between;  /* Keep to space-between to handle most items */
-    padding: 20px;
+    padding: 40px;
     gap: 20px;
+    height: 800px;
+    overflow-y: auto; /* Scrollable */
 }
 
 
-
-/* Individual challenge styling */
-.challenge {
-    flex: 1 1 45%;
-    background-color: #1e1e1e;
-    border: 1px solid #333;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
-    min-width: 280px;
-    box-sizing: border-box;
-}
 
 .challenge h2 {
-    color: #964ae2; /* Stylish purple color for numbers to match headers */
+    color: #964ae2; /* purple */
 }
 
 .description {
@@ -54,9 +50,11 @@ body {
     margin-bottom: 15px;
 }
 
+
 .category, .points, .files, .difficulty {
 
 }
+
 
 
 .files ul {
@@ -85,16 +83,10 @@ body {
 }
 
 
-/* Additional rule for the very last item if alone in a row */
-.challenge:last-child:not(:nth-last-child(2)) {
-    flex-basis: 100%;
-    max-width: 45%;  /* Limit its width to align with others */
-    margin: 0 auto;  /* Center the element */
-}
 
 /* Login form styling */
 /* styles.css */
-#login-form {
+#login-section {
     width: 400px; /* Width adjusted for a larger form */
     margin: 80px auto; /* Increased vertical margin for more central focus */
     padding: 40px; /* Increased padding for a spacious interior */
@@ -104,20 +96,20 @@ body {
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.9); /* Enhanced shadow for a deeper 3D effect */
 }
 
-#login-form h1 {
+#login-section h1 {
     text-align: center;
     color: #964ae2; /* Purple accent for the title */
     font-size: 24px; /* Larger font size for visibility */
     margin-bottom: 30px; /* More space below the header */
 }
 
-#login-form form {
+#login-section form {
     display: flex;
     flex-direction: column;
 }
 
-#login-form input[type="text"],
-#login-form input[type="password"] {
+#login-section input[type="text"],
+#login-section input[type="password"] {
     padding: 15px; /* Comfortable padding */
     margin-bottom: 15px; /* Adequate spacing between fields */
     border: 1px solid #333; /* Darker border to match the outer border */
@@ -127,7 +119,7 @@ body {
     font-size: 16px; /* Increased font size for ease of reading */
 }
 
-#login-form input[type="submit"] {
+#login-section input[type="submit"] {
     padding: 15px; /* Generous padding for a substantial button */
     color: white;
     background-color: #964ae2; /* Purple accent color */
@@ -138,23 +130,23 @@ body {
     font-size: 16px; /* Larger text for a bold statement */
 }
 
-#login-form input[type="submit"]:hover {
+#login-section input[type="submit"]:hover {
     background-color: #7329c4; /* Darker purple on hover for visual feedback */
 }
 
-#login-form p {
+#login-section p {
     color: #ccc; /* Light grey color for readability against the dark background */
     font-size: 14px; /* Slightly smaller font size for less emphasis compared to input fields */
     text-align: center; /* Center-align text for consistency with the form's alignment */
     margin-top: 20px; /* Spacing above the paragraph to separate it from the form */
 }
 
-#login-form a {
+#login-section a {
     color: #964ae2; /* Purple color for the link to match the accent color */
     text-decoration: none; /* No underline to keep it clean and modern */
 }
 
-#login-form a:hover {
+#login-section a:hover {
     color: #7329c4; /* Darker purple on hover for visual feedback */
     text-decoration: underline; /* Underline on hover to indicate it's clickable */
 }
@@ -166,7 +158,7 @@ body {
     align-items: center; /* Aligns items vertically in the middle */
     justify-content: start; /* Aligns items to the start of the form */
     max-width: 100%; /* Ensures the form does not exceed the container width */
-    margin: 20px 0;
+    margin-bottom: 20px;
 }
 
 #flag-form input[type="text"] {
@@ -196,10 +188,10 @@ body {
 }
 
 #flag-form input[type="submit"]:hover {
-    background-color: #b266ff;
+    background-color: #7329c4; /* Darker purple on hover for visual feedback */
 }
 
-/* Section where flag submission form is stored */
+/* Section where flag submission form, and filter form is stored */
 #flag-section {
     width: 400px;
     float: right;
@@ -210,6 +202,10 @@ body {
 
     background-color: #1e1e1e;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+#flag-section h2 {
+    font-size: 22px;
 }
 
 /* Rules */
@@ -225,6 +221,47 @@ body {
     margin-right: auto;
     color: #ddd
 }
+
+#filter-form {
+    /* Centering the form */
+    margin: 0 auto 30px;
+}
+
+#filter-form select {
+    background-color: #333; /* Darker background for input fields */
+    color: #ccc; /* Light gray text color */
+    border: none;
+    padding: 10px;
+    margin-bottom: 10px; /* Spacing between form elements */
+    width: 100%; /* Full width */
+    border-radius: 4px; /* Slightly rounded edges for inputs */
+}
+
+#filter-form input[type="submit"] {
+    background-color: #964ae2; /* Stylish purple color for numbers to match headers */
+    color: #fff; /* White text */
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s; /* Transition for hover effect */
+    width: 100%; /* Full width */
+    border-radius: 4px; /* Rounded edges */
+}
+
+#filter-form input[type="submit"]:hover {
+    background-color: #7329c4; /* Darker purple on hover for visual feedback */
+}
+
+/* Style for the challenge listings */
+#challenge-list .challenge {
+    background-color: #222; /* Dark background for each challenge */
+    padding: 15px;
+    margin-top: 10px;
+    border-radius: 8px; /* Rounded corners for challenge cards */
+    border-left: 5px solid #7329c4; /* Stylish left border */
+}
+
+
 
 /* Home page */
 #home-section {
@@ -253,9 +290,6 @@ ol li {
     line-height: 1.8; /* Slightly larger line height for readability */
 }
 
-ol li:last-child {
-    border-bottom: none; /* No border for the last item */
-}
 
 /* Enhancing the number styling */
 ol li:before {

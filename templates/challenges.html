@@ -33,15 +33,32 @@
                         console.log(response)
 
                         // If the flag was correct
-                        if (response.success) {
-                            // Nice checkbox alert
+                        if (response.status === 'correct') {
+                            // Correct alert
                             Swal.fire({
                                 title: "Correct flag!",
                                 text: response.message,
                                 icon: "success"
+
+                            }).then(
+                                function() {
+                                    // Reload page after the user dismisses the alert
+                                    // This is to update the solved challenges and user score
+                                    window.location.reload()
+                                }
+                            );
+
+
+                        } else if (response.status === 'already_submitted') {
+                            // Already submitted alert
+                            Swal.fire({
+                                title: "Already submitted!",
+                                text: response.message,
+                                icon: "warning"
                             });
+
                         } else {
-                            // Nice checkbox alert
+                            // Wrong alert
                             Swal.fire({
                                 title: "Wrong flag!",
                                 text: response.message,
@@ -55,6 +72,29 @@
                     complete: function(data) {
                         let input = $('#flag')
                         input.val('');
+                    }
+                });
+            });
+        });
+
+
+        // Script for challenge filtering
+        $(document).ready(function() {
+            $('#filter-form').submit(function(e) {
+                e.preventDefault();
+
+                const selectedCategory = $('[name="category"]').val();
+                const selectedDifficulty = $('[name="difficulty"]').val();
+
+                $('.challenge').each(function() {
+                    const challenge = $(this);
+                    const matchesCategory = selectedCategory === "" || challenge.data('category') === selectedCategory;
+                    const matchesDifficulty = selectedDifficulty === "" || challenge.data('difficulty') === selectedDifficulty;
+
+                    if (matchesCategory && matchesDifficulty) {
+                        challenge.show();
+                    } else {
+                        challenge.hide();
                     }
                 });
             });
@@ -76,9 +116,31 @@
         </nav>
     </header>
 
-
     <section id="flag-section">
-        <h2>Flag Submission:</h2>
+        <h2>Filter Challenges</h2>
+        <!-- Challenge filtering form -->
+        <form id="filter-form">
+            <select name="category">
+                <option value="">All Categories</option>
+                <option value="web">web</option>
+                <option value="crypto">crypto</option>
+                <option value="pwn">pwn</option>
+                <option value="rev">rev</option>
+                <option value="osint">osint</option>
+                <option value="misc">misc</option>
+            </select>
+            <select name="difficulty">
+                <option value="">All Difficulties</option>
+                <option value="free">free</option>
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+            </select>
+            <input type="submit" value="Filter">
+        </form>
+
+
+        <h2>Flag Submission</h2>
         <!-- Flag submission form -->
         <form action="/submit-flag" id="flag-form" method="post">
             <label for="flag"></label><input type="text" id="flag" name="flag" placeholder="saint{EXAMPLE_FLAG}">
@@ -88,17 +150,20 @@
 
         <strong>Hello {{ current_user.username }}</strong> <br>
         <strong>You have {{ current_user.score }} points</strong>
+
     </section>
 
     <section id="challenge-list">
         {% for challenge in challenges %}
-        <article class="challenge">
+        <article class="challenge" data-category="{{ challenge.category }}" data-difficulty="{{ challenge.difficulty }}">
             <!-- Challenge info -->
             <h2>{{ challenge.name }}</h2>
             <p class="description"> {{ challenge.description | safe }} </p>
             <p class="category"><strong>Category:</strong> {{ challenge.category }}</p>
             <p class="difficulty"><strong>Difficulty:</strong> {{ challenge.difficulty }}</p>
             <p class="points"><strong>Points:</strong> {{ challenge.points }}</p>
+            <p class="author"><strong>Author:</strong> {{ challenge.author }}</p>
+
 
             {% if challenge.files%}
                 <!-- Challenge downloads -->

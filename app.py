@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, request, jsonify, render_template, send_from_directory
+from flask import Flask, redirect
 from challenges import ChallengeManager
 from routes import register_routes
 
@@ -25,6 +25,10 @@ def create_app(test_config=None):
     @login_manager.user_loader
     def load_user(user_id):
         return User.query.get(user_id)
+
+    @login_manager.unauthorized_handler
+    def unauthorised():
+        return redirect('/register')
 
     bcrypt = Bcrypt()
     bcrypt.init_app(app)

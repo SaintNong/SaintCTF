@@ -45,4 +45,19 @@ CHALLENGES = [
         'solvers': []
 
     },
+    {
+        'name': 'Very secure censorship',
+        'author': 'alex',
+        'description': 'This flag contains top secret information,\nso I decided to pixelate it.',
+        'category': 'misc',
+        'difficulty': 'medium',
+        'points': 100,
+        'hosted_onsite': True,
+        'folder': 'depixelation',
+        'files': [{'name' : 'redacted.png'}],
+
+        'flag': 'saint{unr3d4ct3d}',
+        'solvers': []
+
+    }
 ]
