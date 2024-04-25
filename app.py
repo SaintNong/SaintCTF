@@ -4,38 +4,46 @@ from flask import Flask, request, jsonify, render_template, send_from_directory
 from challenges import ChallengeManager
 from routes import register_routes
 
-from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, LoginManager
 from flask_bcrypt import Bcrypt
+from flask_sqlalchemy import SQLAlchemy
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(app.root_path, 'database.db')
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = 'password123'
-db = SQLAlchemy(app)
-login_manager = LoginManager(app)
-bcrypt = Bcrypt(app)
-challenge_manager = ChallengeManager()
-register_routes(app, db, bcrypt, challenge_manager)
+def create_app(test_config=None):
+    app = Flask(__name__, template_folder='templates')
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(app.root_path, 'database.db')
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['SECRET_KEY'] = 'password123'
 
+    # Extensions
+    from models import db
+    db.init_app(app)
 
-class User(db.Model, UserMixin):
-    user_id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String, unique=True, nullable=False)
-    password = db.Column(db.String, nullable=False)
-    score = db.Column(db.Integer, nullable=False)
+    login_manager = LoginManager()
+    login_manager.init_app(app)
 
-    def __repr__(self):
-        return f"<User '{self.user_id}', '{self.username}', '{self.score}>"
+    from models import User
 
-    def get_id(self):
-        return self.uid
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(user_id)
 
+    bcrypt = Bcrypt()
+    bcrypt.init_app(app)
 
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(user_id)
+    # Fake extension
+    challenge_manager = ChallengeManager()
+
+    # Register app routes
+    register_routes(app, db, bcrypt, challenge_manager)
+
+    # Reset the database each time
+    with app.app_context():
+        db.drop_all()
+        db.create_all()
+
+    return app
 
 
 if __name__ == '__main__':
-    app.run()
+    app = create_app()
+    app.run(debug=True)

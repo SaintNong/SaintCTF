@@ -13,7 +13,8 @@ CHALLENGES = [
         'folder': 'download_file',
         'files': [{'name': 'flag.txt'}],
 
-        'flag': 'saint{w0w_y0u_d0wnl04d3d_s0m3th1ng!}'
+        'flag': 'saint{w0w_y0u_d0wnl04d3d_s0m3th1ng!}',
+        'solvers': []
     },
     {
         'name': 'Flag Format',
@@ -26,7 +27,8 @@ CHALLENGES = [
         'folder': 'flag_format',
         'files': [],
 
-        'flag': 'saint{FLAG_FORMAT}'
+        'flag': 'saint{FLAG_FORMAT}',
+        'solvers': []
     },
     {
         'name': 'Robots? Where???',
@@ -40,6 +42,7 @@ CHALLENGES = [
         'files': [],
 
         'flag': 'saint{I_FOUND_THE_ROBOTS_a3d7cb3}',
+        'solvers': []
 
     },
 ]

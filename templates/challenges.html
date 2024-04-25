@@ -63,13 +63,15 @@
 </head>
 <body>
     <header id="main-header">
-        <h1>Challenges</h1>
+        <h1>Wow! Look at those challenges</h1>
 
         <nav id="main-nav">
             <ul>
                 <li><a href="/">Home</a></li>
                 <li><a href="/rules">Rules</a></li>
                 <li><a href="/challenges">Challenges</a></li>
+                <li><a href="/login">Login</a></li>
+                <li><a href="/register">Register</a></li>
             </ul>
         </nav>
     </header>
@@ -82,9 +84,10 @@
             <label for="flag"></label><input type="text" id="flag" name="flag" placeholder="saint{EXAMPLE_FLAG}">
             <input type="submit" value="Submit Flag">
 
-            <!-- Response message area -->
-            <p class="responseMessage"></p>
         </form>
+
+        <strong>Hello {{ current_user.username }}</strong> <br>
+        <strong>You have {{ current_user.score }} points</strong>
     </section>
 
     <section id="challenge-list">
