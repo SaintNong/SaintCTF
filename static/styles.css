@@ -261,7 +261,10 @@ html, body {
     border-left: 5px solid #7329c4; /* Stylish left border */
 }
 
-
+#leaderboard-section {
+    position: relative;
+    padding: 30px 30px 30px 50%;
+}
 
 /* Home page */
 #home-section {

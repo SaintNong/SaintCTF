@@ -6,25 +6,51 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='nav.css') }}">
 
-       <!-- Sweet alert -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5/dark.css" />
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>    <!-- as lazy as normal alerts, better than you could make them yourself -->
+    <!-- Sweet alert -->
+    <!-- as lazy as normal alerts, better than you could make them yourself -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5/dark.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
 
     <!-- Jquery 3.6.0 -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 <body style="background-color: #121212;">
-    {%  include 'navbar.html' %}
+{% include 'navbar.html' %}
 
-    <h2>Insert leaderboard here</h2>
+<section id="leaderboard-section">
+    <h2>Leaderboard (updates every 5 seconds)</h2>
+    <ul id="leaderboard-list"></ul>
+</section>
 
-    <script>
+<script>
+    $(document).ready(function () {
+
+        function updateLeaderboard() {
+            // Make a request to the leaderboard API
+            $.getJSON("/get-leaderboard", function (data) {
+                // Nuke the old leaderboard
+                $("#leaderboard-list").empty();
 
 
-        $(document).ready(function() {
-            // Set navbar selected
-            $(".leaderboard-link").addClass("navbar-selected");
-        });
-    </script>
+                // Rebuild the leaderboard
+                $.each(data, function (index, user) {
+                    $("#leaderboard-list").append("<li>" + user.username + ": " + user.score + "</li>");
+                });
+            });
+        }
+
+        // When page loads, we update leaderboard
+        updateLeaderboard();
+
+        // Update leaderboard every 5 seconds
+        setInterval(updateLeaderboard, 5000);
+    });
+
+
+    $(document).ready(function () {
+        // Set navbar selected
+        $(".leaderboard-link").addClass("navbar-selected");
+    });
+</script>
 </body>
 </html>

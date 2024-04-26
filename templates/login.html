@@ -28,8 +28,6 @@
     </section>
 
     <script>
-        // Set navbar selected
-        $(".login-link").addClass("navbar-selected");
 
         // Capture redirects to this page
         {% if login_msg %}
@@ -43,6 +41,10 @@
 
 
         $(document).ready(function() {
+            // Set navbar selected
+            $(".login-link").addClass("navbar-selected");
+
+
             $('#login-form').submit(function(e) {
                 e.preventDefault();  // Prevent default form submission
 

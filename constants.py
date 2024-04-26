@@ -59,5 +59,21 @@ CHALLENGES = [
         'flag': 'saint{unr3d4ct3d}',
         'solvers': []
 
-    }
+    },
+    {
+        'name': 'Mysterious file',
+        'author': 'ning',
+        'description': 'Anyone here got linux?',
+        'category': 'rev',
+        'difficulty': 'medium',
+        'points': 100,
+        'hosted_onsite': True,
+        'folder': 'rev1',
+        'files': [{'name': 'mystery'}],
+
+        'flag': 'saint{woah_its_a_binary!}',
+        'solvers': []
+
+    },
+
 ]

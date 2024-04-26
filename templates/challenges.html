@@ -8,15 +8,16 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='nav.css') }}">
 
     <!-- Sweet alert -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5/dark.css" />
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>    <!-- as lazy as normal alerts, better than you could make them yourself -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5/dark.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+    <!-- as lazy as normal alerts, better than you could make them yourself -->
 
     <!-- Jquery 3.6.0 -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
         // OH MY GOD ITS JQUERY RUNNNNNN
-        $(document).ready(function() {
-        $('#flag-form').submit(function(e) {
+        $(document).ready(function () {
+            $('#flag-form').submit(function (e) {
                 // Prevents default ugly form submission
                 e.preventDefault();
 
@@ -29,7 +30,7 @@
                     data: form.serialize(), // Pass the form data to the endpoint
 
                     // When the response comes back
-                    success: function(response) {
+                    success: function (response) {
                         console.log(response)
 
                         // If the flag was correct
@@ -41,7 +42,7 @@
                                 icon: "success"
 
                             }).then(
-                                function() {
+                                function () {
                                     // Reload page after the user dismisses the alert
                                     // This is to update the solved challenges and user score
                                     window.location.reload()
@@ -69,7 +70,7 @@
                     },
 
                     // After its all done, we clear the flag input field
-                    complete: function(data) {
+                    complete: function (data) {
                         let input = $('#flag')
                         input.val('');
                     }
@@ -78,20 +79,19 @@
         });
 
 
-        // Script for challenge filtering
-        $(document).ready(function() {
+        $(document).ready(function () {
             // Set navbar selected
             $(".challenges-link").addClass("navbar-selected");
 
 
-
-            $('#filter-form').submit(function(e) {
+            // Script for challenge filtering
+            $('#filter-form').submit(function (e) {
                 e.preventDefault();
 
                 const selectedCategory = $('[name="category"]').val();
                 const selectedDifficulty = $('[name="difficulty"]').val();
 
-                $('.challenge').each(function() {
+                $('.challenge').each(function () {
                     const challenge = $(this);
                     const matchesCategory = selectedCategory === "" || challenge.data('category') === selectedCategory;
                     const matchesDifficulty = selectedDifficulty === "" || challenge.data('difficulty') === selectedDifficulty;
@@ -108,48 +108,50 @@
     </script>
 </head>
 <body style="background-color: #121212;">
-    {%  include 'navbar.html' %}
+{% include 'navbar.html' %}
 
-    <section id="flag-section">
-        <h2>Filter Challenges</h2>
-        <!-- Challenge filtering form -->
-        <form id="filter-form">
-            <select name="category">
-                <option value="">All Categories</option>
-                <option value="web">web</option>
-                <option value="crypto">crypto</option>
-                <option value="pwn">pwn</option>
-                <option value="rev">rev</option>
-                <option value="osint">osint</option>
-                <option value="misc">misc</option>
-            </select>
-            <select name="difficulty">
-                <option value="">All Difficulties</option>
-                <option value="free">free</option>
-                <option value="easy">Easy</option>
-                <option value="medium">Medium</option>
-                <option value="hard">Hard</option>
-            </select>
-            <input type="submit" value="Filter">
-        </form>
+<section id="flag-section">
+    <h2>Filter Challenges</h2>
+    <!-- Challenge filtering form -->
+    <form id="filter-form">
+        <select name="category">
+            <option value="">All Categories</option>
+            <option value="web">web</option>
+            <option value="crypto">crypto</option>
+            <option value="pwn">pwn</option>
+            <option value="rev">rev</option>
+            <option value="osint">osint</option>
+            <option value="misc">misc</option>
+        </select>
+        <select name="difficulty">
+            <option value="">All Difficulties</option>
+            <option value="free">free</option>
+            <option value="easy">Easy</option>
+            <option value="medium">Medium</option>
+            <option value="hard">Hard</option>
+        </select>
+        <input type="submit" value="Filter">
+    </form>
 
 
-        <h2>Flag Submission</h2>
-        <!-- Flag submission form -->
-        <form action="/submit-flag" id="flag-form" method="post">
-            <label for="flag"></label><input type="text" id="flag" name="flag" placeholder="saint{EXAMPLE_FLAG}">
-            <input type="submit" value="Submit Flag">
+    <h2>Flag Submission</h2>
+    <!-- Flag submission form -->
+    <form action="/submit-flag" id="flag-form" method="post">
+        <label for="flag"></label><input type="text" id="flag" name="flag" placeholder="saint{EXAMPLE_FLAG}">
+        <input type="submit" value="Submit Flag">
 
-        </form>
+    </form>
 
-        <strong>Hello {{ current_user.username }}</strong> <br>
-        <strong>You have {{ current_user.score }} points</strong>
+    <strong>Hello {{ current_user.username }}</strong> <br>
+    <strong>You have {{ current_user.score }} points</strong>
 
-    </section>
+</section>
 
-    <section id="challenge-list">
-        {% for challenge in challenges %}
-        <article class="challenge" data-category="{{ challenge.category }}" data-difficulty="{{ challenge.difficulty }}">
+<section id="challenge-list">
+    <p>{{ challenges|length }} challenge(s) unsolved</p>
+    {% for challenge in challenges %}
+        <article class="challenge" data-category="{{ challenge.category }}"
+                 data-difficulty="{{ challenge.difficulty }}">
             <!-- Challenge info -->
             <h2>{{ challenge.name }}</h2>
             <p class="description"> {{ challenge.description | safe }} </p>
@@ -159,7 +161,7 @@
             <p class="author"><strong>Author:</strong> {{ challenge.author }}</p>
 
 
-            {% if challenge.files%}
+            {% if challenge.files %}
                 <!-- Challenge downloads -->
                 <div class="files">
                     <ul>
@@ -173,7 +175,7 @@
 
 
         </article>
-        {% endfor %}
-    </section>
+    {% endfor %}
+</section>
 </body>
 </html>
