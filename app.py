@@ -1,13 +1,13 @@
 import os
 
-from flask import Flask, redirect
+from flask import Flask, render_template
 from challenges import ChallengeManager
 from routes import register_routes
 
-from flask_login import UserMixin, LoginManager
+from flask_login import LoginManager, current_user
 from flask_bcrypt import Bcrypt
 
-def create_app(test_config=None):
+def create_app():
     app = Flask(__name__, template_folder='templates')
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(app.root_path, 'database.db')
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -28,7 +28,7 @@ def create_app(test_config=None):
 
     @login_manager.unauthorized_handler
     def unauthorised():
-        return redirect('/register')
+        return render_template('login.html', user=current_user, login_msg=True)
 
     bcrypt = Bcrypt()
     bcrypt.init_app(app)

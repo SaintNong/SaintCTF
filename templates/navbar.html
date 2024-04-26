@@ -1,0 +1,17 @@
+<header id="main-header">
+    <h1>SaintCTF</h1>
+
+    <nav id="main-nav">
+        <ul>
+            <li><a class="home-link" href="/">Home</a></li>
+            <li><a class="rules-link" href="/rules">Rules</a></li>
+            <li><a class="challenges-link" href="/challenges">Challenges</a></li>
+            {% if not user.is_authenticated %}
+                <li><a class="login-link" href="/login">Login</a></li>
+                <li><a class="signup-link" href="/register">Sign Up</a></li>
+            {% else %}
+                <li><a class="logout-link" href="/logout">Logout</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+</header>

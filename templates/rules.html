@@ -6,21 +6,14 @@
     <title>Rules | SaintCTF</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='nav.css') }}">
+
+    <!-- Jquery 3.6.0 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
 </head>
 <body style="background-color: #121212;">
-    <header id="main-header">
-        <h1>SaintCTF</h1>
+    {%  include 'navbar.html' %}
 
-        <nav id="main-nav">
-            <ul>
-                <li><a href="/">Home</a></li>
-                <li><a class="navbar-selected" href="/rules">Rules</a></li>
-                <li><a href="/challenges">Challenges</a></li>
-                <li><a href="/login">Login</a></li>
-                <li><a href="/register">Sign Up</a></li>
-            </ul>
-        </nav>
-    </header>
 
     <section id="rules-section">
         <h1>Rulez</h1>
@@ -39,6 +32,13 @@
                 <li>All complaints about the rules here will be redirected to /dev/null for further consideration.</li>
             </ol>
         </article>
+
+        <script>
+            $(document).ready(function() {
+                // Set navbar selected
+                $(".rules-link").addClass("navbar-selected");
+            });
+        </script>
 
     </section>
 </body>

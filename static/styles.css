@@ -35,7 +35,7 @@ html, body {
     justify-content: space-between;  /* Keep to space-between to handle most items */
     padding: 40px;
     gap: 20px;
-    height: 800px;
+    height: 650px;
     overflow-y: auto; /* Scrollable */
 }
 
@@ -51,7 +51,7 @@ html, body {
 }
 
 
-.category, .points, .files, .difficulty {
+.category, .points, .files, .difficulty, .author {
 
 }
 

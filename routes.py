@@ -10,7 +10,7 @@ def register_routes(app, db, bcrypt, challenge_manager):
     # ==== Pages ====
     @app.route('/')
     def index():
-        return render_template('index.html')
+        return render_template('index.html', user=current_user)
 
     @app.route('/challenges')
     @login_required
@@ -22,7 +22,7 @@ def register_routes(app, db, bcrypt, challenge_manager):
 
     @app.route('/rules')
     def rules():
-        return render_template('rules.html')
+        return render_template('rules.html', user=current_user)
 
     # Setting up the downloads folder
     @app.route('/downloads/<path:filename>', methods=['GET'])
@@ -38,7 +38,7 @@ def register_routes(app, db, bcrypt, challenge_manager):
     @app.route('/logout', methods=['GET', 'POST'])
     def logout():
         logout_user()
-        return "Success"
+        return redirect('/')
 
     # Signup page
     @app.route('/register', methods=['GET', 'POST'])
@@ -69,7 +69,7 @@ def register_routes(app, db, bcrypt, challenge_manager):
             return jsonify(status='success', message='User created')
 
         else:
-            return render_template('register.html')
+            return render_template('register.html', user=current_user)
 
     # Login page
     @app.route('/login', methods=['GET', 'POST'])
@@ -90,7 +90,7 @@ def register_routes(app, db, bcrypt, challenge_manager):
             else:
                 return jsonify(status='error', message='Either the username or password is incorrect')
         else:
-            return render_template('login.html')
+            return render_template('login.html', user=current_user, login_msg=False)
 
     # ==== API ====
     # Flag submission API

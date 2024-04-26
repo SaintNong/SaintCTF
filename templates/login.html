@@ -14,19 +14,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 <body style="background-color: #121212;">
-    <header id="main-header">
-        <h1>SaintCTF</h1>
+    {%  include 'navbar.html' %}
 
-        <nav id="main-nav">
-            <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/rules">Rules</a></li>
-                <li><a href="/challenges">Challenges</a></li>
-                <li><a class="navbar-selected" href="/login">Login</a></li>
-                <li><a href="/register">Sign Up</a></li>
-            </ul>
-        </nav>
-    </header>
+
     <section id="login-section">
         <h1>Login</h1>
         <form id="login-form" action="/login" method="POST">
@@ -38,39 +28,53 @@
     </section>
 
     <script>
-    $(document).ready(function() {
-        $('#login-form').submit(function(e) {
-            e.preventDefault();  // Prevent default form submission
+        // Set navbar selected
+        $(".login-link").addClass("navbar-selected");
 
-            const formData = $(this).serialize();  // Serialize form data
+        // Capture redirects to this page
+        {% if login_msg %}
+        $(document).ready(function() {
+            Swal.fire({
+                title: "You have to log in to do that!",
+                icon: "info"
+            });
+        });
+        {% endif %}
 
-            $.ajax({
-                type: 'POST',
-                url: '/login',
-                data: formData,
-                success: function(response) {
-                    if (response.status === 'success') {
-                        // On successful login we go straight to challenges
-                        window.location.href = '/challenges'
-                    } else if (response.status === 'error') {
+
+        $(document).ready(function() {
+            $('#login-form').submit(function(e) {
+                e.preventDefault();  // Prevent default form submission
+
+                const formData = $(this).serialize();  // Serialize form data
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/login',
+                    data: formData,
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            // On successful login we go straight to challenges
+                            window.location.href = '/challenges'
+                        } else if (response.status === 'error') {
+                            Swal.fire({
+                                title: "Login Failed!",
+                                text: response.message,
+                                icon: "error"
+                            });
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        // Handler if AJAX itself fails (network issues, etc.)
                         Swal.fire({
-                            title: "Login Failed!",
-                            text: response.message,
+                            title: "Error",
+                            text: "Something went wrong: " + error,
                             icon: "error"
                         });
                     }
-                },
-                error: function(xhr, status, error) {
-                    // Handler if AJAX itself fails (network issues, etc.)
-                    Swal.fire({
-                        title: "Error",
-                        text: "Something went wrong: " + error,
-                        icon: "error"
-                    });
-                }
+                });
             });
         });
-    });
     </script>
 </body>
 </html>

@@ -15,19 +15,9 @@
 
 </head>
 <body style="background-color: #121212;">
-    <header id="main-header">
-        <h1>SaintCTF</h1>
+    {%  include 'navbar.html' %}
 
-        <nav id="main-nav">
-            <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/rules">Rules</a></li>
-                <li><a href="/challenges">Challenges</a></li>
-                <li><a href="/login">Login</a></li>
-                <li><a class="navbar-selected" href="/register">Sign Up</a></li>
-            </ul>
-        </nav>
-    </header>
+
     <section id="login-section">
         <h1>Sign Up</h1>
         <form id="signup-form" action="/register" method="POST">
@@ -38,39 +28,45 @@
     </section>
 
     <script>
-    $(document).ready(function() {
-        $('#signup-form').submit(function(e) {
-            e.preventDefault();  // Prevent default form submission
 
-            const formData = $(this).serialize();  // Serialize form data
 
-            $.ajax({
-                type: 'POST',
-                url: '/register',
-                data: formData,
-                success: function(response) {
-                    if (response.status === 'success') {
-                        // On successful signup we go straight to challenges
-                        window.location.href = '/challenges'
-                    } else if (response.status === 'error') {
+        $(document).ready(function() {
+            // Set navbar selected
+            $(".signup-link").addClass("navbar-selected");
+
+
+            $('#signup-form').submit(function(e) {
+                e.preventDefault();  // Prevent default form submission
+
+                const formData = $(this).serialize();  // Serialize form data
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/register',
+                    data: formData,
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            // On successful signup we go straight to challenges
+                            window.location.href = '/challenges'
+                        } else if (response.status === 'error') {
+                            Swal.fire({
+                                title: "Registration Failed!",
+                                text: response.message,
+                                icon: "error"
+                            });
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        // Handler if AJAX itself fails (network issues, etc.)
                         Swal.fire({
-                            title: "Registration Failed!",
-                            text: response.message,
+                            title: "Error",
+                            text: "Something went wrong: " + error,
                             icon: "error"
                         });
                     }
-                },
-                error: function(xhr, status, error) {
-                    // Handler if AJAX itself fails (network issues, etc.)
-                    Swal.fire({
-                        title: "Error",
-                        text: "Something went wrong: " + error,
-                        icon: "error"
-                    });
-                }
+                });
             });
         });
-    });
 
     </script>
 </body>

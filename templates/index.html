@@ -6,21 +6,13 @@
     <title>Home | SaintCTF</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='nav.css') }}">
+
+    <!-- Jquery 3.6.0 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
 </head>
 <body style="background-color: #121212;">
-    <header id="main-header">
-        <h1>SaintCTF</h1>
-
-        <nav id="main-nav">
-            <ul>
-                <li><a class="navbar-selected" href="/">Home</a></li>
-                <li><a href="/rules">Rules</a></li>
-                <li><a href="/challenges">Challenges</a></li>
-                <li><a href="/login">Login</a></li>
-                <li><a href="/register">Sign Up</a></li>
-            </ul>
-        </nav>
-    </header>
+    {%  include 'navbar.html' %}
 
     <section id="home-section">
         <h1>Welcome to SaintCTF</h1>
@@ -29,5 +21,12 @@
         <p>For everyone else,</p>
         <p>INSERT CTF EXPLANATION HERE</p>
     </section>
+
+    <script>
+        $(document).ready(function() {
+            // Set navbar selected
+            $(".home-link").addClass("navbar-selected");
+        });
+    </script>
 </body>
 </html>
