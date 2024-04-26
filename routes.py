@@ -90,7 +90,6 @@ def register_routes(app, db, bcrypt, challenge_manager):
         else:
             return render_template('login.html', user=current_user, login_msg=False)
 
-    # TODO: Leaderboard page
     @app.route('/leaderboard')
     def leaderboard():
         return render_template('leaderboard.html', user=current_user)
@@ -122,7 +121,6 @@ def register_routes(app, db, bcrypt, challenge_manager):
         # No hits on any challenges, wrong flag.
         return jsonify({'status': 'wrong', 'message': 'Incorrect flag. Try again!'})
 
-    # TODO: Leaderboard API
     # Returns usernames and scores of all users, sorted
     @app.route('/get-leaderboard', methods=['GET'])
     def get_leaderboard():
