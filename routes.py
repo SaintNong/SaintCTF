@@ -15,9 +15,7 @@ def register_routes(app, db, bcrypt, challenge_manager):
     @app.route('/challenges')
     @login_required
     def challenges():
-        # Filter out unsolved challenges before passing the challenges to be rendered
-        unsolved_challenges = [challenge for challenge in challenge_manager.challenges
-                               if current_user.username not in challenge['solvers']]
+        unsolved_challenges = challenge_manager.get_unsolved_challenges(current_user)
         return render_template('challenges.html', challenges=unsolved_challenges, user=current_user)
 
     @app.route('/rules')
@@ -92,6 +90,11 @@ def register_routes(app, db, bcrypt, challenge_manager):
         else:
             return render_template('login.html', user=current_user, login_msg=False)
 
+    # TODO: Leaderboard page
+    @app.route('/leaderboard')
+    def leaderboard():
+        return render_template('leaderboard.html', user=current_user)
+
     # ==== API ====
     # Flag submission API
     @app.route('/submit-flag', methods=['POST'])
@@ -100,7 +103,7 @@ def register_routes(app, db, bcrypt, challenge_manager):
         submitted_flag = request.form['flag'].strip()
 
         # Look through the challenges to see if the flag matches any of them
-        for challenge in challenge_manager.challenges:
+        for i, challenge in enumerate(challenge_manager.challenges):
             if submitted_flag == challenge['flag']:
                 # Flag was correct
                 if current_user.username not in challenge['solvers']:
@@ -108,7 +111,7 @@ def register_routes(app, db, bcrypt, challenge_manager):
                     current_user.score += challenge['points']
                     db.session.commit()
 
-                    challenge['solvers'].append(current_user.username)
+                    challenge_manager.solve_challenge(i, current_user)
 
                     return jsonify({'status': 'correct', 'message': response_message})
 
@@ -118,6 +121,19 @@ def register_routes(app, db, bcrypt, challenge_manager):
 
         # No hits on any challenges, wrong flag.
         return jsonify({'status': 'wrong', 'message': 'Incorrect flag. Try again!'})
+
+    # TODO: Leaderboard API
+    # Returns usernames and scores of all users, sorted
+    @app.route('/get-leaderboard', methods=['GET'])
+    def get_leaderboard():
+        # Query users db
+        leaderboard = db.session.query(User.username, User.score).order_by(User.score.desc()).all()
+
+        result = []
+        for line in leaderboard:
+            result.append({'username': line[0], 'score': line[1]})
+
+        return jsonify(result)
 
     # ==== Misc ====
     # Favicon
