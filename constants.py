@@ -1,3 +1,4 @@
+from datetime import datetime
 
 DOWNLOAD_FOLDER = 'downloads'
 STATIC_FOLDER = 'static'
@@ -46,21 +47,6 @@ CHALLENGES = [
 
     },
     {
-        'name': 'Very secure censorship',
-        'author': 'alex',
-        'description': 'This flag contains top secret information,\nso I decided to pixelate it.',
-        'category': 'misc',
-        'difficulty': 'medium',
-        'points': 100,
-        'hosted_onsite': True,
-        'folder': 'depixelation',
-        'files': [{'name' : 'redacted.png'}],
-
-        'flag': 'saint{unr3d4ct3d}',
-        'solvers': []
-
-    },
-    {
         'name': 'Mysterious file',
         'author': 'ning',
         'description': 'Anyone here got linux?',
@@ -75,5 +61,22 @@ CHALLENGES = [
         'solvers': []
 
     },
+    {
+        'name': 'Very secure censorship',
+        'author': 'alex',
+        'description': 'This flag contains top secret information,\nso I decided to pixelate it.',
+        'category': 'misc',
+        'difficulty': 'hard',
+        'points': 200,
+        'hosted_onsite': True,
+        'folder': 'depixelation',
+        'files': [{'name': 'redacted.png'}],
+
+        'flag': 'saint{unr3d4ct3d}',
+        'solvers': []
+
+    },
 
 ]
+
+CTF_START_TIME = datetime.now()

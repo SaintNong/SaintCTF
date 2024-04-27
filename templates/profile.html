@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile | SaintCTF</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/nav.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+
+    <!-- Jquery 3.6.0 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+
+    <!-- Chart.js 3.5.1 with date-fns adapter -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/date-fns/1.30.1/date_fns.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+</head>
+<body>
+    {% include 'navbar.html' %}
+
+    <main class="container">
+        <section id="user-profile-card">
+            <h2>{{ displayed_user.username }}</h2>
+            <h2>Points: {{ displayed_user.score }}</h2>
+        </section>
+
+        <canvas id="score-history"></canvas>
+
+        <section id="recent-solves">
+            <h2>Solves</h2>
+            <table class="solves-table">
+                <thead>
+                    <tr>
+                        <th>Challenge</th>
+                        <th>Category</th>
+                        <th>Difficulty</th>
+                        <th>Points</th>
+                        <th>Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for solve in solves %}
+                    <tr>
+                        <td>{{ solve.challenge.name }}</td>
+                        <td>{{ solve.challenge.category }}</td>
+                        <td>{{ solve.challenge.difficulty }}</td>
+                        <td>{{ solve.challenge.points }}</td>
+                        <td>{{ solve.time_ago }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <script>
+        $(document).ready(function() {
+            // Set navbar selected
+            $(".profile-link").addClass("navbar-selected");
+
+
+            // Prepare data for the score chart
+            let timeLabels = [];
+            let scoreData = [];
+            let totalScore = 0;
+
+            {% for solve in solves|reverse %}
+                timeLabels.push('{{ (solve.time-timedelta(microseconds=1)).strftime("%Y-%m-%d %H:%M:%S") }}');
+                timeLabels.push('{{ solve.time.strftime("%Y-%m-%d %H:%M:%S") }}');
+                scoreData.push(totalScore);
+                totalScore += {{ solve.challenge.points }};
+                scoreData.push(totalScore);
+            {% endfor %}
+
+
+            let ctx = document.getElementById('score-history').getContext('2d');
+            let scoreChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: timeLabels,
+                    datasets: [{
+                        label: '{{ displayed_user.username }}',
+                        data: scoreData,
+                        backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            type: 'time',
+                            ticks: {
+                                color: '#FFFFFF' // White color for ticks
+                            },
+                            grid: {
+                                color: 'rgba(255,255,255,0.1)' // Lighter grid lines against dark background
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: '#FFFFFF' // White color for ticks
+                            },
+                            grid: {
+                                color: 'rgba(255,255,255,0.1)' // Lighter grid lines against dark background
+                            }
+                        }
+                    },
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                color: '#FFFFFF' // White color for legend text
+                            }
+                        }
+                    },
+                    layout: {
+                        padding: 20
+                    },
+                    // Set the overall background color to dark
+                    backgroundColor: '#333333'
+                }
+            });
+        });
+    </script>
+</body>
+</html>

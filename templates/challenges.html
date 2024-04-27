@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Challenges | SaintCTF</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='nav.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/nav.css') }}">
 
     <!-- Sweet alert -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5/dark.css"/>
@@ -126,9 +126,9 @@
         <select name="difficulty">
             <option value="">All Difficulties</option>
             <option value="free">free</option>
-            <option value="easy">Easy</option>
-            <option value="medium">Medium</option>
-            <option value="hard">Hard</option>
+            <option value="easy">easy</option>
+            <option value="medium">medium</option>
+            <option value="hard">hard</option>
         </select>
         <input type="submit" value="Filter">
     </form>
@@ -148,7 +148,8 @@
 </section>
 
 <section id="challenge-list">
-    <p>{{ challenges|length }} challenge(s) unsolved</p>
+    <p>{{ challenges|length }} challenge(s) left to solve</p>
+
     {% for challenge in challenges %}
         <article class="challenge" data-category="{{ challenge.category }}"
                  data-difficulty="{{ challenge.difficulty }}">
@@ -159,7 +160,7 @@
             <p class="difficulty"><strong>Difficulty:</strong> {{ challenge.difficulty }}</p>
             <p class="points"><strong>Points:</strong> {{ challenge.points }}</p>
             <p class="author"><strong>Author:</strong> {{ challenge.author }}</p>
-
+            <p class="solve-counter"><strong>Solves:</strong> {{ challenge.solvers|length }}</p>
 
             {% if challenge.files %}
                 <!-- Challenge downloads -->

@@ -2,9 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Login | SaintCTF</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='nav.css') }}">
+    <title>Profile | SaintCTF</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/nav.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/leaderboard.css') }}">
 
     <!-- Sweet alert -->
     <!-- as lazy as normal alerts, better than you could make them yourself -->
@@ -17,37 +18,79 @@
 <body style="background-color: #121212;">
 {% include 'navbar.html' %}
 
-<section id="leaderboard-section">
-    <h2>Leaderboard (updates every 5 seconds)</h2>
-    <ul id="leaderboard-list"></ul>
-</section>
+<div class="dashboard-container">
+    <section id="leaderboard-section" class="dashboard-panel">
+        <h2>Leaderboard</h2>
+        <table id="leaderboard"></table>
+    </section>
 
+    <section id="recent-activity-section" class="dashboard-panel">
+        <h2>Recent Solves</h2>
+        <table id="recent-table"></table>
+    </section>
+</div>
 <script>
     $(document).ready(function () {
 
         function updateLeaderboard() {
+
             // Make a request to the leaderboard API
             $.getJSON("/get-leaderboard", function (data) {
+
+                // The current user will be highlighted
+                let currentUsername = "{{ user.username }}";
+
                 // Nuke the old leaderboard
-                $("#leaderboard-list").empty();
+                let leaderboard = $("#leaderboard");
+                leaderboard.empty();
+
+                // Make header
+                leaderboard.append(`<thead> <tr><th style="width: 50px;">Rank</th> <th>Name</th> <th>Score</th></tr> </thead>`);
 
 
                 // Rebuild the leaderboard
+                let tbody = $("<tbody></tbody>");
                 $.each(data, function (index, user) {
-                    $("#leaderboard-list").append("<li>" + user.username + ": " + user.score + "</li>");
+                    // Check if the user is the current logged in user, and highlight if they are
+                    let highlight = user.username === currentUsername ? 'id="current-user"' : '';
+                    tbody.append(`<tr ${highlight}><td>${index + 1}</td><td id="username-data"><a href="/profile/${user.user_id}">${user.username}</a></td><td>${user.score}</td></tr>`);
+
                 });
+                leaderboard.append(tbody);
+            });
+
+
+
+        }
+
+        function updateRecentActivity() {
+            // Make a request to the Recent Solves API
+            $.getJSON("/get-recent-solves", function (data) {
+                let recentTable = $("#recent-table");
+                // Clear the old content
+                recentTable.empty();
+
+                // Define the table headers
+                recentTable.append(`<thead><tr><th>Solver</th><th>Challenge</th><th>Time</th></tr></thead>`);
+
+                // Append data to the table body
+                let tbody = $("<tbody></tbody>");
+                $.each(data, function (index, solve) {
+                    tbody.append(`<tr><td>${solve.solver}</td><td>${solve.challenge.name}</td><td>${solve.time_ago}</td></tr>`);
+                });
+                recentTable.append(tbody);
             });
         }
 
-        // When page loads, we update leaderboard
+        // When page loads, we update leaderboard and recent activity once
+        updateRecentActivity();
         updateLeaderboard();
 
-        // Update leaderboard every 5 seconds
+        // We refresh our info every 5 seconds
+        setInterval(updateRecentActivity, 5000);
         setInterval(updateLeaderboard, 5000);
-    });
 
 
-    $(document).ready(function () {
         // Set navbar selected
         $(".leaderboard-link").addClass("navbar-selected");
     });

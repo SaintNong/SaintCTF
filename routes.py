@@ -1,10 +1,12 @@
-from flask import render_template, send_from_directory, request, jsonify, redirect
+from flask import render_template, send_from_directory, request, jsonify, redirect, abort
 from constants import *
 from flask_login import login_user, logout_user, current_user, login_required
 from models import User
+from challenges import ChallengeManager
+from datetime import timedelta
 
 
-def register_routes(app, db, bcrypt, challenge_manager):
+def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager):
     print("Routes registered")
 
     # ==== Pages ====
@@ -94,6 +96,20 @@ def register_routes(app, db, bcrypt, challenge_manager):
     def leaderboard():
         return render_template('leaderboard.html', user=current_user)
 
+    # Shows the profile of specific user with uid
+    @app.route('/profile/<int:user_id>')
+    @login_required
+    def profile(user_id):
+        # Query database for user
+        displayed_user = db.session.query(User).filter(User.uid == user_id).first()
+
+        if displayed_user is None:
+            abort(404, "This player does not exist.")
+
+        solves = challenge_manager.get_solved_challenges(displayed_user.username)
+
+        return render_template('profile.html', user=current_user, displayed_user=displayed_user, solves=solves, timedelta=timedelta)
+
     # ==== API ====
     # Flag submission API
     @app.route('/submit-flag', methods=['POST'])
@@ -121,17 +137,23 @@ def register_routes(app, db, bcrypt, challenge_manager):
         # No hits on any challenges, wrong flag.
         return jsonify({'status': 'wrong', 'message': 'Incorrect flag. Try again!'})
 
-    # Returns usernames and scores of all users, sorted
     @app.route('/get-leaderboard', methods=['GET'])
     def get_leaderboard():
         # Query users db
-        leaderboard = db.session.query(User.username, User.score).order_by(User.score.desc()).all()
+        top_players = db.session.query(User.username, User.score, User.uid).order_by(User.score.desc()).all()
 
         result = []
-        for line in leaderboard:
-            result.append({'username': line[0], 'score': line[1]})
+        for line in top_players:
+            result.append({'username': line[0], 'score': line[1], 'user_id': line[2]})
 
         return jsonify(result)
+
+    @app.route('/get-recent-solves', methods=['GET'])
+    def get_recent_solves():
+        # Get last 12 recent solves
+        recent_solves = challenge_manager.get_recent_solves(12)
+
+        return jsonify(recent_solves)
 
     # ==== Misc ====
     # Favicon
