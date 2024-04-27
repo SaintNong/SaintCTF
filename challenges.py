@@ -1,5 +1,6 @@
 import constants
 import datetime
+from datetime import timedelta
 
 
 def time_ago(time):
@@ -92,3 +93,43 @@ class ChallengeManager:
                 break
 
         return recent_solves
+
+    def get_time_based_leaderboard(self, top_users):
+        dataset = []
+
+        top_cumulative_scores = {}
+        for user in top_users:
+            top_cumulative_scores[user] = 0
+
+        # Go from the oldest solve to the lgatest one
+        for solve in self.recent_solves[::-1]:
+            if solve.username in top_users:
+                username = solve.username
+                solved_challenge = self.challenges[solve.challenge_id]
+                weight = solved_challenge['points']
+
+                # The instant before this solve, they were at the score they were at before
+                dataset.append({
+                    "time": (solve.time-timedelta(milliseconds=1)).isoformat(),
+                    "user": solve.username,
+                    "points": top_cumulative_scores[username],
+                })
+
+                # The instant when they solve the challenge, they jump up to however many points the
+                # challenge was worth
+                top_cumulative_scores[username] += weight
+                dataset.append({
+                    "time": solve.time.isoformat(),
+                    "user": solve.username,
+                    "points": top_cumulative_scores[username],
+                })
+
+        # At the present time, all the users have the score they currently have, so we add that too
+        for user in top_cumulative_scores.keys():
+            dataset.append({
+                "time": datetime.datetime.now().isoformat(),
+                "user": user,
+                "points": top_cumulative_scores[user],
+            })
+
+        return dataset

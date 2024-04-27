@@ -1,3 +1,9 @@
+/* Enable scrolling again */
+body, html {
+    overflow: auto;
+    padding-bottom: 100px;
+}
+
 /* Table styling */
 table {
     width: 100%;
@@ -19,7 +25,24 @@ tbody tr:hover {
 }
 
 .container {
-    width: 800px;
-
+    width: 60%;
+    text-align: center;
+    margin: 0 auto;
 }
 
+#user-profile-card {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+#recent-solves {
+    margin-top: 30px;
+}
+
+#recent-solves h2 {
+    padding-bottom: 15px;
+}
+
+#username-heading {
+    color: #964ae2; /* Theme color */
+}

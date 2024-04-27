@@ -108,7 +108,17 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager):
 
         solves = challenge_manager.get_solved_challenges(displayed_user.username)
 
-        return render_template('profile.html', user=current_user, displayed_user=displayed_user, solves=solves, timedelta=timedelta)
+        # Calculate user rank
+
+        top_players = db.session.query(User.username, User.score, User.uid).order_by(User.score.desc()).all()
+        rank = 1
+        for player in top_players:
+            if player.uid == user_id:
+                break
+            rank += 1
+
+        return render_template('profile.html', user=current_user, displayed_user=displayed_user,
+                               solves=solves, timedelta=timedelta, rank=rank)
 
     # ==== API ====
     # Flag submission API
@@ -154,6 +164,21 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager):
         recent_solves = challenge_manager.get_recent_solves(12)
 
         return jsonify(recent_solves)
+
+    @app.route('/get-leaderboard-graph-data', methods=['GET'])
+    def get_leaderboard_graph():
+        # Get top 10 players
+        top_players = db.session.query(User.username, User.score).order_by(User.score.desc()).limit(10).all()
+        names = []
+        for player in top_players:
+            names.append(player.username)
+
+        # Get datapoints
+        data_points = challenge_manager.get_time_based_leaderboard(names)
+
+        return data_points
+
+
 
     # ==== Misc ====
     # Favicon
