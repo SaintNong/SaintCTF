@@ -223,7 +223,7 @@ body {
 
 #filter-form {
     /* Centering the form */
-    margin: 0 auto 30px;
+    margin: 0 auto 0.5em;
 }
 
 #filter-form select {
@@ -234,21 +234,6 @@ body {
     margin-bottom: 10px; /* Spacing between form elements */
     width: 100%; /* Full width */
     border-radius: 4px; /* Slightly rounded edges for inputs */
-}
-
-#filter-form input[type="submit"] {
-    background-color: #964ae2; /* Stylish purple color for numbers to match headers */
-    color: #fff; /* White text */
-    border: none;
-    padding: 10px;
-    cursor: pointer;
-    transition: background-color 0.3s; /* Transition for hover effect */
-    width: 100%; /* Full width */
-    border-radius: 4px; /* Rounded edges */
-}
-
-#filter-form input[type="submit"]:hover {
-    background-color: #7329c4; /* Darker purple on hover for visual feedback */
 }
 
 /* Style for the challenge listings */
