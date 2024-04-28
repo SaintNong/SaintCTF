@@ -1,6 +1,22 @@
 import constants
 import datetime
 from datetime import timedelta
+import json
+
+
+def serialize_datetime(obj):
+    if isinstance(obj, datetime.datetime):
+        return obj.isoformat()
+    raise TypeError("Not a datetime object")
+
+
+def deserialize_datetime(json_dict):
+    for key, value in json_dict.items():
+        try:
+            json_dict[key] = datetime.datetime.fromisoformat(value)
+        except (ValueError, TypeError):
+            continue
+    return json_dict
 
 
 def time_ago(time):
@@ -10,7 +26,7 @@ def time_ago(time):
     day = delta.days
     hour, remainder = divmod(delta.seconds, 3600)
     minute, second = divmod(remainder, 60)
-    
+
     if day > 0:
         return f"{day} day{'s' if day > 1 else ''} {hour} hour{'s' if hour > 1 else ''} ago"
     elif hour > 0:
@@ -23,70 +39,80 @@ def time_ago(time):
         return "Just now"
 
 
-class Solve:
-    def __init__(self, username, time, challenge_id):
-        self.username = username
-        self.time = time
-        self.challenge_id = challenge_id
-
-    def __eq__(self, other):
-        return self.username == other.username
-
-
 class ChallengeManager:
     def __init__(self):
-        self.challenges = constants.CHALLENGES
-        self.recent_solves = []  # List of the most recently solved challenges
+        self.challenges = []
+        self.recent_solves = []
 
-        # Replace all newlines in description with the html <br> tags
+        self.load_state()
+
+        # Clear solve information and save if RESET_DATA flag is checked
+        if constants.RESET_DATA:
+            for challenge in self.challenges:
+                challenge['solves'] = []
+            self.recent_solves = []
+            self.save_state()
+
+        self.initialize_challenges()
+
+    def save_state(self):
+        with open(constants.CHALLENGES_FILE_PATH, 'w') as f:
+            data = {
+                'challenges': self.challenges,
+                'recent_solves': self.recent_solves,
+            }
+            json.dump(data, f, indent=4, default=serialize_datetime)
+
+    def load_state(self):
+        with open(constants.CHALLENGES_FILE_PATH, 'r') as f:
+            data = json.load(f, object_hook=deserialize_datetime)
+            self.challenges = data['challenges']
+            self.recent_solves = data['recent_solves']
+
+    def initialize_challenges(self):
+        # Replaces
         for challenge in self.challenges:
             challenge['description'] = challenge['description'].replace('\n', '<br>')
 
-        # Very dirty script to process challenge paths to include the downloads folder
-        # 'challenge.txt' => '/downloads/challenge_name/challenge.txt'
-        for i, challenge in enumerate(self.challenges):
-            if challenge['hosted_onsite']:
+            if challenge['has_files']:
+                # Calculates challenge files
                 for file_data in challenge['files']:
-                    file_data['url'] = f"/downloads/{challenge['folder']}/{file_data['name']}"
+                    if file_data.get('url') is None:
+                        file_data['url'] = f"/downloads/{challenge['folder']}/{file_data['name']}"
 
     def get_unsolved_challenges(self, user):
-        res = []
-
-        for challenge in self.challenges:
-            if user.username not in challenge['solvers']:
-                res.append(challenge)
-
+        res = [challenge for challenge in self.challenges if user.username not in challenge['solvers']]
         return res
 
     def solve_challenge(self, index, user):
-        solve = Solve(user.username, datetime.datetime.now(), index)
+        solve = {
+            'username': user.username,
+            'time': datetime.datetime.now(),
+            'challenge_id': index,
+        }
+
         self.challenges[index]['solvers'].append(user.username)
         self.recent_solves.insert(0, solve)
+        self.save_state()
 
     # Gets the all challenges the user has solved, and how long ago they solved it
     def get_solved_challenges(self, username):
-        solved_challenges = []
-
-        for solve in self.recent_solves:
-            if solve.username == username:
-                solved_challenges.append({
-                    "time": solve.time,
-                    "challenge": self.challenges[solve.challenge_id],
-                    "time_ago": time_ago(solve.time)
-                })
-
-        return solved_challenges
+        return [{
+            "time": solve['time'],
+            "challenge": self.challenges[solve['challenge_id']],
+            "time_ago": time_ago(solve['time'])
+        } for solve in self.recent_solves if solve['username'] == username]
 
     # Returns the last n recent solves
     def get_recent_solves(self, n):
         recent_solves = []
         for solve in self.recent_solves:
-            challenge = self.challenges[solve.challenge_id]
+            challenge = self.challenges[solve['challenge_id']]
             recent_solves.append({
-                "solver": solve.username,
+                "solver": solve['username'],
                 "challenge": challenge,
-                "time": solve.time,
-                "time_ago": time_ago(solve.time)
+                "time": solve['time'],
+                "time_ago": time_ago(solve['time'])
             })
 
             if len(recent_solves) == n:
@@ -101,17 +127,17 @@ class ChallengeManager:
         for user in top_users:
             top_cumulative_scores[user] = 0
 
-        # Go from the oldest solve to the lgatest one
+        # Go from the oldest solve to the latest one
         for solve in self.recent_solves[::-1]:
-            if solve.username in top_users:
-                username = solve.username
-                solved_challenge = self.challenges[solve.challenge_id]
+            if solve['username'] in top_users:
+                username = solve['username']
+                solved_challenge = self.challenges[solve['challenge_id']]
                 weight = solved_challenge['points']
 
                 # The instant before this solve, they were at the score they were at before
                 dataset.append({
-                    "time": (solve.time-timedelta(milliseconds=1)).isoformat(),
-                    "user": solve.username,
+                    "time": (solve['time'] - timedelta(milliseconds=1)).isoformat(),
+                    "user": solve['username'],
                     "points": top_cumulative_scores[username],
                 })
 
@@ -119,8 +145,8 @@ class ChallengeManager:
                 # challenge was worth
                 top_cumulative_scores[username] += weight
                 dataset.append({
-                    "time": solve.time.isoformat(),
-                    "user": solve.username,
+                    "time": solve['time'].isoformat(),
+                    "user": solve['username'],
                     "points": top_cumulative_scores[username],
                 })
 

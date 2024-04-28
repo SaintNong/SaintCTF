@@ -4,6 +4,7 @@ from flask_login import login_user, logout_user, current_user, login_required
 from models import User
 from challenges import ChallengeManager
 from datetime import timedelta
+import re
 
 
 def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager):
@@ -47,10 +48,17 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager):
             username = request.form.get('username')
             password = request.form.get('password')
 
+            if not username or not password:
+                return jsonify({'error': 'Missing username or password'})
+
             # Make sure user doesn't exist
             user = User.query.filter(User.username == username).first()
             if user:
                 return jsonify(status='error', message='That username is taken.')
+
+            # Make sure the username is in allowed characters list
+            if not re.match('^[A-Za-z0-9_]+$', username):
+                return jsonify(status='error', message='Username can only contain letters, numbers, and underscores.')
 
             # Hash password before storing
             hashed_password = bcrypt.generate_password_hash(password)
@@ -177,8 +185,6 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager):
         data_points = challenge_manager.get_time_based_leaderboard(names)
 
         return data_points
-
-
 
     # ==== Misc ====
     # Favicon

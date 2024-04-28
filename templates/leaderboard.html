@@ -139,54 +139,60 @@
             return Object.values(datasets);
         }
 
+
+        function updateChart(newData) {
+            leaderboardChart.data.datasets = newData;
+            leaderboardChart.update();
+        }
+
         function renderChart(data) {
             if (leaderboardChart) {
-                leaderboardChart.destroy();
-            }
-
-            leaderboardChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    datasets: data
-                },
-                options: {
-                    scales: {
-                        x: {
-                            type: 'time',
-                            ticks: {
-                                color: '#FFFFFF' // White color for ticks
+                updateChart(data);
+            } else {
+                leaderboardChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        datasets: data
+                    },
+                    options: {
+                        scales: {
+                            x: {
+                                type: 'time',
+                                ticks: {
+                                    color: '#FFFFFF' // White color for ticks
+                                },
                             },
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    color: '#FFFFFF', // White color for ticks
+                                },
+                                grid: {
+                                    color: 'rgba(255,255,255,0.1)' // Lighter grid lines against a dark background
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Score',
+                                    color: '#FFFFFF' // Ensuring the title is also white
+                                }
+                            }
                         },
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                color: '#FFFFFF', // White color for ticks
-                            },
-                            grid: {
-                                color: 'rgba(255,255,255,0.1)' // Lighter grid lines against a dark background
-                            },
-                            title: {
-                                display: true,
-                                text: 'Score',
-                                color: '#FFFFFF' // Ensuring the title is also white
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                                labels: {
+                                    color: '#FFFFFF' // White color for legend text
+                                }
                             }
-                        }
-                    },
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                            labels: {
-                                color: '#FFFFFF' // White color for legend text
-                            }
-                        }
-                    },
-                    layout: {
-                        padding: 20
-                    },
-                    backgroundColor: '#333333'
-                }
-            });
+                        },
+                        layout: {
+                            padding: 20
+                        },
+                        backgroundColor: '#333333'
+                    }
+                });
+            }
         }
 
         function getRandomColor() {
@@ -197,6 +203,7 @@
             }
             return color;
         }
+
 
         fetchDataAndRenderChart();
         setInterval(fetchDataAndRenderChart, 10000);

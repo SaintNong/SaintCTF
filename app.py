@@ -3,6 +3,7 @@ import os
 from flask import Flask, render_template
 from challenges import ChallengeManager
 from routes import register_routes
+from constants import RESET_DATA
 
 from flask_login import LoginManager, current_user
 from flask_bcrypt import Bcrypt
@@ -39,10 +40,11 @@ def create_app():
     # Register app routes
     register_routes(app, db, bcrypt, challenge_manager)
 
-    # Reset the database each time
-    with app.app_context():
-        db.drop_all()
-        db.create_all()
+    # Reset the database if data reset flag is checked
+    if RESET_DATA:
+        with app.app_context():
+            db.drop_all()
+            db.create_all()
 
     return app
 

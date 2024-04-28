@@ -14,10 +14,7 @@ body {
     background-color: #121212;
 }
 
-/* Disable scroll on the page, except when we want it */
-html, body {
-    overflow: hidden;
-}
+
 
 /* Header styling */
 #main-header h1 {
@@ -27,16 +24,16 @@ html, body {
     background-color: #222;
 }
 
+/* Andrew cool css */
+#challenge-main {
+    display: flex;
+    flex-direction: row-reverse;
+}
 
 /* Section styling */
 #challenge-list {
-    /*display: flex;*/
-    /*flex-wrap: wrap;*/
-    justify-content: space-between;  /* Keep to space-between to handle most items */
     padding: 40px;
-    gap: 20px;
-    height: 650px;
-    overflow-y: auto; /* Scrollable */
+    flex: 1;
 }
 
 
@@ -193,15 +190,17 @@ html, body {
 
 /* Section where flag submission form, and filter form is stored */
 #flag-section {
-    width: 400px;
-    float: right;
-    height: 100vh;
 
     gap: 20px;
     padding: 30px;
 
     background-color: #1e1e1e;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+
+    /* Andrew god */
+    position: sticky;
+    top:0;
+    max-height: 100vh;
 }
 
 #flag-section h2 {
