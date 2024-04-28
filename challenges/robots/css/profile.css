@@ -1,0 +1,48 @@
+/* Enable scrolling again */
+body, html {
+    overflow: auto;
+    padding-bottom: 100px;
+}
+
+/* Table styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    text-align: left;
+    padding: 8px;
+    border-bottom: 1px solid #333;
+}
+
+thead {
+    background-color: #333;
+}
+
+tbody tr:hover {
+    background-color: #1a1a1a;
+}
+
+.container {
+    width: 60%;
+    text-align: center;
+    margin: 0 auto;
+}
+
+#user-profile-card {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+#recent-solves {
+    margin-top: 30px;
+}
+
+#recent-solves h2 {
+    padding-bottom: 15px;
+}
+
+#username-heading {
+    color: #964ae2; /* Theme color */
+}

@@ -1,0 +1,1 @@
+Run the file in a linux box, or use strings on it. If you chose to run it, the file will print out the flag
