@@ -18,8 +18,7 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager):
     @app.route('/challenges')
     @login_required
     def challenges():
-        unsolved_challenges = challenge_manager.get_unsolved_challenges(current_user)
-        return render_template('challenges.html', challenges=unsolved_challenges, user=current_user)
+        return render_template('challenges.html', challenges=challenge_manager.challenges, user=current_user)
 
     @app.route('/rules')
     def rules():

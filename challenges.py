@@ -80,10 +80,6 @@ class ChallengeManager:
                     if file_data.get('url') is None:
                         file_data['url'] = f"/downloads/{challenge['folder']}/{file_data['name']}"
 
-    def get_unsolved_challenges(self, user):
-        res = [challenge for challenge in self.challenges if user.username not in challenge['solvers']]
-        return res
-
     def solve_challenge(self, index, user):
         solve = {
             'username': user.username,

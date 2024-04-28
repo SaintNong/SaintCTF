@@ -260,6 +260,13 @@ body {
     border-left: 5px solid #7329c4; /* Stylish left border */
 }
 
+#challenge-list .challenge[data-solved] {
+    border-color: #339900;
+}
+
+#challenge-list .challenge[data-solved] h2 {
+    color: darkgrey;
+}
 
 
 

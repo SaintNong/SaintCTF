@@ -90,13 +90,15 @@
 
                 const selectedCategory = $('[name="category"]').val();
                 const selectedDifficulty = $('[name="difficulty"]').val();
+                const showSolved = $('[name="solved"]').prop('checked');
 
                 $('.challenge').each(function () {
                     const challenge = $(this);
                     const matchesCategory = selectedCategory === "" || challenge.data('category') === selectedCategory;
                     const matchesDifficulty = selectedDifficulty === "" || challenge.data('difficulty') === selectedDifficulty;
+                    const matchesUnsolved = challenge.data('solved') === undefined;
 
-                    if (matchesCategory && matchesDifficulty) {
+                    if (matchesCategory && matchesDifficulty && (matchesUnsolved || showSolved)) {
                         challenge.show();
                     } else {
                         challenge.hide();
@@ -131,6 +133,10 @@
                 <option value="medium">medium</option>
                 <option value="hard">hard</option>
             </select>
+            <div>
+                <input type="checkbox" name="solved" id="solved" />
+                <label for="solved">Show solved challenges</label>
+            </div>
             <input type="submit" value="Filter">
         </form>
 
@@ -153,7 +159,11 @@
 
         {% for challenge in challenges %}
             <article class="challenge" data-category="{{ challenge.category }}"
-                     data-difficulty="{{ challenge.difficulty }}">
+                     data-difficulty="{{ challenge.difficulty }}"
+                     {% if current_user.username in challenge.solvers %}
+                         data-solved style="display: none;"
+                     {% endif %}
+                 >
                 <!-- Challenge info -->
                 <h2>{{ challenge.name }}</h2>
                 <p class="description"> {{ challenge.description | safe }} </p>
