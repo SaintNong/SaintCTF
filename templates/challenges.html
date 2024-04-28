@@ -92,6 +92,7 @@
                 const selectedDifficulty = $('[name="difficulty"]').val();
                 const showSolved = $('[name="solved"]').prop('checked');
 
+                let visibleCount = 0;
                 $('.challenge').each(function () {
                     const challenge = $(this);
                     const matchesCategory = selectedCategory === "" || challenge.data('category') === selectedCategory;
@@ -100,10 +101,13 @@
 
                     if (matchesCategory && matchesDifficulty && (matchesUnsolved || showSolved)) {
                         challenge.show();
+                        visibleCount++;
                     } else {
                         challenge.hide();
                     }
                 });
+
+                $("#visible-count").html(visibleCount);
             });
         });
 
@@ -113,9 +117,13 @@
 {% include 'navbar.html' %}
 
 <main id="challenge-main">
+    {% set solved_count = challenges | selectattr("solvers", "contains", current_user.username) | list | length %}
     {% set unsolved_count = challenges | rejectattr("solvers", "contains", current_user.username) | list | length %}
+
     <section id="flag-section">
         <h2>Filter Challenges</h2>
+        <p><span id="visible-count">{{ unsolved_count }}</span> / {{ challenges|length }} challenge(s) visible</p>
+
         <!-- Challenge filtering form -->
         <form id="filter-form">
             <select name="category">
@@ -136,7 +144,7 @@
             </select>
             <div>
                 <input type="checkbox" name="solved" id="solved" />
-                <label for="solved">Show solved challenges</label>
+                <label for="solved">Show solved challenges ({{ solved_count }})</label>
             </div>
             <input type="submit" value="Filter">
         </form>
