@@ -83,25 +83,33 @@
             // Set navbar selected
             $(".challenges-link").addClass("navbar-selected");
 
-
             // Script for challenge filtering
-            $('#filter-form').submit(function (e) {
-                e.preventDefault();
-
+            $('#filter-form').on("change", function (e) {
                 const selectedCategory = $('[name="category"]').val();
                 const selectedDifficulty = $('[name="difficulty"]').val();
+                const showSolved = $('[name="solved"]').prop('checked');
 
+                let visibleCount = 0;
                 $('.challenge').each(function () {
                     const challenge = $(this);
+
+                    challenge.stop(true, false); // Clear queue of animations, but do not jump to end of current animation.
+
                     const matchesCategory = selectedCategory === "" || challenge.data('category') === selectedCategory;
                     const matchesDifficulty = selectedDifficulty === "" || challenge.data('difficulty') === selectedDifficulty;
+                    const matchesUnsolved = challenge.data('solved') === undefined;
 
-                    if (matchesCategory && matchesDifficulty) {
-                        challenge.show();
+                    const effectOptions = {duration: 250, easing: "linear"};
+
+                    if (matchesCategory && matchesDifficulty && (matchesUnsolved || showSolved)) {
+                        challenge.slideDown(effectOptions);
+                        visibleCount++;
                     } else {
-                        challenge.hide();
+                        challenge.slideUp(effectOptions);
                     }
                 });
+
+                $("#visible-count").html(visibleCount);
             });
         });
 
@@ -111,10 +119,18 @@
 {% include 'navbar.html' %}
 
 <main id="challenge-main">
+    {% set solved_count = challenges | selectattr("solvers", "contains", current_user.username) | list | length %}
+    {% set unsolved_count = challenges | rejectattr("solvers", "contains", current_user.username) | list | length %}
+
     <section id="flag-section">
+        <h1>Welcome {{ current_user.username }}!</h1>
+        <p>You have {{ current_user.score }} points.</p>
+
         <h2>Filter Challenges</h2>
+        <p><span id="visible-count">{{ unsolved_count }}</span> / {{ challenges|length }} challenge(s) visible</p>
+
         <!-- Challenge filtering form -->
-        <form id="filter-form">
+        <form id="filter-form" action="javascript:void(0);">
             <select name="category">
                 <option value="">All Categories</option>
                 <option value="web">web</option>
@@ -131,7 +147,10 @@
                 <option value="medium">medium</option>
                 <option value="hard">hard</option>
             </select>
-            <input type="submit" value="Filter">
+            <div>
+                <input type="checkbox" name="solved" id="solved" />
+                <label for="solved">Show solved challenges ({{ solved_count }})</label>
+            </div>
         </form>
 
 
@@ -143,17 +162,18 @@
 
         </form>
 
-        <strong>Hello {{ current_user.username }}</strong> <br>
-        <strong>You have {{ current_user.score }} points</strong>
-
     </section>
 
     <section id="challenge-list">
-        <p>{{ challenges|length }} challenge(s) left to solve</p>
+        <p>{{ unsolved_count }} challenge(s) left to solve</p>
 
         {% for challenge in challenges %}
             <article class="challenge" data-category="{{ challenge.category }}"
-                     data-difficulty="{{ challenge.difficulty }}">
+                     data-difficulty="{{ challenge.difficulty }}"
+                     {% if current_user.username in challenge.solvers %}
+                         data-solved style="display: none;"
+                     {% endif %}
+                 >
                 <!-- Challenge info -->
                 <h2>{{ challenge.name }}</h2>
                 <p class="description"> {{ challenge.description | safe }} </p>

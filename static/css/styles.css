@@ -200,11 +200,12 @@ body {
     /* Andrew god */
     position: sticky;
     top:0;
-    max-height: 100vh;
+    height: 100vh;
 }
 
 #flag-section h2 {
     font-size: 22px;
+    margin-top: 0.5em;
 }
 
 /* Rules */
@@ -223,7 +224,7 @@ body {
 
 #filter-form {
     /* Centering the form */
-    margin: 0 auto 30px;
+    margin: 0 auto;
 }
 
 #filter-form select {
@@ -236,21 +237,6 @@ body {
     border-radius: 4px; /* Slightly rounded edges for inputs */
 }
 
-#filter-form input[type="submit"] {
-    background-color: #964ae2; /* Stylish purple color for numbers to match headers */
-    color: #fff; /* White text */
-    border: none;
-    padding: 10px;
-    cursor: pointer;
-    transition: background-color 0.3s; /* Transition for hover effect */
-    width: 100%; /* Full width */
-    border-radius: 4px; /* Rounded edges */
-}
-
-#filter-form input[type="submit"]:hover {
-    background-color: #7329c4; /* Darker purple on hover for visual feedback */
-}
-
 /* Style for the challenge listings */
 #challenge-list .challenge {
     background-color: #222; /* Dark background for each challenge */
@@ -260,6 +246,13 @@ body {
     border-left: 5px solid #7329c4; /* Stylish left border */
 }
 
+#challenge-list .challenge[data-solved] {
+    border-color: #339900;
+}
+
+#challenge-list .challenge[data-solved] h2 {
+    color: darkgrey;
+}
 
 
 
