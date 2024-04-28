@@ -1,6 +1,6 @@
 /* Navigation Bar Styling */
 #main-nav {
-    background-color: #222222;
+    background-color: var(--light-bg-color);
     padding: 10px 20px;
     text-align: center;
 
@@ -31,6 +31,6 @@
 
 /* Highlight navbar selected item with increased specificity */
 #main-nav ul li a.navbar-selected {
-    color: #964ae2;
+    color: var(--purple-1);
 }
 

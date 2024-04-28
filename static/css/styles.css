@@ -1,3 +1,13 @@
+:root {
+    --bg-color: #121212;
+    --light-bg-color: #1e1e1e;
+    --purple-1: #964ae2; /* purple */
+    --purple-2: #7329c4; /* hover */
+    --link-color: #4a90e2;
+    --form-field-border-color: #333;
+    --hover-color: #1a1a1a;
+}
+
 /* Reset some default styling */
 body, h1, h2, p, ul, li {
     margin: 0;
@@ -11,17 +21,17 @@ body {
     font-family: Arial, sans-serif;
     line-height: 1.6;
     color: #ddd;
-    background-color: #121212;
+    background-color: var(--bg-color);
 }
 
 
 
 /* Header styling */
 #main-header h1 {
-    color: #fff;
+    color: white;
     text-align: center;
     padding: 20px 0;
-    background-color: #222;
+    background-color: var(--light-bg-color);
 }
 
 /* Andrew cool css */
@@ -39,7 +49,7 @@ body {
 
 
 .challenge h2 {
-    color: #964ae2; /* purple */
+    color: var(--purple-1); /* purple */
 }
 
 .description {
@@ -71,7 +81,7 @@ body {
 
 
 .files a {
-    color: #4a90e2;
+    color: var(--link-color);
     text-decoration: none;
 }
 
@@ -87,15 +97,15 @@ body {
     width: 400px; /* Width adjusted for a larger form */
     margin: 80px auto; /* Increased vertical margin for more central focus */
     padding: 40px; /* Increased padding for a spacious interior */
-    border: 2px solid #333; /* Darker border for a subtle and elegant look */
+    border: 2px solid var(--form-field-border-color); /* Darker border for a subtle and elegant look */
     border-radius: 10px; /* Smoothed rounded corners */
-    background-color: #1e1e1e; /* Dark background */
+    background-color: var(--light-bg-color); /* Dark background */
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.9); /* Enhanced shadow for a deeper 3D effect */
 }
 
 #login-section h1 {
     text-align: center;
-    color: #964ae2; /* Purple accent for the title */
+    color: var(--purple-1); /* Purple accent for the title */
     font-size: 24px; /* Larger font size for visibility */
     margin-bottom: 30px; /* More space below the header */
 }
@@ -109,8 +119,8 @@ body {
 #login-section input[type="password"] {
     padding: 15px; /* Comfortable padding */
     margin-bottom: 15px; /* Adequate spacing between fields */
-    border: 1px solid #333; /* Darker border to match the outer border */
-    background-color: #121212; /* Consistent dark theme for input fields */
+    border: 1px solid var(--form-field-border-color); /* Darker border to match the outer border */
+    background-color: var(--bg-color); /* Consistent dark theme for input fields */
     color: #ccc; /* Lighter text for readability */
     border-radius: 5px; /* Soft rounded corners for the inputs */
     font-size: 16px; /* Increased font size for ease of reading */
@@ -119,7 +129,7 @@ body {
 #login-section input[type="submit"] {
     padding: 15px; /* Generous padding for a substantial button */
     color: white;
-    background-color: #964ae2; /* Purple accent color */
+    background-color: var(--purple-1); /* Purple accent color */
     border: none;
     border-radius: 5px; /* Consistent radius with other elements */
     cursor: pointer;
@@ -128,7 +138,7 @@ body {
 }
 
 #login-section input[type="submit"]:hover {
-    background-color: #7329c4; /* Darker purple on hover for visual feedback */
+    background-color: var(--purple-2); /* Darker purple on hover for visual feedback */
 }
 
 #login-section p {
@@ -139,12 +149,12 @@ body {
 }
 
 #login-section a {
-    color: #964ae2; /* Purple color for the link to match the accent color */
+    color: var(--purple-1); /* Purple color for the link to match the accent color */
     text-decoration: none; /* No underline to keep it clean and modern */
 }
 
 #login-section a:hover {
-    color: #7329c4; /* Darker purple on hover for visual feedback */
+    color: var(--purple-2); /* Darker purple on hover for visual feedback */
     text-decoration: underline; /* Underline on hover to indicate it's clickable */
 }
 
@@ -161,8 +171,8 @@ body {
 #flag-form input[type="text"] {
     flex-grow: 1; /* Allows the text input to grow and fill available space */
     padding: 8px;
-    border: 1px solid #333;
-    background-color: #333;
+    border: 1px solid var(--form-field-border-color);
+    background-color: var(--form-field-border-color);
     color: #ddd;
     border-radius: 4px;
     margin-right: 5px; /* Space between text input and submit button */
@@ -176,7 +186,7 @@ body {
 #flag-form input[type="submit"] {
     padding: 8px 16px;
     border: none;
-    background-color: #964ae2;
+    background-color: var(--purple-1);
     color: white;
     text-transform: uppercase;
     border-radius: 4px;
@@ -185,7 +195,7 @@ body {
 }
 
 #flag-form input[type="submit"]:hover {
-    background-color: #7329c4; /* Darker purple on hover for visual feedback */
+    background-color: var(--purple-2); /* Darker purple on hover for visual feedback */
 }
 
 /* Section where flag submission form, and filter form is stored */
@@ -194,7 +204,7 @@ body {
     gap: 20px;
     padding: 30px;
 
-    background-color: #1e1e1e;
+    background-color: var(--light-bg-color);
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
 
     /* Andrew god */
@@ -213,7 +223,7 @@ body {
     text-align: left;
     padding: 20px;
     margin-top: 20px;
-    background-color: #1e1e1e;
+    background-color: var(--light-bg-color);
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
     max-width: 800px;
@@ -228,7 +238,7 @@ body {
 }
 
 #filter-form select {
-    background-color: #333; /* Darker background for input fields */
+    background-color: var(--form-field-border-color); /* Darker background for input fields */
     color: #ccc; /* Light gray text color */
     border: none;
     padding: 10px;
@@ -239,11 +249,11 @@ body {
 
 /* Style for the challenge listings */
 #challenge-list .challenge {
-    background-color: #222; /* Dark background for each challenge */
+    background-color: var(--light-bg-color); /* Dark background for each challenge */
     padding: 15px;
     margin-top: 10px;
     border-radius: 8px; /* Rounded corners for challenge cards */
-    border-left: 5px solid #7329c4; /* Stylish left border */
+    border-left: 5px solid var(--purple-2); /* Stylish left border */
 }
 
 
@@ -284,7 +294,7 @@ ol {
 
 ol li {
     padding: 10px 0; /* Padding for each list item to space them out */
-    border-bottom: 1px solid #333; /* Subtle border for each item */
+    border-bottom: 1px solid var(--form-field-border-color); /* Subtle border for each item */
     line-height: 1.8; /* Slightly larger line height for readability */
 }
 
@@ -293,7 +303,7 @@ ol li {
 ol li:before {
     content: counter(item) ". "; /* Adds a period after the number */
     counter-increment: item; /* Automatically increments the numbers */
-    color: #964ae2; /* Stylish purple color for numbers to match headers */
+    color: var(--purple-1); /* Stylish purple color for numbers to match headers */
     font-weight: bold; /* Makes the numbers bold */
     margin-right: 10px; /* Space between the number and text */
 }
