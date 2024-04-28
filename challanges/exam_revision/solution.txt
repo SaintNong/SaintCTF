@@ -1,1 +1,0 @@
-Throw the ciphertext into cyberchef, and use the rot13 brute force option. Alternativly, try all 26 keys with standard rot13

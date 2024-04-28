@@ -1,1 +1,0 @@
-Navigate to robots.txt, and see the page "owo_secret.html". Navigate to the secret page, and use inspect element to see a html comment with the flag.
