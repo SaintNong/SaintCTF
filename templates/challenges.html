@@ -123,6 +123,9 @@
     {% set unsolved_count = challenges | rejectattr("solvers", "contains", current_user.username) | list | length %}
 
     <section id="flag-section">
+        <h1>Welcome {{ current_user.username }}!</h1>
+        <p>You have {{ current_user.score }} points.</p>
+
         <h2>Filter Challenges</h2>
         <p><span id="visible-count">{{ unsolved_count }}</span> / {{ challenges|length }} challenge(s) visible</p>
 
@@ -158,9 +161,6 @@
             <input type="submit" value="Submit Flag">
 
         </form>
-
-        <strong>Hello {{ current_user.username }}</strong> <br>
-        <strong>You have {{ current_user.score }} points</strong>
 
     </section>
 

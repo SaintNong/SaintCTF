@@ -205,6 +205,7 @@ body {
 
 #flag-section h2 {
     font-size: 22px;
+    margin-top: 0.5em;
 }
 
 /* Rules */
@@ -223,7 +224,7 @@ body {
 
 #filter-form {
     /* Centering the form */
-    margin: 0 auto 0.5em;
+    margin: 0 auto;
 }
 
 #filter-form select {
