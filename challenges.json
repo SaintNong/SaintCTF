@@ -17,7 +17,9 @@
             ],
             "flag": "saint{w0w_y0u_d0wnl04d3d_s0m3th1ng!}",
             "solvers": [
-                "efwefw"
+                "efwefw",
+                "fewwfewfefew",
+                "SaintNong"
             ],
             "solves": []
         },
@@ -39,7 +41,7 @@
             "name": "Exam revision",
             "author": "ning",
             "description": "can you crack this very secure cipher for me??<br>The flag is nvdio{nxnv_xdkczm}",
-            "category": "misc",
+            "category": "crypto",
             "difficulty": "easy",
             "points": 15,
             "has_files": true,
@@ -60,7 +62,9 @@
             "folder": "robots",
             "files": [],
             "flag": "saint{I_FOUND_THE_ROBOTS_a3d7cb3}",
-            "solvers": [],
+            "solvers": [
+                "SaintNong"
+            ],
             "solves": []
         },
         {
@@ -99,10 +103,27 @@
             ],
             "flag": "saint{unr3d4ct3d}",
             "solvers": [
-                "efwefw"
+                "efwefw",
+                "SaintNong"
             ],
             "solves": []
         }
     ],
-    "recent_solves": []
+    "recent_solves": [
+        {
+            "username": "SaintNong",
+            "time": "2024-04-28T21:03:55.185618",
+            "challenge_id": 5
+        },
+        {
+            "username": "SaintNong",
+            "time": "2024-04-28T21:00:46.928801",
+            "challenge_id": 3
+        },
+        {
+            "username": "SaintNong",
+            "time": "2024-04-28T21:00:41.086836",
+            "challenge_id": 0
+        }
+    ]
 }
