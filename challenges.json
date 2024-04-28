@@ -32,7 +32,12 @@
             "points": 10,
             "has_files": true,
             "folder": "flag_format",
-            "files": [],
+            "files": [
+                {
+                    "name": "ciphertext.txt",
+                    "url": "/downloads/download_file/flag.txt"
+                }
+            ],
             "flag": "saint{FLAG_FORMAT}",
             "solvers": [],
             "solves": []

@@ -1,0 +1,2 @@
+To solve this challange, download the unredacter tool, and use it on the file, avalable here: https://github.com/BishopFox/unredacter
+Challange is only rated as a hard because of how esoteric the tool is, and it's likely many peoples first time using tools as rough as this

@@ -1,0 +1,2 @@
+User-agent: *
+Disallow: /owo_secret.html
