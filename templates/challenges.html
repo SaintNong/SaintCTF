@@ -92,15 +92,20 @@
                 let visibleCount = 0;
                 $('.challenge').each(function () {
                     const challenge = $(this);
+
+                    challenge.stop(true, false); // Clear queue of animations, but do not jump to end of current animation.
+
                     const matchesCategory = selectedCategory === "" || challenge.data('category') === selectedCategory;
                     const matchesDifficulty = selectedDifficulty === "" || challenge.data('difficulty') === selectedDifficulty;
                     const matchesUnsolved = challenge.data('solved') === undefined;
 
+                    const effectOptions = {duration: 250, easing: "linear"};
+
                     if (matchesCategory && matchesDifficulty && (matchesUnsolved || showSolved)) {
-                        challenge.show();
+                        challenge.slideDown(effectOptions);
                         visibleCount++;
                     } else {
-                        challenge.hide();
+                        challenge.slideUp(effectOptions);
                     }
                 });
 
