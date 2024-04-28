@@ -13,6 +13,7 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(app.root_path, 'database.db')
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SECRET_KEY'] = 'password123'
+    app.config['TEMPLATES_AUTO_RELOAD'] = True # https://stackoverflow.com/a/38371484
 
     # Extensions
     from models import db
