@@ -38,6 +38,11 @@ def create_app():
     # Fake extension
     challenge_manager = ChallengeManager()
 
+    # https://github.com/pallets/jinja/issues/1766
+    @app.template_test("contains")
+    def contains(seq, value):
+        return value in seq
+
     # Register app routes
     register_routes(app, db, bcrypt, challenge_manager)
 

@@ -113,6 +113,7 @@
 {% include 'navbar.html' %}
 
 <main id="challenge-main">
+    {% set unsolved_count = challenges | rejectattr("solvers", "contains", current_user.username) | list | length %}
     <section id="flag-section">
         <h2>Filter Challenges</h2>
         <!-- Challenge filtering form -->
@@ -155,7 +156,7 @@
     </section>
 
     <section id="challenge-list">
-        <p>{{ challenges|length }} challenge(s) left to solve</p>
+        <p>{{ unsolved_count }} challenge(s) left to solve</p>
 
         {% for challenge in challenges %}
             <article class="challenge" data-category="{{ challenge.category }}"
