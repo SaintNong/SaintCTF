@@ -49,7 +49,7 @@ class ChallengeManager:
         # Clear solve information and save if RESET_DATA flag is checked
         if constants.RESET_DATA:
             for challenge in self.challenges:
-                challenge['solves'] = []
+                challenge['solvers'] = []
             self.recent_solves = []
             self.save_state()
 

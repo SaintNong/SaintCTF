@@ -16,12 +16,7 @@
                 }
             ],
             "flag": "saint{w0w_y0u_d0wnl04d3d_s0m3th1ng!}",
-            "solvers": [
-                "efwefw",
-                "fewwfewfefew",
-                "SaintNong"
-            ],
-            "solves": []
+            "solvers": []
         },
         {
             "name": "Flag Format",
@@ -39,8 +34,7 @@
                 }
             ],
             "flag": "saint{FLAG_FORMAT}",
-            "solvers": [],
-            "solves": []
+            "solvers": []
         },
         {
             "name": "Exam revision",
@@ -53,8 +47,7 @@
             "folder": "exam_revision",
             "files": [],
             "flag": "saint{scsa_cipher}",
-            "solvers": [],
-            "solves": []
+            "solvers": []
         },
         {
             "name": "Robots? Where???",
@@ -67,10 +60,7 @@
             "folder": "robots",
             "files": [],
             "flag": "saint{I_FOUND_THE_ROBOTS_a3d7cb3}",
-            "solvers": [
-                "SaintNong"
-            ],
-            "solves": []
+            "solvers": []
         },
         {
             "name": "Mysterious file",
@@ -88,8 +78,7 @@
                 }
             ],
             "flag": "saint{woah_its_a_binary!}",
-            "solvers": [],
-            "solves": []
+            "solvers": []
         },
         {
             "name": "Very secure censorship",
@@ -107,28 +96,8 @@
                 }
             ],
             "flag": "saint{unr3d4ct3d}",
-            "solvers": [
-                "efwefw",
-                "SaintNong"
-            ],
-            "solves": []
+            "solvers": []
         }
     ],
-    "recent_solves": [
-        {
-            "username": "SaintNong",
-            "time": "2024-04-28T21:03:55.185618",
-            "challenge_id": 5
-        },
-        {
-            "username": "SaintNong",
-            "time": "2024-04-28T21:00:46.928801",
-            "challenge_id": 3
-        },
-        {
-            "username": "SaintNong",
-            "time": "2024-04-28T21:00:41.086836",
-            "challenge_id": 0
-        }
-    ]
+    "recent_solves": []
 }
