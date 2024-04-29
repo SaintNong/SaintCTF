@@ -172,7 +172,7 @@ body {
     flex-grow: 1; /* Allows the text input to grow and fill available space */
     padding: 8px;
     border: 1px solid var(--form-field-border-color);
-    background-color: var(--form-field-border-color);
+    background-color: var(--light-bg-color);
     color: #ddd;
     border-radius: 4px;
     margin-right: 5px; /* Space between text input and submit button */
@@ -238,9 +238,9 @@ body {
 }
 
 #filter-form select {
-    background-color: var(--form-field-border-color); /* Darker background for input fields */
+    background-color: var(--light-bg-color); /* Darker background for input fields */
     color: #ccc; /* Light gray text color */
-    border: none;
+    border: 2px solid var(--form-field-border-color); /* Darker border for a subtle and elegant look */
     padding: 10px;
     margin-bottom: 10px; /* Spacing between form elements */
     width: 100%; /* Full width */
