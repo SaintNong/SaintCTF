@@ -1,7 +1,7 @@
 from flask import render_template, send_from_directory, request, jsonify, redirect, abort
 from constants import *
 from flask_login import login_user, logout_user, current_user, login_required
-from models import User
+from models import User, Solve
 from challenges import ChallengeManager
 from datetime import timedelta
 import re
@@ -18,20 +18,35 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager):
     @app.route('/challenges')
     @login_required
     def challenges():
-        return render_template('challenges.html', challenges=challenge_manager.challenges, user=current_user)
+        # A hack to get solve data to still be "virtually" attached to challenges
+        challenge_with_solves = challenge_manager.challenges
+        for i, challenge in enumerate(challenge_with_solves):
+            # Find solves with this challenge id
+            solves = Solve.query.filter_by(challenge_id=i).all()
+
+            # Add the username of each solver to challenge['solvers']
+            challenge['solvers'] = []
+            for solve in solves:
+                challenge['solvers'].append(solve.user.username)  # Wow! Thanks, SQL!
+        print(challenge_with_solves)
+
+        return render_template('challenges.html', challenges=challenge_with_solves, user=current_user)
+
+    # Setting up challenge downloads
+    @app.route('/downloads/<path:filename>', methods=['GET'])
+    def download(filename):
+        if filename.endswith('challenge.toml'):
+            return "Nice try, it's in a separate folder"
+        else:
+            return send_from_directory(DOWNLOAD_DIRECTORY, filename)
 
     @app.route('/rules')
     def rules():
         return render_template('rules.html', user=current_user)
 
-    # Setting up the downloads folder
-    @app.route('/downloads/<path:filename>', methods=['GET'])
-    def download(filename):
-        return send_from_directory(DOWNLOAD_FOLDER, filename)
-
     @app.route('/downloads/')
     def empty_download():
-        # Trying to sneakily list all downloads
+        # Trying to sneakily list all challenges
         return "Nice try"
 
     # Logout page
@@ -113,10 +128,9 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager):
         if displayed_user is None:
             abort(404, "This player does not exist.")
 
-        solves = challenge_manager.get_solved_challenges(displayed_user.username)
+        solves = challenge_manager.get_user_solved_challenges(displayed_user.uid)
 
         # Calculate user rank
-
         top_players = db.session.query(User.username, User.score, User.uid).order_by(User.score.desc()).all()
         rank = 1
         for player in top_players:
@@ -136,9 +150,12 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager):
 
         # Look through the challenges to see if the flag matches any of them
         for i, challenge in enumerate(challenge_manager.challenges):
+            # Flag was correct
             if submitted_flag == challenge['flag']:
-                # Flag was correct
-                if current_user.username not in challenge['solvers']:
+
+                # Check if the user already solved the challenge
+                solve = Solve.query.filter_by(user_id=current_user.uid, challenge_id=i).first()
+                if solve is None:
                     response_message = f"You've earned {challenge['points']} points."
                     current_user.score += challenge['points']
                     db.session.commit()
@@ -175,13 +192,13 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager):
     @app.route('/get-leaderboard-graph-data', methods=['GET'])
     def get_leaderboard_graph():
         # Get top 10 players
-        top_players = db.session.query(User.username, User.score).order_by(User.score.desc()).limit(10).all()
-        names = []
+        top_players = db.session.query(User.uid, User.score).order_by(User.score.desc()).limit(10).all()
+        top_ids = []
         for player in top_players:
-            names.append(player.username)
+            top_ids.append(player.uid)
 
         # Get datapoints
-        data_points = challenge_manager.get_time_based_leaderboard(names)
+        data_points = challenge_manager.get_leaderboard_graph_data(top_ids)
 
         return data_points
 
@@ -189,13 +206,13 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager):
     # Favicon
     @app.route('/favicon.ico')
     def favicon():
-        return send_from_directory(STATIC_FOLDER, 'images/favicon.ico', mimetype='image/vnd.microsoft.icon')
+        return send_from_directory(STATIC_DIRECTORY, 'images/favicon.ico', mimetype='image/vnd.microsoft.icon')
 
     # === Robots challenge ===
     @app.route('/robots.txt')
     def robots():
-        return send_from_directory(STATIC_FOLDER, 'robots.txt')
+        return send_from_directory(STATIC_DIRECTORY, 'robots.txt')
 
     @app.route('/owo_secret.html')
     def owo_secret():
-        return send_from_directory(STATIC_FOLDER, 'owo_secret.html')
+        return send_from_directory(STATIC_DIRECTORY, 'owo_secret.html')

@@ -1,0 +1,9 @@
+name = "Exam Revision"
+author = "ning"
+description = """
+can you crack this very secure cipher for me??
+The flag is nvdio{nxnv_xdkczm}"""
+category = "crypto"
+difficulty = "easy"
+points = 20
+flag = "saint{scsa_cipher}"

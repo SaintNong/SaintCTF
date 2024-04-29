@@ -1,7 +1,11 @@
-import constants
 import datetime
 from datetime import timedelta
-import json
+import os
+import shutil
+import tomllib
+
+from constants import CHALLENGES_DIRECTORY, DOWNLOAD_DIRECTORY, DIFFICULTY_MAPPING, CTF_START_TIME
+from models import Solve, User, db
 
 
 def serialize_datetime(obj):
@@ -42,116 +46,131 @@ def time_ago(time):
 class ChallengeManager:
     def __init__(self):
         self.challenges = []
-        self.recent_solves = []
+        self.read_challenges()
 
-        self.load_state()
+    def read_challenges(self):
+        # Reset downloads directory
+        if os.path.exists(DOWNLOAD_DIRECTORY):
+            shutil.rmtree(DOWNLOAD_DIRECTORY)
+        os.makedirs(DOWNLOAD_DIRECTORY)
 
-        # Clear solve information and save if RESET_DATA flag is checked
-        if constants.RESET_DATA:
-            for challenge in self.challenges:
-                challenge['solvers'] = []
-            self.recent_solves = []
-            self.save_state()
+        for challenge_name in os.listdir(CHALLENGES_DIRECTORY):
+            # Get the directory of the challenge, and the directory of the downloads folder associated with it
+            challenge_dir = os.path.join(CHALLENGES_DIRECTORY, challenge_name)
+            download_dir = os.path.join(DOWNLOAD_DIRECTORY, challenge_name)
 
-        self.initialize_challenges()
+            # Read the challenge configuration file
+            toml_file = os.path.join(CHALLENGES_DIRECTORY, challenge_name, "challenge.toml")
+            if os.path.isfile(toml_file):
+                with open(toml_file, "rb") as file:
+                    challenge_data = tomllib.load(file)
+            else:
+                raise FileNotFoundError(f"Could not find challenge.toml file for challenge '{challenge_name}'")
 
-    def save_state(self):
-        with open(constants.CHALLENGES_FILE_PATH, 'w') as f:
-            data = {
-                'challenges': self.challenges,
-                'recent_solves': self.recent_solves,
-            }
-            json.dump(data, f, indent=4, default=serialize_datetime)
+            # Begin adding challenge files
+            challenge_data['files'] = []
 
-    def load_state(self):
-        with open(constants.CHALLENGES_FILE_PATH, 'r') as f:
-            data = json.load(f, object_hook=deserialize_datetime)
-            self.challenges = data['challenges']
-            self.recent_solves = data['recent_solves']
+            # If there are extra files to add, we create the downloads folder
+            files = os.listdir(challenge_dir)
+            if len(files) > 1:
+                os.makedirs(download_dir, exist_ok=True)
 
-    def initialize_challenges(self):
-        # Replaces
-        for challenge in self.challenges:
-            challenge['description'] = challenge['description'].replace('\n', '<br>')
+            for file in os.listdir(challenge_dir):
+                # Skip challenge toml (because it contains the flag)
+                if file == 'challenge.toml':
+                    continue
 
-            if challenge['has_files']:
-                # Calculates challenge files
-                for file_data in challenge['files']:
-                    if file_data.get('url') is None:
-                        file_data['url'] = f"/downloads/{challenge['folder']}/{file_data['name']}"
+                # Copy file across to downloads
+                src_path = os.path.join(challenge_dir, file)
+                dest_path = os.path.join(download_dir, file)
+                shutil.copyfile(src_path, dest_path)
 
-    def solve_challenge(self, index, user):
-        solve = {
-            'username': user.username,
-            'time': datetime.datetime.now(),
-            'challenge_id': index,
-        }
+                # Add file download metadata
+                challenge_data['files'].append({
+                    'name': file,
+                    'url': os.path.join(download_dir, file)
+                })
 
-        self.challenges[index]['solvers'].append(user.username)
-        self.recent_solves.insert(0, solve)
-        self.save_state()
+            # Add the challenge
+            self.challenges.append(challenge_data)
+
+        try:
+            # Sort challenges by difficulty
+            self.challenges.sort(key=lambda x: DIFFICULTY_MAPPING[x['difficulty']])
+        except KeyError:
+            # Oh no, someone made a new difficulty
+            raise KeyError("It seems someone tried to make a new difficulty...")
+
+    @staticmethod
+    def solve_challenge(index, user):
+        solve = Solve(user_id=user.uid, challenge_id=index)
+        db.session.add(solve)
+        db.session.commit()
 
     # Gets the all challenges the user has solved, and how long ago they solved it
-    def get_solved_challenges(self, username):
+    def get_user_solved_challenges(self, user_id):
+        solves = Solve.query.filter_by(user_id=user_id).all()
         return [{
-            "time": solve['time'],
-            "challenge": self.challenges[solve['challenge_id']],
-            "time_ago": time_ago(solve['time'])
-        } for solve in self.recent_solves if solve['username'] == username]
+            "time": solve.time,
+            "challenge": self.challenges[solve.challenge_id],
+            "time_ago": time_ago(solve.time)
+        } for solve in solves]
 
     # Returns the last n recent solves
     def get_recent_solves(self, n):
-        recent_solves = []
-        for solve in self.recent_solves:
-            challenge = self.challenges[solve['challenge_id']]
-            recent_solves.append({
-                "solver": solve['username'],
-                "challenge": challenge,
-                "time": solve['time'],
-                "time_ago": time_ago(solve['time'])
+        recent_solves = Solve.query.order_by(Solve.time.desc()).limit(n)
+        return [{
+            "solver": solve.user.username,
+            "challenge": self.challenges[solve.challenge_id],
+            "time": solve.time,
+            "time_ago": time_ago(solve.time)
+        } for solve in recent_solves]
+
+    def get_leaderboard_graph_data(self, top_user_ids):
+        dataset = []
+        top_cumulative_scores = {user_id: 0 for user_id in top_user_ids}
+
+        # Fetch solves from the database for the given top users, ordered by time ascending
+        solves = Solve.query.filter(Solve.user_id.in_(top_user_ids)).order_by(Solve.time.asc()).all()
+
+        for solve in solves:
+            user_id = solve.user_id
+            challenge = self.challenges[solve.challenge_id]
+            points = challenge['points']
+
+            # The instant before this solve, they were at the score they were at before
+            dataset.append({
+                "time": (solve.time - timedelta(milliseconds=1)).isoformat(),
+                "user": solve.user.username,
+                "points": top_cumulative_scores[user_id]
             })
 
-            if len(recent_solves) == n:
-                break
-
-        return recent_solves
-
-    def get_time_based_leaderboard(self, top_users):
-        dataset = []
-
-        top_cumulative_scores = {}
-        for user in top_users:
-            top_cumulative_scores[user] = 0
-
-        # Go from the oldest solve to the latest one
-        for solve in self.recent_solves[::-1]:
-            if solve['username'] in top_users:
-                username = solve['username']
-                solved_challenge = self.challenges[solve['challenge_id']]
-                weight = solved_challenge['points']
-
-                # The instant before this solve, they were at the score they were at before
-                dataset.append({
-                    "time": (solve['time'] - timedelta(milliseconds=1)).isoformat(),
-                    "user": solve['username'],
-                    "points": top_cumulative_scores[username],
-                })
-
-                # The instant when they solve the challenge, they jump up to however many points the
-                # challenge was worth
-                top_cumulative_scores[username] += weight
-                dataset.append({
-                    "time": solve['time'].isoformat(),
-                    "user": solve['username'],
-                    "points": top_cumulative_scores[username],
-                })
-
-        # At the present time, all the users have the score they currently have, so we add that too
-        for user in top_cumulative_scores.keys():
+            # The instant when they solve the challenge, they jump up to however many points the challenge was worth
+            top_cumulative_scores[user_id] += points
             dataset.append({
-                "time": datetime.datetime.now().isoformat(),
-                "user": user,
-                "points": top_cumulative_scores[user],
+                "time": solve.time.isoformat(),
+                "user": solve.user.username,
+                "points": top_cumulative_scores[user_id]
+            })
+
+        # At the start of the CTF, all users had 0 points, and at the current time, all users have their current points
+        now = datetime.datetime.now().isoformat()
+        start = CTF_START_TIME.isoformat()
+        for user_id in top_cumulative_scores:
+            user = User.query.get(user_id)
+
+            # Add current score
+            dataset.append({
+                "time": now,
+                "user": user.username if user else "Unknown",
+                "points": top_cumulative_scores[user_id]
+            })
+
+            # Add starting score
+            dataset.insert(0, {
+                "time": start,
+                "user": user.username if user else "Unknown",
+                "points": 0
             })
 
         return dataset
