@@ -18,7 +18,19 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager):
     @app.route('/challenges')
     @login_required
     def challenges():
-        return render_template('challenges.html', challenges=challenge_manager.challenges, user=current_user)
+        # A hack to get solve data to still be "virtually" attached to challenges
+        challenge_with_solves = challenge_manager.challenges
+        for i, challenge in enumerate(challenge_with_solves):
+            # Find solves with this challenge id
+            solves = Solve.query.filter_by(challenge_id=i).all()
+
+            # Add the username of each solver to challenge['solvers']
+            challenge['solvers'] = []
+            for solve in solves:
+                challenge['solvers'].append(solve.user.username)  # Wow! Thanks, SQL!
+        print(challenge_with_solves)
+
+        return render_template('challenges.html', challenges=challenge_with_solves, user=current_user)
 
     # Setting up challenge downloads
     @app.route('/downloads/<path:filename>', methods=['GET'])
