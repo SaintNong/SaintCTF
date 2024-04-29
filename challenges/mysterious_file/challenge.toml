@@ -1,0 +1,8 @@
+name = "Mysterious File"
+author = "ning"
+description = """
+Anyone here got linux?"""
+category = "rev"
+difficulty = "medium"
+points = 150
+flag = "saint{woah_its_a_binary!}"

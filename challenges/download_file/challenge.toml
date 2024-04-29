@@ -1,0 +1,8 @@
+name = "Download File"
+author = "ning"
+description = """
+They said not to click links from strangers right?"""
+category = "misc"
+difficulty = "free points"
+points = 10
+flag = "saint{w0w_y0u_d0wnl04d3d_s0m3th1ng!}"

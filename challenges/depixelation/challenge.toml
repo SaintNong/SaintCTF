@@ -1,0 +1,9 @@
+name = "Very secure censorship"
+author = "ning"
+description = """
+This flag contains top secret information,
+so I decided to pixelate it."""
+category = "misc"
+difficulty = "hard"
+points = 250
+flag = "saint{unr3d4ct3d}"
