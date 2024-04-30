@@ -109,7 +109,7 @@ class ChallengeManager:
 
     # Gets the all challenges the user has solved, and how long ago they solved it
     def get_user_solved_challenges(self, user_id):
-        solves = Solve.query.filter_by(user_id=user_id).all()
+        solves = Solve.query.filter_by(user_id=user_id).order_by(Solve.time.desc()).all()
         return [{
             "time": solve.time,
             "challenge": self.challenges[solve.challenge_id],
