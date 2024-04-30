@@ -28,7 +28,6 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager):
             challenge['solvers'] = []
             for solve in solves:
                 challenge['solvers'].append(solve.user.username)  # Wow! Thanks, SQL!
-        print(challenge_with_solves)
 
         return render_template('challenges.html', challenges=challenge_with_solves, user=current_user)
 
@@ -123,18 +122,18 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager):
     @login_required
     def profile(user_id):
         # Query database for user
-        displayed_user = db.session.query(User).filter(User.uid == user_id).first()
+        displayed_user = db.session.query(User).filter(User.id == user_id).first()
 
         if displayed_user is None:
             abort(404, "This player does not exist.")
 
-        solves = challenge_manager.get_user_solved_challenges(displayed_user.uid)
+        solves = challenge_manager.get_user_solved_challenges(displayed_user.id)
 
         # Calculate user rank
-        top_players = db.session.query(User.username, User.score, User.uid).order_by(User.score.desc()).all()
+        top_players = db.session.query(User.username, User.score, User.id).order_by(User.score.desc()).all()
         rank = 1
         for player in top_players:
-            if player.uid == user_id:
+            if player.id == user_id:
                 break
             rank += 1
 
@@ -154,7 +153,7 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager):
             if submitted_flag == challenge['flag']:
 
                 # Check if the user already solved the challenge
-                solve = Solve.query.filter_by(user_id=current_user.uid, challenge_id=i).first()
+                solve = Solve.query.filter_by(user_id=current_user.id, challenge_id=i).first()
                 if solve is None:
                     response_message = f"You've earned {challenge['points']} points."
                     current_user.score += challenge['points']
@@ -174,7 +173,7 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager):
     @app.route('/get-leaderboard', methods=['GET'])
     def get_leaderboard():
         # Query users db
-        top_players = db.session.query(User.username, User.score, User.uid).order_by(User.score.desc()).all()
+        top_players = db.session.query(User.username, User.score, User.id).order_by(User.score.desc()).all()
 
         result = []
         for line in top_players:
@@ -192,10 +191,10 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager):
     @app.route('/get-leaderboard-graph-data', methods=['GET'])
     def get_leaderboard_graph():
         # Get top 10 players
-        top_players = db.session.query(User.uid, User.score).order_by(User.score.desc()).limit(10).all()
+        top_players = db.session.query(User.id, User.score).order_by(User.score.desc()).limit(10).all()
         top_ids = []
         for player in top_players:
-            top_ids.append(player.uid)
+            top_ids.append(player.id)
 
         # Get datapoints
         data_points = challenge_manager.get_leaderboard_graph_data(top_ids)

@@ -6,7 +6,7 @@ db = SQLAlchemy()
 
 
 class User(db.Model, UserMixin):
-    uid = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String, unique=True, nullable=False)
     password = db.Column(db.String, nullable=False)
     score = db.Column(db.Integer, nullable=True)
@@ -15,19 +15,19 @@ class User(db.Model, UserMixin):
         return True
 
     def __repr__(self):
-        return f"<User '{self.uid}', '{self.username}', '{self.score}>"
+        return f"<User '{self.id}', '{self.username}', '{self.score}>"
 
     def get_id(self):
-        return self.uid
+        return self.id
 
 
 class Solve(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.uid'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     challenge_id = db.Column(db.Integer, nullable=False)
     time = db.Column(db.DateTime, default=datetime.now)  # Who cares about UTC, this isn't a global CTF
 
-    user = db.relationship('User', backref=db.backref('solves', lazy=True))
+    user = db.relationship('User', backref=db.backref('solve', lazy=True))
 
     def __repr__(self):
         return f'<Solve user={self.user.username} challenge_id={self.challenge_id} time={self.time}>'

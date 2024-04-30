@@ -4,7 +4,7 @@ import os
 import shutil
 import tomllib
 
-from constants import CHALLENGES_DIRECTORY, DOWNLOAD_DIRECTORY, DIFFICULTY_MAPPING, CTF_START_TIME
+from constants import CHALLENGES_DIRECTORY, DOWNLOAD_DIRECTORY, DIFFICULTY_MAPPING
 from models import Solve, User, db
 
 
@@ -103,7 +103,7 @@ class ChallengeManager:
 
     @staticmethod
     def solve_challenge(index, user):
-        solve = Solve(user_id=user.uid, challenge_id=index)
+        solve = Solve(user_id=user.id, challenge_id=index)
         db.session.add(solve)
         db.session.commit()
 
@@ -153,9 +153,8 @@ class ChallengeManager:
                 "points": top_cumulative_scores[user_id]
             })
 
-        # At the start of the CTF, all users had 0 points, and at the current time, all users have their current points
+        # At the current time, all users have their current points
         now = datetime.datetime.now().isoformat()
-        start = CTF_START_TIME.isoformat()
         for user_id in top_cumulative_scores:
             user = User.query.get(user_id)
 
@@ -166,11 +165,5 @@ class ChallengeManager:
                 "points": top_cumulative_scores[user_id]
             })
 
-            # Add starting score
-            dataset.insert(0, {
-                "time": start,
-                "user": user.username if user else "Unknown",
-                "points": 0
-            })
 
         return dataset

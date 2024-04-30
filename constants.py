@@ -3,9 +3,7 @@ from datetime import datetime
 DOWNLOAD_DIRECTORY = 'downloads'
 STATIC_DIRECTORY = 'static'
 CHALLENGES_DIRECTORY = 'challenges'
-
-# Will reset data on each run time
-RESET_DATA = True
+SECRET_KEY_FILE = 'secret.txt'
 
 DIFFICULTY_MAPPING = {
     'free points': 0,
@@ -17,4 +15,3 @@ DIFFICULTY_MAPPING = {
 }
 
 
-CTF_START_TIME = datetime.now()
