@@ -37,7 +37,7 @@ h2 {
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
     height: 600px;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 /* Table styling */
