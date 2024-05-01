@@ -189,7 +189,7 @@
                     <div class="files">
                         <ul>
                             {% for file in challenge.files %}
-                                <li><a href="{{ file.url }}" download="{{ file.name }}">{{ file.name }}</a></li>
+                                <li><a href="downloads/{{ challenge.id }}/{{ file }}" download="{{ file }}">{{ file }}</a></li>
 
                             {% endfor %}
                         </ul>

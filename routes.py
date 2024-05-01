@@ -32,12 +32,12 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager):
         return render_template('challenges.html', challenges=challenge_with_solves, user=current_user)
 
     # Setting up challenge downloads
-    @app.route('/downloads/<path:filename>', methods=['GET'])
-    def download(filename):
-        if filename.endswith('challenge.toml'):
+    @app.route('/downloads/<challenge>/<path:filepath>', methods=['GET'])
+    def download(challenge, filepath):
+        if filepath.endswith('challenge.toml'):
             return "Nice try, it's in a separate folder"
         else:
-            return send_from_directory(DOWNLOAD_DIRECTORY, filename)
+            return send_from_directory(CHALLENGES_DIRECTORY, challenge + "/" + filepath)
 
     @app.route('/rules')
     def rules():

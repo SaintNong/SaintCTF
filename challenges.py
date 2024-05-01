@@ -4,7 +4,7 @@ import os
 import shutil
 import tomllib
 
-from constants import CHALLENGES_DIRECTORY, DOWNLOAD_DIRECTORY, DIFFICULTY_MAPPING
+from constants import CHALLENGES_DIRECTORY, DIFFICULTY_MAPPING
 from models import Solve, User, db
 
 
@@ -49,15 +49,9 @@ class ChallengeManager:
         self.read_challenges()
 
     def read_challenges(self):
-        # Reset downloads directory
-        if os.path.exists(DOWNLOAD_DIRECTORY):
-            shutil.rmtree(DOWNLOAD_DIRECTORY)
-        os.makedirs(DOWNLOAD_DIRECTORY)
-
         for challenge_name in os.listdir(CHALLENGES_DIRECTORY):
-            # Get the directory of the challenge, and the directory of the downloads folder associated with it
+            # Get the directory of the challenge
             challenge_dir = os.path.join(CHALLENGES_DIRECTORY, challenge_name)
-            download_dir = os.path.join(DOWNLOAD_DIRECTORY, challenge_name)
 
             # Read the challenge configuration file
             toml_file = os.path.join(CHALLENGES_DIRECTORY, challenge_name, "challenge.toml")
@@ -70,29 +64,19 @@ class ChallengeManager:
             else:
                 raise FileNotFoundError(f"Could not find challenge.toml file for challenge '{challenge_name}'")
 
+            # Save the folder name (id) of the challenge
+            challenge_data['id'] = challenge_name
+
             # Begin adding challenge files
             challenge_data['files'] = []
-
-            # If there are extra files to add, we create the downloads folder
-            files = os.listdir(challenge_dir)
-            if len(files) > 1:
-                os.makedirs(download_dir, exist_ok=True)
 
             for file in os.listdir(challenge_dir):
                 # Skip challenge toml (because it contains the flag)
                 if file == 'challenge.toml':
                     continue
 
-                # Copy file across to downloads
-                src_path = os.path.join(challenge_dir, file)
-                dest_path = os.path.join(download_dir, file)
-                shutil.copyfile(src_path, dest_path)
-
                 # Add file download metadata
-                challenge_data['files'].append({
-                    'name': file,
-                    'url': os.path.join(download_dir, file)
-                })
+                challenge_data['files'].append(file)
 
             # Add the challenge
             self.challenges.append(challenge_data)
