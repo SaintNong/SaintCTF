@@ -65,13 +65,14 @@ def create_app():
     register_routes(app, db, bcrypt, challenge_manager)
 
     # Reset the database if data reset flag is checked
-    if app.config['RESET_DATA']:
-        with app.app_context():
+    with app.app_context():
+        if app.config['RESET_DATA']:
             print('RESETTING DATABASE')
             print('To keep database data through multiple runtimes, set RESET_DATA to False.')
             db.drop_all()
-            db.create_all()
-            db.session.commit()
+
+        db.create_all()
+        db.session.commit()
 
     return app
 

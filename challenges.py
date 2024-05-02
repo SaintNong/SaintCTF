@@ -64,6 +64,9 @@ class ChallengeManager:
             if os.path.isfile(toml_file):
                 with open(toml_file, "rb") as file:
                     challenge_data = tomllib.load(file)
+
+                    # Fix newlines
+                    challenge_data['description'] = challenge_data['description'].replace('\n', '<br>')
             else:
                 raise FileNotFoundError(f"Could not find challenge.toml file for challenge '{challenge_name}'")
 
