@@ -70,13 +70,17 @@ class ChallengeManager:
             # Begin adding challenge files
             challenge_data['files'] = []
 
-            for file in os.listdir(challenge_dir):
+            for entry in os.scandir(challenge_dir):
+                # Skip non-files (i.e. folders)
+                if not entry.is_file():
+                    continue
+
                 # Skip challenge toml (because it contains the flag)
-                if file == 'challenge.toml':
+                if entry.name == 'challenge.toml':
                     continue
 
                 # Add file download metadata
-                challenge_data['files'].append(file)
+                challenge_data['files'].append(entry.name)
 
             # Add the challenge
             self.challenges.append(challenge_data)
