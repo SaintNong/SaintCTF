@@ -34,10 +34,17 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager):
     # Setting up challenge downloads
     @app.route('/downloads/<challenge>/<path:filepath>', methods=['GET'])
     def download(challenge, filepath):
-        if filepath.endswith('challenge.toml'):
-            return "Nice try, it's in a separate folder"
-        else:
+        challenge_files = [c['files'] for c in challenge_manager.challenges if c['id'] == challenge]
+        if len(challenge_files) < 1: # Challenge ID not found
+            abort(404) # https://stackoverflow.com/a/69234618
+
+        assert len(challenge_files) == 1, "Multiple challenges cannot have the same ID!"
+        challenge_files = challenge_files[0]
+
+        if filepath in challenge_files:
             return send_from_directory(CHALLENGES_DIRECTORY, challenge + "/" + filepath)
+        else:
+            abort(404)
 
     @app.route('/rules')
     def rules():
