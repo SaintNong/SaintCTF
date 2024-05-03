@@ -45,16 +45,16 @@ def time_ago(time):
 
 class ChallengeManager:
     def __init__(self):
-        self.challenges = []
+        self.challenges = {}
         self.read_challenges()
 
     def read_challenges(self):
-        for challenge_name in os.listdir(CHALLENGES_DIRECTORY):
+        for challenge_id in os.listdir(CHALLENGES_DIRECTORY):
             # Get the directory of the challenge
-            challenge_dir = os.path.join(CHALLENGES_DIRECTORY, challenge_name)
+            challenge_dir = os.path.join(CHALLENGES_DIRECTORY, challenge_id)
 
             # Read the challenge configuration file
-            toml_file = os.path.join(CHALLENGES_DIRECTORY, challenge_name, "challenge.toml")
+            toml_file = os.path.join(CHALLENGES_DIRECTORY, challenge_id, "challenge.toml")
             if os.path.isfile(toml_file):
                 with open(toml_file, "rb") as file:
                     challenge_data = tomllib.load(file)
@@ -62,10 +62,7 @@ class ChallengeManager:
                     # Fix newlines
                     challenge_data['description'] = challenge_data['description'].replace('\n', '<br>')
             else:
-                raise FileNotFoundError(f"Could not find challenge.toml file for challenge '{challenge_name}'")
-
-            # Save the folder name (id) of the challenge
-            challenge_data['id'] = challenge_name
+                raise FileNotFoundError(f"Could not find challenge.toml file for challenge '{challenge_id}'")
 
             # Begin adding challenge files
             challenge_data['files'] = []
@@ -83,18 +80,18 @@ class ChallengeManager:
                 challenge_data['files'].append(entry.name)
 
             # Add the challenge
-            self.challenges.append(challenge_data)
+            self.challenges[challenge_id] = challenge_data
 
         try:
             # Sort challenges by difficulty
-            self.challenges.sort(key=lambda x: DIFFICULTY_MAPPING[x['difficulty']])
+            self.challenges = dict(sorted(self.challenges.items(), key=lambda x: DIFFICULTY_MAPPING[x[1]['difficulty']]))
         except KeyError:
             # Oh no, someone made a new difficulty
             raise KeyError("It seems someone tried to make a new difficulty...")
 
     @staticmethod
-    def solve_challenge(index, user):
-        solve = Solve(user_id=user.id, challenge_id=index)
+    def solve_challenge(id_, user):
+        solve = Solve(user_id=user.id, challenge_id=id_)
         db.session.add(solve)
         db.session.commit()
 
