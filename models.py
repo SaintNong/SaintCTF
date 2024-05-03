@@ -4,8 +4,8 @@ from datetime import datetime
 
 db = SQLAlchemy()
 
-# Why the usage of `id` is allowable: https://stackoverflow.com/a/76108267
 
+# Why the usage of `id` is allowable: https://stackoverflow.com/a/76108267
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String, unique=True, nullable=False)
