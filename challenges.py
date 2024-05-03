@@ -67,12 +67,9 @@ class ChallengeManager:
             challenge_data['files'] = []
 
             for entry in os.scandir(challenge_dir):
-                # Skip non-files (i.e. folders)
-                if not entry.is_file():
-                    continue
-
-                # Skip challenge toml (because it contains the flag)
-                if entry.name == 'challenge.toml':
+                # - Skip non-files (i.e. folders)
+                # - Skip challenge toml (because it contains the flag)
+                if not entry.is_file() or entry.name == 'challenge.toml':
                     continue
 
                 # Add file download metadata
@@ -83,7 +80,8 @@ class ChallengeManager:
 
         try:
             # Sort challenges by difficulty
-            self.challenges = dict(sorted(self.challenges.items(), key=lambda x: DIFFICULTY_MAPPING[x[1]['difficulty']]))
+            self.challenges = dict(
+                sorted(self.challenges.items(), key=lambda x: DIFFICULTY_MAPPING[x[1]['difficulty']]))
         except KeyError:
             # Oh no, someone made a new difficulty
             raise KeyError("It seems someone tried to make a new difficulty...")
@@ -151,6 +149,5 @@ class ChallengeManager:
                 "user": user.username if user else "Unknown",
                 "points": top_cumulative_scores[user_id]
             })
-
 
         return dataset
