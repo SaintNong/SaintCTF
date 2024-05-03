@@ -1,7 +1,6 @@
 import datetime
 from datetime import timedelta
 import os
-import shutil
 import tomllib
 
 from constants import CHALLENGES_DIRECTORY, DIFFICULTY_MAPPING
