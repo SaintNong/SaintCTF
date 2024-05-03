@@ -1,10 +1,9 @@
 import datetime
 from datetime import timedelta
 import os
-import shutil
 import tomllib
 
-from constants import CHALLENGES_DIRECTORY, DOWNLOAD_DIRECTORY, DIFFICULTY_MAPPING
+from constants import CHALLENGES_DIRECTORY, DIFFICULTY_MAPPING
 from models import Solve, User, db
 
 
@@ -45,22 +44,16 @@ def time_ago(time):
 
 class ChallengeManager:
     def __init__(self):
-        self.challenges = []
+        self.challenges = {}
         self.read_challenges()
 
     def read_challenges(self):
-        # Reset downloads directory
-        if os.path.exists(DOWNLOAD_DIRECTORY):
-            shutil.rmtree(DOWNLOAD_DIRECTORY)
-        os.makedirs(DOWNLOAD_DIRECTORY)
-
-        for challenge_name in os.listdir(CHALLENGES_DIRECTORY):
-            # Get the directory of the challenge, and the directory of the downloads folder associated with it
-            challenge_dir = os.path.join(CHALLENGES_DIRECTORY, challenge_name)
-            download_dir = os.path.join(DOWNLOAD_DIRECTORY, challenge_name)
+        for challenge_id in os.listdir(CHALLENGES_DIRECTORY):
+            # Get the directory of the challenge
+            challenge_dir = os.path.join(CHALLENGES_DIRECTORY, challenge_id)
 
             # Read the challenge configuration file
-            toml_file = os.path.join(CHALLENGES_DIRECTORY, challenge_name, "challenge.toml")
+            toml_file = os.path.join(CHALLENGES_DIRECTORY, challenge_id, "challenge.toml")
             if os.path.isfile(toml_file):
                 with open(toml_file, "rb") as file:
                     challenge_data = tomllib.load(file)
@@ -68,45 +61,34 @@ class ChallengeManager:
                     # Fix newlines
                     challenge_data['description'] = challenge_data['description'].replace('\n', '<br>')
             else:
-                raise FileNotFoundError(f"Could not find challenge.toml file for challenge '{challenge_name}'")
+                raise FileNotFoundError(f"Could not find challenge.toml file for challenge '{challenge_id}'")
 
             # Begin adding challenge files
             challenge_data['files'] = []
 
-            # If there are extra files to add, we create the downloads folder
-            files = os.listdir(challenge_dir)
-            if len(files) > 1:
-                os.makedirs(download_dir, exist_ok=True)
-
-            for file in os.listdir(challenge_dir):
-                # Skip challenge toml (because it contains the flag)
-                if file == 'challenge.toml':
+            for entry in os.scandir(challenge_dir):
+                # - Skip non-files (i.e. folders)
+                # - Skip challenge toml (because it contains the flag)
+                if not entry.is_file() or entry.name == 'challenge.toml':
                     continue
 
-                # Copy file across to downloads
-                src_path = os.path.join(challenge_dir, file)
-                dest_path = os.path.join(download_dir, file)
-                shutil.copyfile(src_path, dest_path)
-
                 # Add file download metadata
-                challenge_data['files'].append({
-                    'name': file,
-                    'url': os.path.join(download_dir, file)
-                })
+                challenge_data['files'].append(entry.name)
 
             # Add the challenge
-            self.challenges.append(challenge_data)
+            self.challenges[challenge_id] = challenge_data
 
         try:
             # Sort challenges by difficulty
-            self.challenges.sort(key=lambda x: DIFFICULTY_MAPPING[x['difficulty']])
+            self.challenges = dict(
+                sorted(self.challenges.items(), key=lambda x: DIFFICULTY_MAPPING[x[1]['difficulty']]))
         except KeyError:
             # Oh no, someone made a new difficulty
             raise KeyError("It seems someone tried to make a new difficulty...")
 
     @staticmethod
-    def solve_challenge(index, user):
-        solve = Solve(user_id=user.id, challenge_id=index)
+    def solve_challenge(id_, user):
+        solve = Solve(user_id=user.id, challenge_id=id_)
         db.session.add(solve)
         db.session.commit()
 
@@ -167,6 +149,5 @@ class ChallengeManager:
                 "user": user.username if user else "Unknown",
                 "points": top_cumulative_scores[user_id]
             })
-
 
         return dataset

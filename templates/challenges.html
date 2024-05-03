@@ -119,8 +119,8 @@
 {% include 'navbar.html' %}
 
 <main id="challenge-main">
-    {% set solved_count = challenges | selectattr("solvers", "contains", current_user.username) | list | length %}
-    {% set unsolved_count = challenges | rejectattr("solvers", "contains", current_user.username) | list | length %}
+    {% set solved_count = challenges.values() | selectattr("solvers", "contains", current_user.username) | list | length %}
+    {% set unsolved_count = challenges.values()| rejectattr("solvers", "contains", current_user.username) | list | length %}
 
     <section id="flag-section">
         <h1>Welcome {{ current_user.username }}!</h1>
@@ -168,7 +168,7 @@
     <section id="challenge-list">
         <p>{{ unsolved_count }} challenge(s) left to solve</p>
 
-        {% for challenge in challenges %}
+        {% for id, challenge in challenges.items() %}
             <article class="challenge" data-category="{{ challenge.category }}"
                      data-difficulty="{{ challenge.difficulty }}"
                      {% if current_user.username in challenge.solvers %}
@@ -189,7 +189,7 @@
                     <div class="files">
                         <ul>
                             {% for file in challenge.files %}
-                                <li><a href="{{ file.url }}" download="{{ file.name }}">{{ file.name }}</a></li>
+                                <li><a href="downloads/{{ id }}/{{ file }}" download="{{ file }}">{{ file }}</a></li>
 
                             {% endfor %}
                         </ul>

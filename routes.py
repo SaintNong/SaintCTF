@@ -20,9 +20,9 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager):
     def challenges():
         # A hack to get solve data to still be "virtually" attached to challenges
         challenge_with_solves = challenge_manager.challenges
-        for i, challenge in enumerate(challenge_with_solves):
+        for id_, challenge in challenge_with_solves.items():
             # Find solves with this challenge id
-            solves = Solve.query.filter_by(challenge_id=i).all()
+            solves = Solve.query.filter_by(challenge_id=id_).all()
 
             # Add the username of each solver to challenge['solvers']
             challenge['solvers'] = []
@@ -32,12 +32,17 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager):
         return render_template('challenges.html', challenges=challenge_with_solves, user=current_user)
 
     # Setting up challenge downloads
-    @app.route('/downloads/<path:filename>', methods=['GET'])
-    def download(filename):
-        if filename.endswith('challenge.toml'):
-            return "Nice try, it's in a separate folder"
+    @app.route('/downloads/<challenge>/<path:filepath>', methods=['GET'])
+    def download(challenge, filepath):
+        challenge = challenge_manager.challenges.get(challenge)
+
+        if challenge is None: # Challenge ID not found
+            abort(404) # https://stackoverflow.com/a/69234618
+
+        if filepath in challenge['files']:
+            return send_from_directory(CHALLENGES_DIRECTORY, challenge + "/" + filepath)
         else:
-            return send_from_directory(DOWNLOAD_DIRECTORY, filename)
+            abort(404)
 
     @app.route('/rules')
     def rules():
@@ -148,18 +153,18 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager):
         submitted_flag = request.form['flag'].strip()
 
         # Look through the challenges to see if the flag matches any of them
-        for i, challenge in enumerate(challenge_manager.challenges):
+        for id_, challenge in challenge_manager.challenges.items():
             # Flag was correct
             if submitted_flag == challenge['flag']:
 
                 # Check if the user already solved the challenge
-                solve = Solve.query.filter_by(user_id=current_user.id, challenge_id=i).first()
+                solve = Solve.query.filter_by(user_id=current_user.id, challenge_id=id_).first()
                 if solve is None:
                     response_message = f"You've earned {challenge['points']} points."
                     current_user.score += challenge['points']
                     db.session.commit()
 
-                    challenge_manager.solve_challenge(i, current_user)
+                    challenge_manager.solve_challenge(id_, current_user)
 
                     return jsonify({'status': 'correct', 'message': response_message})
 
