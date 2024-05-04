@@ -4,6 +4,7 @@ from flask_login import login_user, logout_user, current_user, login_required
 from models import User, Solve
 from challenges import ChallengeManager
 from datetime import timedelta
+import itertools
 import re
 
 
@@ -18,18 +19,21 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager):
     @app.route('/challenges')
     @login_required
     def challenges():
-        # A hack to get solve data to still be "virtually" attached to challenges
-        challenge_with_solves = challenge_manager.challenges
-        for id_, challenge in challenge_with_solves.items():
-            # Find solves with this challenge id
-            solves = Solve.query.filter_by(challenge_id=id_).all()
+        # Select all solves, ordered by challenge_id (needed for `groupby`)
+        solves = db.session.scalars(db.select(Solve).order_by(Solve.challenge_id)).all()
 
-            # Add the username of each solver to challenge['solvers']
-            challenge['solvers'] = []
-            for solve in solves:
-                challenge['solvers'].append(solve.user.username)  # Wow! Thanks, SQL!
+        # Remove solves that do not correspond to known challenges
+        # (in case challenges have been removed)
+        solves = [x for x in solves if x.challenge_id in challenge_manager.challenges]
 
-        return render_template('challenges.html', challenges=challenge_with_solves, user=current_user)
+        # Save count of user's solved challenges
+        solved_count = len([x for x in solves if x.user == current_user])
+
+        # Group solves by challenge_id
+        # https://stackoverflow.com/a/51416299
+        solves = {k: list(g) for k, g in itertools.groupby(solves, key=lambda x: x.challenge_id)}
+
+        return render_template('challenges.html', challenges=challenge_manager.challenges, solves=solves, solved_count=solved_count, user=current_user)
 
     # Setting up challenge downloads
     @app.route('/downloads/<challenge>/<path:filepath>', methods=['GET'])

@@ -119,8 +119,7 @@
 {% include 'navbar.html' %}
 
 <main id="challenge-main">
-    {% set solved_count = challenges.values() | selectattr("solvers", "contains", current_user.username) | list | length %}
-    {% set unsolved_count = challenges.values()| rejectattr("solvers", "contains", current_user.username) | list | length %}
+    {% set unsolved_count = challenges|length - solved_count %}
 
     <section id="flag-section">
         <h1>Welcome {{ current_user.username }}!</h1>
@@ -171,7 +170,7 @@
         {% for id, challenge in challenges.items() %}
             <article class="challenge" data-category="{{ challenge.category }}"
                      data-difficulty="{{ challenge.difficulty }}"
-                     {% if current_user.username in challenge.solvers %}
+                     {% if solves[id]|map(attribute='user.username')|select('eq', current_user.username)|list %}
                          data-solved style="display: none;"
                      {% endif %}
                  >
@@ -182,7 +181,7 @@
                 <p class="difficulty"><strong>Difficulty:</strong> {{ challenge.difficulty }}</p>
                 <p class="points"><strong>Points:</strong> {{ challenge.points }}</p>
                 <p class="author"><strong>Author:</strong> {{ challenge.author }}</p>
-                <p class="solve-counter"><strong>Solves:</strong> {{ challenge.solvers|length }}</p>
+                <p class="solve-counter"><strong>Solves:</strong> {{ solves[id]|length }}</p>
 
                 {% if challenge.files %}
                     <!-- Challenge downloads -->
