@@ -175,17 +175,23 @@
                      {% endif %}
                  >
                 <!-- Challenge info -->
-                <h2>{{ challenge.name }}</h2>
+                <header>
+                    <div>
+                        <h2>{{ challenge.name }} </h2>
+                        <p class="author">{{ challenge.author }}</p>
+                    </div>
+
+                    <div class="info-block">
+                        <p class="points">{{ challenge.points}} points</p>
+                        <p class="difficulty">{{ challenge.difficulty }}</p>
+                    </div>
+                </header>
                 <p class="description"> {{ challenge.description | safe }} </p>
-                <p class="category"><strong>Category:</strong> {{ challenge.category }}</p>
-                <p class="difficulty"><strong>Difficulty:</strong> {{ challenge.difficulty }}</p>
-                <p class="points"><strong>Points:</strong> {{ challenge.points }}</p>
-                <p class="author"><strong>Author:</strong> {{ challenge.author }}</p>
-                <p class="solve-counter"><strong>Solves:</strong> {{ solves[id]|length }}</p>
 
                 {% if challenge.files %}
                     <!-- Challenge downloads -->
                     <div class="files">
+                        <h3>Files</h3>
                         <ul>
                             {% for file in challenge.files %}
                                 <li><a href="downloads/{{ id }}/{{ file }}" download="{{ file }}">{{ file }}</a></li>
@@ -194,6 +200,10 @@
                         </ul>
                     </div>
                 {% endif %}
+                <footer>
+                    <p class="category">{{ challenge.category }}</p>
+                    <p class="solves">{{ solves[id]|length }} solve(s)</p>
+                </footer>
 
 
             </article>
