@@ -32,15 +32,15 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager):
         return render_template('challenges.html', challenges=challenge_with_solves, user=current_user)
 
     # Setting up challenge downloads
-    @app.route('/downloads/<challenge>/<path:filepath>', methods=['GET'])
-    def download(challenge, filepath):
-        challenge = challenge_manager.challenges.get(challenge)
+    @app.route('/downloads/<challenge_id>/<path:filepath>', methods=['GET'])
+    def download(challenge_id, filepath):
+        challenge = challenge_manager.challenges.get(challenge_id)
 
         if challenge is None: # Challenge ID not found
             abort(404) # https://stackoverflow.com/a/69234618
 
         if filepath in challenge['files']:
-            return send_from_directory(CHALLENGES_DIRECTORY, challenge + "/" + filepath)
+            return send_from_directory(CHALLENGES_DIRECTORY, challenge_id + "/" + filepath)
         else:
             abort(404)
 
