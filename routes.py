@@ -38,9 +38,7 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager):
                 # Calculate new url from current url and port
                 current_url = url_for(request.endpoint, _external=True)
                 parts = current_url.split(':')
-                print(parts[0])
                 container_url = f"{parts[0]}:{parts[1]}:{container['port']}"
-                print(container_url)
 
                 # Set container URL in the challenge data
                 container['url'] = container_url
