@@ -50,7 +50,7 @@ class ChallengeManager:
     def read_challenges(self):
         for challenge_id in os.listdir(CHALLENGES_DIRECTORY):
             # Get the directory of the challenge
-            challenge_dir = os.path.join(CHALLENGES_DIRECTORY, challenge_id)
+            downloads_dir = os.path.join(CHALLENGES_DIRECTORY, challenge_id, "downloads")
 
             # Read the challenge configuration file
             toml_file = os.path.join(CHALLENGES_DIRECTORY, challenge_id, "challenge.toml")
@@ -66,10 +66,9 @@ class ChallengeManager:
             # Begin adding challenge files
             challenge_data['files'] = []
 
-            for entry in os.scandir(challenge_dir):
-                # - Skip non-files (i.e. folders)
-                # - Skip challenge toml (because it contains the flag)
-                if not entry.is_file() or entry.name == 'challenge.toml':
+            for entry in os.scandir(downloads_dir):
+                # Skip non-files (i.e. folders)
+                if not entry.is_file():
                     continue
 
                 # Add file download metadata

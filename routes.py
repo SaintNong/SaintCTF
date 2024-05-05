@@ -40,7 +40,7 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager):
             abort(404) # https://stackoverflow.com/a/69234618
 
         if filepath in challenge['files']:
-            return send_from_directory(CHALLENGES_DIRECTORY, challenge_id + "/" + filepath)
+            return send_from_directory(CHALLENGES_DIRECTORY, challenge_id + "/downloads/" + filepath)
         else:
             abort(404)
 
