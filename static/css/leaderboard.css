@@ -42,23 +42,7 @@ h2 {
 
 /* Table styling */
 table {
-    width: 100%;
-    border-collapse: collapse;
     max-height: 600px;
-}
-
-th, td {
-    text-align: left;
-    padding: 8px;
-    border-bottom: 1px solid var(--form-field-border-color);
-}
-
-thead {
-    background-color: var(--form-field-border-color);
-}
-
-tbody tr:hover {
-    background-color: var(--hover-color);
 }
 
 /* Re-enable page scroll */
