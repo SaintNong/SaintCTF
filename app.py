@@ -6,7 +6,8 @@ import signal
 import sys
 
 from flask import Flask, render_template, url_for
-from challenges import ChallengeManager
+from challenges import ChallengeManager, time_ago
+
 from routes import register_routes
 
 from flask_login import LoginManager, current_user
@@ -59,10 +60,8 @@ def create_app():
     # Fake extension
     challenge_manager = ChallengeManager()
 
-    # https://github.com/pallets/jinja/issues/1766
-    @app.template_test("contains")
-    def contains(seq, value):
-        return value in seq
+    # https://flask.palletsprojects.com/en/3.0.x/templating/#registering-filters
+    app.jinja_env.filters['time_ago'] = time_ago
 
     # Register app routes
     register_routes(app, db, bcrypt, challenge_manager)

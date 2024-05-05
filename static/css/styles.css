@@ -1,4 +1,5 @@
 :root {
+    --fg-color: white;
     --bg-color: #121212;
     --light-bg-color: #1e1e1e;
     --purple-1: #964ae2; /* purple */
@@ -6,6 +7,7 @@
     --link-color: #4a90e2;
     --form-field-border-color: #333;
     --hover-color: #1a1a1a;
+    --user-highlight: #004225;
 }
 
 /* Reset some default styling */
@@ -20,7 +22,7 @@ body {
     height: 100%; /* Make body fill entire page, but dont extend further */
     font-family: Arial, sans-serif;
     line-height: 1.6;
-    color: #ddd;
+    color: var(--fg-color);
     background-color: var(--bg-color);
 }
 
@@ -28,7 +30,7 @@ body {
 
 /* Header styling */
 #main-header h1 {
-    color: white;
+    color: var(--fg-color);
     text-align: center;
     padding: 20px 0;
     background-color: var(--light-bg-color);
@@ -46,47 +48,105 @@ body {
     flex: 1;
 }
 
+.challenge > * {
+    margin-bottom: 0.3em;
+}
 
+.challenge > :last-child {
+    margin-bottom: 0;
+}
+
+.challenge header p, .challenge footer p, .challenge footer summary {
+    color: lightgrey;
+}
 
 .challenge h2 {
     color: var(--purple-1); /* purple */
 }
 
-.description {
-    margin-top: 5px;
-    margin-bottom: 15px;
+.challenge header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.6em;
 }
 
-
-.category, .points, .files, .difficulty, .author {
-
+.challenge .info-block {
+    text-align: end;
 }
 
+.category-link, .difficulty-link {
+    text-decoration: none;
+}
 
+.difficulty-link {
+    float: left;
+}
+
+.solves-count {
+    text-align: right;
+}
+
+/* Table styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    text-align: left;
+    padding: 8px;
+    border-bottom: 1px solid var(--form-field-border-color);
+}
+
+thead {
+    background-color: var(--form-field-border-color);
+}
+
+tbody tr:hover {
+    background-color: var(--hover-color);
+}
+
+tbody tr.highlight {
+    background-color: var(--user-highlight);
+}
+
+.files {
+    --spacing: 1em;
+}
+
+.files h3 {
+    display: inline;
+    margin-right: var(--spacing);
+    font-size: 1em;
+    font-weight: bold;
+}
 
 .files ul {
-    padding-top: 15px; /* Separate file downloads from the rest of the challenge */
-
-    padding-left: 0; /* Removes the default padding */
-    display: flex; /* Enables flexbox layout */
+    display: inline-flex; /* Enables flexbox layout */
     flex-wrap: wrap; /* Allows items to wrap to the next line if needed */
     list-style: none; /* Removes default list styling */
-    margin: 0; /* Removes default margin */
 }
 
 .files li {
-    margin-right: 20px; /* Adds some space between file links */
+    margin-right: var(--spacing); /* Adds some space between file links */
     white-space: nowrap; /* Prevents the text from wrapping */
 }
 
-
 .files a {
-    color: var(--link-color);
     text-decoration: none;
+}
+
+a {
+    color: var(--link-color);
 }
 
 .files a:hover {
     text-decoration: underline;
+}
+
+details > summary {
+    cursor: pointer;
 }
 
 
