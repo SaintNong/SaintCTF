@@ -3,7 +3,7 @@ from datetime import timedelta
 import os
 import tomllib
 import docker
-import atexit
+import signal
 
 from constants import CHALLENGES_DIRECTORY, DIFFICULTY_MAPPING
 from models import Solve, User, db
@@ -53,7 +53,8 @@ class ContainerManager:
         print("Container manager initialized")
 
         # Stop containers when program is closed
-        atexit.register(self.clean_up_containers)
+        signal.signal(signal.SIGINT, self.clean_up_containers)
+        signal.signal(signal.SIGTERM, self.clean_up_containers)
 
     def add_container(self, container_data, container_dir, challenge_id):
         client = self.client
@@ -78,7 +79,7 @@ class ContainerManager:
             print(f" * Docker API encountered an error while starting {challenge_id}")
             raise e
 
-    def clean_up_containers(self):
+    def clean_up_containers(self, signum, frame):
         # Stops all containers - called on program exit
         print("Stopping containers")
 
