@@ -221,8 +221,9 @@
                 {% if challenge.container %}
                     <!-- Challenge Links-->
                     <div class = "files">
+                        <h3>Link</h3>
                         <ul>
-                            <li><a href="{{ challenge.container.url }}">Link</a></li>
+                            <li><a href="{{ challenge.container.url }}">{{ challenge.container.url }}</a></li>
                         </ul>
                     </div>
                 {% endif %}
