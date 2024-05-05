@@ -183,7 +183,7 @@
 
                     <div class="info-block">
                         <p class="points">{{ challenge.points}} points</p>
-                        <p class="difficulty">{{ challenge.difficulty }}</p>
+                        <p class="category">{{ challenge.category }}</p>
                     </div>
                 </header>
                 <p class="description"> {{ challenge.description | safe }} </p>
@@ -202,7 +202,7 @@
                 {% endif %}
 
                 <footer>
-                    <p class="category">{{ challenge.category }}</p>
+                    <p class="difficulty">{{ challenge.difficulty }}</p>
                     {% if solves[id] %}
                         <details class="solves-count">
                             <summary>{{ solves[id]|length }} solve(s)</summary>
