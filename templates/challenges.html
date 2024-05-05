@@ -231,7 +231,10 @@
                                     </tr>
                                 </thead>
                                 {% for solve in solves[id] %}
-                                    <tr>
+                                    <tr {% if solve.user.username == current_user.username %}
+                                        class="highlight"
+                                        {% endif %}
+                                        >
                                         <td>{{solve.user.username}}</td>
                                         <td>{{solve.time | time_ago}}</td>
                                     </tr>
