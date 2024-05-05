@@ -1,4 +1,4 @@
-from flask import render_template, send_from_directory, request, jsonify, redirect, abort
+from flask import render_template, send_from_directory, request, jsonify, redirect, abort, url_for
 from constants import *
 from flask_login import login_user, logout_user, current_user, login_required
 from models import User, Solve
@@ -29,6 +29,22 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager):
             for solve in solves:
                 challenge['solvers'].append(solve.user.username)  # Wow! Thanks, SQL!
 
+        # Generate the url for any challenge containers
+        # NOTE: This cannot be done in ChallengeManager because it requires app context
+        #       i.e. it requires you to be in a request
+        for id_, challenge in challenge_with_solves.items():
+            container = challenge['container']
+            if container:
+                # Calculate new url from current url and port
+                current_url = url_for(request.endpoint, _external=True)
+                parts = current_url.split(':')
+                print(parts[0])
+                container_url = f"{parts[0]}:{parts[1]}:{container['port']}"
+                print(container_url)
+
+                # Set container URL in the challenge data
+                container['url'] = container_url
+
         return render_template('challenges.html', challenges=challenge_with_solves, user=current_user)
 
     # Setting up challenge downloads
@@ -36,8 +52,8 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager):
     def download(challenge_id, filepath):
         challenge = challenge_manager.challenges.get(challenge_id)
 
-        if challenge is None: # Challenge ID not found
-            abort(404) # https://stackoverflow.com/a/69234618
+        if challenge is None:  # Challenge ID not found
+            abort(404)  # https://stackoverflow.com/a/69234618
 
         if filepath in challenge['files']:
             return send_from_directory(CHALLENGES_DIRECTORY, challenge_id + "/downloads/" + filepath)

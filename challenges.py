@@ -7,6 +7,8 @@ import signal
 
 from constants import CHALLENGES_DIRECTORY, DIFFICULTY_MAPPING
 from models import Solve, User, db
+from flask import url_for
+from urllib.parse import urlparse
 
 
 def serialize_datetime(obj):
@@ -87,6 +89,8 @@ class ContainerManager:
             container.kill()
             print(f" * Killed container '{challenge_id}'")
 
+        raise KeyboardInterrupt
+
 
 class ChallengeManager:
     def __init__(self):
@@ -136,7 +140,6 @@ class ChallengeManager:
                     self.challenges[challenge_id]['container'] = container_data
 
                 if os.path.exists(container_dir):
-
                     self.container_manager.add_container(container_data, container_dir, challenge_id)
                 else:
                     raise FileNotFoundError(
