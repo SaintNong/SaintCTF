@@ -1,3 +1,4 @@
 .idea/
 secret.txt
 database.db
+__pycache__
