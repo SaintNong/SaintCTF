@@ -1,3 +1,5 @@
 .idea/
 secret.txt
 database.db
+__pycache__
+venv/
