@@ -1,8 +1,11 @@
 import os
 import constants
 import secrets
+import docker
+import signal
+import sys
 
-from flask import Flask, render_template
+from flask import Flask, render_template, url_for
 from challenges import ChallengeManager
 from routes import register_routes
 
@@ -77,6 +80,14 @@ def create_app():
     return app
 
 
+def stop_docker(signal, frame):
+    client = docker.from_env()
+    print(" * Exiting Docker")
+    for container in client.containers.list(filters={"label":"CTF"}):
+        container.stop()
+        sys.exit(0)
+
 if __name__ == '__main__':
     app = create_app()
+    signal.signal(signal.SIGINT, stop_docker)
     app.run(debug=True, host='0.0.0.0')

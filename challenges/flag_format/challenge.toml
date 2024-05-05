@@ -7,3 +7,4 @@ category = "misc"
 difficulty = "free points"
 points = 10
 flag = "saint{FLAG_FORMAT}"
+docker = false

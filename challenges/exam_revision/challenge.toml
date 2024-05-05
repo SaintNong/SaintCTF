@@ -7,3 +7,4 @@ category = "crypto"
 difficulty = "easy"
 points = 20
 flag = "saint{scsa_cipher}"
+docker = false

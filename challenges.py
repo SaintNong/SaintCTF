@@ -2,6 +2,7 @@ import datetime
 from datetime import timedelta
 import os
 import tomllib
+import docker
 
 from constants import CHALLENGES_DIRECTORY, DIFFICULTY_MAPPING
 from models import Solve, User, db
@@ -47,6 +48,21 @@ class ChallengeManager:
         self.challenges = {}
         self.read_challenges()
 
+    def start_docker(self, challenge_id, challenge_data):
+        client = docker.from_env()
+
+        container_dir = os.path.join(CHALLENGES_DIRECTORY, challenge_id, "container")
+        print(f" * Starting instance for {challenge_id}")
+
+        try:
+            client.images.build(tag=challenge_id, path=container_dir) 
+            port = {challenge_data['port'] : challenge_data['port']}
+            client.containers.run(challenge_id, auto_remove=True, detach=True, ports=port, labels=['CTF'])
+        except docker.errors.ImageNotFound:
+            print(f" * Dockerfile for {challenge_id} is missing")
+        except docker.errors.APIError:
+            print(f" * Docker API encountered an error starting {challenge_id}, is the container already running?")
+
     def read_challenges(self):
         for challenge_id in os.listdir(CHALLENGES_DIRECTORY):
             # Get the directory of the challenge
@@ -76,6 +92,10 @@ class ChallengeManager:
 
             # Add the challenge
             self.challenges[challenge_id] = challenge_data
+
+            # Start the challenge's Docker container, if needed
+            if challenge_data['docker'] == True:
+                self.start_docker(challenge_id, challenge_data)
 
         try:
             # Sort challenges by difficulty

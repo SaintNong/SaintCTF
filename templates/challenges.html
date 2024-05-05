@@ -196,6 +196,14 @@
                     </div>
                 {% endif %}
 
+                {% if challenge.port %}
+                    <!-- Challenge Links-->
+                    <div class = "files">
+                        <ul>
+                            <li><a href="{{ url_for(request.endpoint, _external=True).split(':')[0] }}:{{ url_for(request.endpoint, _external=True).split(':')[1] }}:{{ challenge.port }}">Link</a></li>
+                        </ul>
+                    </div>
+                {% endif %}
 
             </article>
         {% endfor %}
