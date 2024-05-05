@@ -62,7 +62,7 @@
                 let tbody = $("<tbody></tbody>");
                 $.each(data, function (index, user) {
                     // Check if the user is the current user, and highlight if they are
-                    let highlight = user.username === currentUsername ? 'id="current-user"' : '';
+                    let highlight = user.username === currentUsername ? 'class="highlight" id="current-user"' : '';
                     tbody.append(`<tr ${highlight}><td>${index + 1}</td><td id="username-data"><a href="/profile/${user.user_id}">${user.username}</a></td><td>${user.score}</td></tr>`);
 
                 });

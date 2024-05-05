@@ -1,6 +1,3 @@
-:root {
-    --user-highlight: #004225;
-}
 /* Enable scrolling again */
 body, html {
     overflow: auto;
@@ -51,11 +48,7 @@ html, body {
 }
 
 
-/* Current user is highlighted */
-#current-user {
-    background-color: var(--user-highlight);
-}
-
+/* Current user has "You" suffix  */
 tr#current-user td#username-data::after {
     content: " (You)"
 }

@@ -7,6 +7,7 @@
     --link-color: #4a90e2;
     --form-field-border-color: #333;
     --hover-color: #1a1a1a;
+    --user-highlight: #004225;
 }
 
 /* Reset some default styling */
@@ -104,6 +105,10 @@ thead {
 
 tbody tr:hover {
     background-color: var(--hover-color);
+}
+
+tbody tr.highlight {
+    background-color: var(--user-highlight);
 }
 
 .files {
