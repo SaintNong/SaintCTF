@@ -7,7 +7,3 @@ category = "web"
 difficulty = "hard"
 points = 200
 flag = "DUCTF{Y0u_Kn0W_M4Ss_A5s1GnM3Nt_c890ne89c3}"
-
-docker = true
-port = 3001
-

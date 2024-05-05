@@ -3,6 +3,7 @@ from datetime import timedelta
 import os
 import tomllib
 import docker
+import atexit
 
 from constants import CHALLENGES_DIRECTORY, DIFFICULTY_MAPPING
 from models import Solve, User, db
@@ -43,35 +44,67 @@ def time_ago(time):
         return "Just now"
 
 
+class ContainerManager:
+    """It manages containers"""
+
+    def __init__(self):
+        self.client = docker.from_env()
+        self.containers = {}
+        print("Container manager initialized")
+
+        # Stop containers when program is closed
+        atexit.register(self.clean_up_containers)
+
+    def add_container(self, container_data, container_dir, challenge_id):
+        client = self.client
+
+        # Try creating the container
+        try:
+            # Build container
+            self.client.images.build(tag=challenge_id, path=container_dir)
+
+            # Run container with our port bound
+            print(f" * Starting container '{challenge_id}'")
+            port = {container_data['port']: container_data['port']}
+            container = client.containers.run(challenge_id, auto_remove=True, detach=True, ports=port, labels=['CTF'])
+
+            # Add container
+            self.containers[challenge_id] = container
+
+        # Error handling
+        except docker.errors.ImageNotFound:
+            print(f" * Dockerfile for {challenge_id} is missing")
+        except docker.errors.APIError as e:
+            print(f" * Docker API encountered an error while starting {challenge_id}")
+            raise e
+
+    def clean_up_containers(self):
+        # Stops all containers - called on program exit
+        print("Stopping containers")
+
+        for challenge_id, container in self.containers.items():
+            container.kill()
+            print(f" * Killed container '{challenge_id}'")
+
+
 class ChallengeManager:
     def __init__(self):
         self.challenges = {}
+        self.container_manager = ContainerManager()
+
         self.read_challenges()
-
-    def start_docker(self, challenge_id, challenge_data):
-        client = docker.from_env()
-
-        container_dir = os.path.join(CHALLENGES_DIRECTORY, challenge_id, "container")
-        print(f" * Starting instance for {challenge_id}")
-
-        try:
-            client.images.build(tag=challenge_id, path=container_dir) 
-            port = {challenge_data['port'] : challenge_data['port']}
-            client.containers.run(challenge_id, auto_remove=True, detach=True, ports=port, labels=['CTF'])
-        except docker.errors.ImageNotFound:
-            print(f" * Dockerfile for {challenge_id} is missing")
-        except docker.errors.APIError:
-            print(f" * Docker API encountered an error starting {challenge_id}, is the container already running?")
 
     def read_challenges(self):
         for challenge_id in os.listdir(CHALLENGES_DIRECTORY):
-            # Get the directory of the challenge
-            downloads_dir = os.path.join(CHALLENGES_DIRECTORY, challenge_id, "downloads")
+            challenge_toml = os.path.join(CHALLENGES_DIRECTORY, challenge_id, 'challenge.toml')
+            downloads_dir = os.path.join(CHALLENGES_DIRECTORY, challenge_id, 'downloads')
+
+            container_toml = os.path.join(CHALLENGES_DIRECTORY, challenge_id, 'container.toml')
+            container_dir = os.path.join(CHALLENGES_DIRECTORY, challenge_id, 'container')
 
             # Read the challenge configuration file
-            toml_file = os.path.join(CHALLENGES_DIRECTORY, challenge_id, "challenge.toml")
-            if os.path.isfile(toml_file):
-                with open(toml_file, "rb") as file:
+            if os.path.isfile(challenge_toml):
+                with open(challenge_toml, 'rb') as file:
                     challenge_data = tomllib.load(file)
 
                     # Fix newlines
@@ -79,23 +112,34 @@ class ChallengeManager:
             else:
                 raise FileNotFoundError(f"Could not find challenge.toml file for challenge '{challenge_id}'")
 
-            # Begin adding challenge files
+            # Add challenge downloadable files if applicable
             challenge_data['files'] = []
+            if os.path.exists(downloads_dir):
+                for entry in os.scandir(downloads_dir):
+                    # Skip non-files (i.e. folders)
+                    if not entry.is_file():
+                        continue
 
-            for entry in os.scandir(downloads_dir):
-                # Skip non-files (i.e. folders)
-                if not entry.is_file():
-                    continue
-
-                # Add file download metadata
-                challenge_data['files'].append(entry.name)
+                    # Add file download metadata
+                    challenge_data['files'].append(entry.name)
 
             # Add the challenge
             self.challenges[challenge_id] = challenge_data
 
             # Start the challenge's Docker container, if needed
-            if challenge_data['docker'] == True:
-                self.start_docker(challenge_id, challenge_data)
+            self.challenges[challenge_id]['container'] = {}
+            if os.path.exists(container_toml):
+                # Read container metadata
+                with open(container_toml, "rb") as file:
+                    container_data = tomllib.load(file)
+                    self.challenges[challenge_id]['container'] = container_data
+
+                if os.path.exists(container_dir):
+
+                    self.container_manager.add_container(container_data, container_dir, challenge_id)
+                else:
+                    raise FileNotFoundError(
+                        f"No container folder found for '{challenge_id}', but container.toml was defined")
 
         try:
             # Sort challenges by difficulty

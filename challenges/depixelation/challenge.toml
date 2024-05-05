@@ -7,4 +7,3 @@ category = "misc"
 difficulty = "hard"
 points = 250
 flag = "saint{unr3d4ct3d}"
-docker = false
