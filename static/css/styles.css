@@ -55,7 +55,7 @@ body {
     margin-bottom: 0;
 }
 
-.challenge header p, .challenge footer p {
+.challenge header p, .challenge footer p, .challenge footer summary {
     color: lightgrey;
 }
 
@@ -74,9 +74,12 @@ body {
     text-align: end;
 }
 
-.challenge footer {
-    display: flex;
-    justify-content: space-between;
+.category {
+    float: left;
+}
+
+.solves-count {
+    text-align: right;
 }
 
 /* Table styling */
@@ -131,6 +134,10 @@ a {
 
 .files a:hover {
     text-decoration: underline;
+}
+
+details > summary {
+    cursor: pointer;
 }
 
 

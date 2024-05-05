@@ -200,9 +200,30 @@
                         </ul>
                     </div>
                 {% endif %}
+
                 <footer>
                     <p class="category">{{ challenge.category }}</p>
-                    <p class="solves">{{ solves[id]|length }} solve(s)</p>
+                    {% if solves[id] %}
+                        <details class="solves-count">
+                            <summary>{{ solves[id]|length }} solve(s)</summary>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Username</th>
+                                        <th>Time</th>
+                                    </tr>
+                                </thead>
+                                {% for solve in solves[id] %}
+                                    <tr>
+                                        <td>{{solve.user.username}}</td>
+                                        <td>{{solve.time | time_ago}}</td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        </details>
+                    {% else %}
+                        <p class="solves-count">0 solves</p>
+                    {% endif %}
                 </footer>
 
 
