@@ -74,7 +74,11 @@ body {
     text-align: end;
 }
 
-.difficulty {
+.category-link, .difficulty-link {
+    text-decoration: none;
+}
+
+.difficulty-link {
     float: left;
 }
 

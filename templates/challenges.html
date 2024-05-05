@@ -111,6 +111,23 @@
 
                 $("#visible-count").html(visibleCount);
             });
+
+            // Setup filtering links
+            function setupFilteringLinks(filter) {
+                $(`.${filter}-link`).on('click', function (e) {
+                    // https://stackoverflow.com/a/10086501 Why `currentTarget`?
+                    const state = e.currentTarget.innerText;
+                    const stateSelectField = $(`[name="${filter}"]`)
+                    if (stateSelectField.val() === state) {
+                        stateSelectField.val('').trigger('change');
+                    } else {
+                        stateSelectField.val(state).trigger('change');
+                    }
+                });
+            }
+
+            setupFilteringLinks('difficulty');
+            setupFilteringLinks('category');
         });
 
     </script>
@@ -183,7 +200,7 @@
 
                     <div class="info-block">
                         <p class="points">{{ challenge.points}} points</p>
-                        <p class="category">{{ challenge.category }}</p>
+                        <a class="category-link" href="javascript:void(0);" title="Filter by category">{{ challenge.category }}</a>
                     </div>
                 </header>
                 <p class="description"> {{ challenge.description | safe }} </p>
@@ -202,7 +219,7 @@
                 {% endif %}
 
                 <footer>
-                    <p class="difficulty">{{ challenge.difficulty }}</p>
+                    <a class="difficulty-link" href="javascript:void(0);" title="Filter by difficulty">{{ challenge.difficulty }}</a>
                     {% if solves[id] %}
                         <details class="solves-count">
                             <summary>{{ solves[id]|length }} solve(s)</summary>
