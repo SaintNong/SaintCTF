@@ -7,8 +7,6 @@ import signal
 
 from constants import CHALLENGES_DIRECTORY, DIFFICULTY_MAPPING
 from models import Solve, User, db
-from flask import url_for
-from urllib.parse import urlparse
 
 
 def serialize_datetime(obj):
@@ -58,7 +56,7 @@ class ContainerManager:
         signal.signal(signal.SIGINT, self.clean_up_containers)
         signal.signal(signal.SIGTERM, self.clean_up_containers)
 
-    def add_container(self, container_data, container_dir, challenge_id):
+    def run_container(self, container_data, container_dir, challenge_id):
         client = self.client
 
         # Try creating the container
@@ -108,14 +106,8 @@ class ChallengeManager:
             container_dir = os.path.join(CHALLENGES_DIRECTORY, challenge_id, 'container')
 
             # Read the challenge configuration file
-            if os.path.isfile(challenge_toml):
-                with open(challenge_toml, 'rb') as file:
-                    challenge_data = tomllib.load(file)
-
-                    # Fix newlines
-                    challenge_data['description'] = challenge_data['description'].replace('\n', '<br>')
-            else:
-                raise FileNotFoundError(f"Could not find challenge.toml file for challenge '{challenge_id}'")
+            challenge_data = self.read_toml_file(challenge_toml, challenge_id)
+            challenge_data['description'] = challenge_data['description'].strip().replace('\n', '<br>')  # Fix newlines
 
             # Add challenge downloadable files if applicable
             challenge_data['files'] = []
@@ -128,22 +120,21 @@ class ChallengeManager:
                     # Add file download metadata
                     challenge_data['files'].append(entry.name)
 
-            # Add the challenge
-            self.challenges[challenge_id] = challenge_data
-
             # Start the challenge's Docker container, if needed
-            self.challenges[challenge_id]['container'] = {}
+            challenge_data['container'] = {}
             if os.path.exists(container_toml):
                 # Read container metadata
-                with open(container_toml, "rb") as file:
-                    container_data = tomllib.load(file)
-                    self.challenges[challenge_id]['container'] = container_data
+                container_data = self.read_toml_file(container_toml, challenge_id)
+                challenge_data['container'] = container_data
 
                 if os.path.exists(container_dir):
-                    self.container_manager.add_container(container_data, container_dir, challenge_id)
+                    self.container_manager.run_container(container_data, container_dir, challenge_id)
                 else:
                     raise FileNotFoundError(
                         f"No container folder found for '{challenge_id}', but container.toml was defined")
+
+            # Add the challenge data
+            self.challenges[challenge_id] = challenge_data
 
         try:
             # Sort challenges by difficulty
@@ -152,6 +143,15 @@ class ChallengeManager:
         except KeyError:
             # Oh no, someone made a new difficulty
             raise KeyError("It seems someone tried to make a new difficulty...")
+
+    @staticmethod
+    def read_toml_file(file_path, challenge_id):
+        if not os.path.exists(file_path):
+            filename = os.path.basename(file_path)
+            raise FileNotFoundError(f"Could not find '{filename}' for challenge '{challenge_id}'")
+
+        with open(file_path, "rb") as file:
+            return tomllib.load(file)
 
     @staticmethod
     def solve_challenge(id_, user):
