@@ -199,8 +199,9 @@
                     </div>
 
                     <div class="info-block">
-                        <p class="points">{{ challenge.points}} points</p>
+                        <a class="difficulty-link" href="javascript:void(0);" title="Filter by difficulty">{{ challenge.difficulty }}</a>
                         <a class="category-link" href="javascript:void(0);" title="Filter by category">{{ challenge.category }}</a>
+                        <p class="points">{{ challenge.points}} points</p>
                     </div>
                 </header>
                 <p class="description"> {{ challenge.description | safe }} </p>
@@ -229,7 +230,6 @@
                 {% endif %}
               
                 <footer>
-                    <a class="difficulty-link" href="javascript:void(0);" title="Filter by difficulty">{{ challenge.difficulty }}</a>
                     {% if solves[id] %}
                         <details class="solves-count">
                             <summary>{{ solves[id]|length }} solve(s)</summary>

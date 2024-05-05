@@ -75,13 +75,27 @@ body {
     text-align: end;
 }
 
+/* Tags */
 .category-link, .difficulty-link {
     text-decoration: none;
+    background-color: #080808;
+    color: var(--fg-color);
+    padding: 5px 15px;
+    border-radius: 10px;
+    transition: background-color 0.3s; /* Smooth transition for hover effect */
+    display: inline-block;
+    margin-left: 5px;
+    margin-bottom: 8px;
+    margin-top: 8px;
+    font-size: 0.85em;
 }
 
-.difficulty-link {
-    float: left;
+.category-link:hover, .difficulty-link:hover {
+    background-color: #111111;
 }
+
+
+
 
 .solves-count {
     text-align: right;
