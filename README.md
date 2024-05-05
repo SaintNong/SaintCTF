@@ -1,4 +1,6 @@
 # SaintCTF
+![Capture The Flag badge](https://img.shields.io/badge/%F0%9F%9A%A9capture-the_flag-964ae2?style=for-the-badge&labelColor=121212)
+
 SaintCTF is a non-customizable, badly written, custom CTF platform.
 
 ## Installation
