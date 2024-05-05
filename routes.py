@@ -20,7 +20,7 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager):
     @login_required
     def challenges():
         # Select all solves, ordered by challenge_id (needed for `groupby`)
-        solves = db.session.scalars(db.select(Solve).order_by(Solve.challenge_id)).all()
+        solves = db.session.scalars(db.select(Solve).order_by(Solve.challenge_id, Solve.time.asc())).all()
 
         # Remove solves that do not correspond to known challenges
         # (in case challenges have been removed)
