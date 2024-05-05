@@ -42,13 +42,13 @@
 <script>
     $(document).ready(function () {
 
+        // The current user will be highlighted
+        const currentUsername = "{{ user.username }}";
+
         function updateLeaderboard() {
 
             // Make a request to the leaderboard API
             $.getJSON("/get-leaderboard", function (data) {
-
-                // The current user will be highlighted
-                let currentUsername = "{{ user.username }}";
 
                 // Nuke the old leaderboard
                 let leaderboard = $("#leaderboard");
@@ -62,7 +62,7 @@
                 let tbody = $("<tbody></tbody>");
                 $.each(data, function (index, user) {
                     // Check if the user is the current user, and highlight if they are
-                    let highlight = user.username === currentUsername ? 'id="current-user"' : '';
+                    let highlight = user.username === currentUsername ? 'class="highlight" id="current-user"' : '';
                     tbody.append(`<tr ${highlight}><td>${index + 1}</td><td id="username-data"><a href="/profile/${user.user_id}">${user.username}</a></td><td>${user.score}</td></tr>`);
 
                 });
@@ -85,7 +85,9 @@
                 // Append data to the table body
                 let tbody = $("<tbody></tbody>");
                 $.each(data, function (index, solve) {
-                    tbody.append(`<tr><td>${solve.solver}</td><td>${solve.challenge.name}</td><td>${solve.time_ago}</td></tr>`);
+                    // Check if the user is the current user, and highlight if they are
+                    let highlight = solve.solver === currentUsername ? 'class="highlight"' : '';
+                    tbody.append(`<tr ${highlight}><td>${solve.solver}</td><td>${solve.challenge.name}</td><td>${solve.time_ago}</td></tr>`);
                 });
                 recentTable.append(tbody);
             });

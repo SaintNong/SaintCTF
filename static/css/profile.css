@@ -4,26 +4,6 @@ body, html {
     padding-bottom: 100px;
 }
 
-/* Table styling */
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-th, td {
-    text-align: left;
-    padding: 8px;
-    border-bottom: 1px solid var(--form-field-border-color);
-}
-
-thead {
-    background-color: var(--form-field-border-color);
-}
-
-tbody tr:hover {
-    background-color: var(--hover-color);
-}
-
 .container {
     width: 60%;
     text-align: center;

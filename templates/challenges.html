@@ -111,6 +111,23 @@
 
                 $("#visible-count").html(visibleCount);
             });
+
+            // Setup filtering links
+            function setupFilteringLinks(filter) {
+                $(`.${filter}-link`).on('click', function (e) {
+                    // https://stackoverflow.com/a/10086501 Why `currentTarget`?
+                    const state = e.currentTarget.innerText;
+                    const stateSelectField = $(`[name="${filter}"]`)
+                    if (stateSelectField.val() === state) {
+                        stateSelectField.val('').trigger('change');
+                    } else {
+                        stateSelectField.val(state).trigger('change');
+                    }
+                });
+            }
+
+            setupFilteringLinks('difficulty');
+            setupFilteringLinks('category');
         });
 
     </script>
@@ -119,8 +136,7 @@
 {% include 'navbar.html' %}
 
 <main id="challenge-main">
-    {% set solved_count = challenges.values() | selectattr("solvers", "contains", current_user.username) | list | length %}
-    {% set unsolved_count = challenges.values()| rejectattr("solvers", "contains", current_user.username) | list | length %}
+    {% set unsolved_count = challenges|length - solved_count %}
 
     <section id="flag-section">
         <h1>Welcome {{ current_user.username }}!</h1>
@@ -171,22 +187,28 @@
         {% for id, challenge in challenges.items() %}
             <article class="challenge" data-category="{{ challenge.category }}"
                      data-difficulty="{{ challenge.difficulty }}"
-                     {% if current_user.username in challenge.solvers %}
+                     {% if solves[id]|map(attribute='user.username')|select('eq', current_user.username)|list %}
                          data-solved style="display: none;"
                      {% endif %}
                  >
                 <!-- Challenge info -->
-                <h2>{{ challenge.name }}</h2>
+                <header>
+                    <div>
+                        <h2>{{ challenge.name }} </h2>
+                        <p class="author">{{ challenge.author }}</p>
+                    </div>
+
+                    <div class="info-block">
+                        <p class="points">{{ challenge.points}} points</p>
+                        <a class="category-link" href="javascript:void(0);" title="Filter by category">{{ challenge.category }}</a>
+                    </div>
+                </header>
                 <p class="description"> {{ challenge.description | safe }} </p>
-                <p class="category"><strong>Category:</strong> {{ challenge.category }}</p>
-                <p class="difficulty"><strong>Difficulty:</strong> {{ challenge.difficulty }}</p>
-                <p class="points"><strong>Points:</strong> {{ challenge.points }}</p>
-                <p class="author"><strong>Author:</strong> {{ challenge.author }}</p>
-                <p class="solve-counter"><strong>Solves:</strong> {{ challenge.solvers|length }}</p>
 
                 {% if challenge.files %}
                     <!-- Challenge downloads -->
                     <div class="files">
+                        <h3>Files</h3>
                         <ul>
                             {% for file in challenge.files %}
                                 <li><a href="downloads/{{ id }}/{{ file }}" download="{{ file }}">{{ file }}</a></li>
@@ -195,6 +217,34 @@
                         </ul>
                     </div>
                 {% endif %}
+
+                <footer>
+                    <a class="difficulty-link" href="javascript:void(0);" title="Filter by difficulty">{{ challenge.difficulty }}</a>
+                    {% if solves[id] %}
+                        <details class="solves-count">
+                            <summary>{{ solves[id]|length }} solve(s)</summary>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Username</th>
+                                        <th>Time</th>
+                                    </tr>
+                                </thead>
+                                {% for solve in solves[id] %}
+                                    <tr {% if solve.user.username == current_user.username %}
+                                        class="highlight"
+                                        {% endif %}
+                                        >
+                                        <td>{{solve.user.username}}</td>
+                                        <td>{{solve.time | time_ago}}</td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        </details>
+                    {% else %}
+                        <p class="solves-count">0 solves</p>
+                    {% endif %}
+                </footer>
 
 
             </article>
