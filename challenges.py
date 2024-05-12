@@ -4,6 +4,7 @@ import os
 import tomllib
 import docker
 import signal
+import sys
 
 from constants import CHALLENGES_DIRECTORY, DIFFICULTY_MAPPING
 from models import Solve, User, db
@@ -47,14 +48,20 @@ def time_ago(time):
 class ContainerManager:
     """It manages containers"""
 
-    def __init__(self):
+    def __init__(self, app):
         self.client = docker.from_env()
-        self.containers = {}
-        print("Container manager initialized")
+        self.app = app
+        print("Container manager initialised")
 
         # Stop containers when program is closed
-        signal.signal(signal.SIGINT, self.clean_up_containers)
-        signal.signal(signal.SIGTERM, self.clean_up_containers)
+        signal.signal(signal.SIGINT, self.exit_flask)
+        signal.signal(signal.SIGTERM, self.exit_flask)
+
+    # The sole reason that this exists is sometimes we want to kill containers without quitting,
+    # and signal.signal() requires a function with no arguments
+    def exit_flask(self, signal,frame):
+        self.clean_up_containers()
+        sys.exit()
 
     def run_container(self, container_data, container_dir, challenge_id):
         client = self.client
@@ -63,14 +70,22 @@ class ContainerManager:
         try:
             # Build container
             self.client.images.build(tag=challenge_id, path=container_dir)
+        
+        except docker.errors.APIError as e:
+            print(f" * Docker API encountered an error while building")
+            raise e
 
-            # Run container with our port bound
-            print(f" * Starting container '{challenge_id}'")
-            port = {container_data['port']: container_data['port']}
-            container = client.containers.run(challenge_id, auto_remove=True, detach=True, ports=port, labels=['CTF'])
+        try:
+            # Check if the container we need is already running, if not, start it
+            containers = self.client.containers.list(filters={'label':['CTF', challenge_id]})
 
-            # Add container
-            self.containers[challenge_id] = container
+            if not containers:
+                port = {container_data['port']: container_data['port']}
+                container = client.containers.run(challenge_id, auto_remove=True, detach=True, ports=port, labels=['CTF', challenge_id])
+                print(f' * Started container for challenge "{challenge_id}" with ID of "{container.name}"')
+            else:
+                for container in containers:
+                    print(f' * Container already running for "{challenge_id}" with ID of "{container.name}"')
 
         # Error handling
         except docker.errors.ImageNotFound:
@@ -79,25 +94,27 @@ class ContainerManager:
             print(f" * Docker API encountered an error while starting {challenge_id}")
             raise e
 
-    def clean_up_containers(self, signum, frame):
-        # Stops all containers - called on program exit
-        print("Stopping containers")
-
-        for challenge_id, container in self.containers.items():
-            container.kill()
-            print(f" * Killed container '{challenge_id}'")
-
-        raise KeyboardInterrupt
-
+    def clean_up_containers(self):
+        # Stops all containers - called on program exit and when starting
+        print(" * Stopping containers")
+        # List all containers started by the CTF, and kill them
+        for container in self.client.containers.list(filters={'label':['CTF']}):
+            try:
+                labels = list(container.labels.keys())
+                container.kill()
+                print(f' * Killed Container for "{labels[1]}" of ID "{container.name}" ')
+            except docker.errors.APIError as e:
+                print(f" * Docker API encountered an error while cleaning")
+                raise e
 
 class ChallengeManager:
-    def __init__(self):
+    def __init__(self, app):
         self.challenges = {}
-        self.container_manager = ContainerManager()
-
+        self.container_manager = ContainerManager(app)
         self.read_challenges()
 
     def read_challenges(self):
+        print(" * Reading challenges and containers")
         for challenge_id in os.listdir(CHALLENGES_DIRECTORY):
             challenge_toml = os.path.join(CHALLENGES_DIRECTORY, challenge_id, 'challenge.toml')
             downloads_dir = os.path.join(CHALLENGES_DIRECTORY, challenge_id, 'downloads')
@@ -112,6 +129,7 @@ class ChallengeManager:
             # Add challenge downloadable files if applicable
             challenge_data['files'] = []
             if os.path.exists(downloads_dir):
+                print(f' * Creating downloads for challenge "{challenge_id}"')
                 for entry in os.scandir(downloads_dir):
                     # Skip non-files (i.e. folders)
                     if not entry.is_file():

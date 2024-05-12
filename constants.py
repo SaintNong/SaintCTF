@@ -1,4 +1,4 @@
-from datetime import datetime
+
 
 STATIC_DIRECTORY = 'static'
 CHALLENGES_DIRECTORY = 'challenges'
