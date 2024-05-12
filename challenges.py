@@ -101,11 +101,15 @@ class ContainerManager:
         for container in self.client.containers.list(filters={'label':['CTF']}):
             try:
                 labels = list(container.labels.keys())
-                container.kill()
-                print(f' * Killed Container for "{labels[1]}" of ID "{container.name}" ')
+                container.stop()
+                print(f' * Stopped container for "{labels[1]}" of ID "{container.name}" ')
             except docker.errors.APIError as e:
-                print(f" * Docker API encountered an error while cleaning")
-                raise e
+                # Due to Flask's debug mode, this method may be called twice
+                # where the second invocation fails to find the container, as
+                # it is already stopped - thus we exclude this error
+                if e.status_code != 404:
+                    print(f" * Docker API encountered an error while cleaning")
+                    raise e
 
 class ChallengeManager:
     def __init__(self, app):
