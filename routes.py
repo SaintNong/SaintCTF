@@ -19,14 +19,11 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager):
     @app.route('/challenges')
     @login_required
     def challenges():
-        new_challenges = {}
         # Generate the url for any challenge containers
         # NOTE: This cannot be done in ChallengeManager because it requires app context
         #       i.e. it requires you to be in a request
         for id_, challenge in challenge_manager.challenges.items():
-            new_challenges[id_] = challenge
-
-            container = new_challenges[id_]['container']
+            container = challenge['container']
             if container:
                 # Calculate new url from current url and port
                 current_url = url_for(request.endpoint, _external=True)

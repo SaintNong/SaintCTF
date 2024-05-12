@@ -1,19 +1,17 @@
 FROM python:3.8-alpine
 
+STOPSIGNAL SIGINT
+EXPOSE 3001
+
 RUN apk update
-
-RUN mkdir /grades_grades_grades
-RUN mkdir /grades_grades_grades/src
-
-COPY requirements.txt /grades_grades_grades
-COPY run.py /grades_grades_grades
-COPY run.sh /grades_grades_grades
-
-COPY ./src /grades_grades_grades/src
-RUN chmod +x /grades_grades_grades/run.sh
 
 WORKDIR /grades_grades_grades
 
-EXPOSE 3001
+COPY requirements.txt ./
+RUN python3 -m pip install -r requirements.txt
 
-CMD ["sh", "run.sh"]
+COPY ./src /grades_grades_grades/src
+
+COPY run.py ./
+
+CMD ["python3", "run.py"]

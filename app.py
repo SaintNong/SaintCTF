@@ -1,9 +1,6 @@
 import os
 import constants
 import secrets
-import docker
-import signal
-import sys
 
 from flask import Flask, render_template, url_for
 from challenges import ChallengeManager, time_ago
@@ -58,7 +55,7 @@ def create_app():
     bcrypt.init_app(app)
 
     # Fake extension
-    challenge_manager = ChallengeManager()
+    challenge_manager = ChallengeManager(app)
 
     # https://flask.palletsprojects.com/en/3.0.x/templating/#registering-filters
     app.jinja_env.filters['time_ago'] = time_ago
@@ -81,4 +78,4 @@ def create_app():
 
 if __name__ == '__main__':
     app = create_app()
-    app.run(debug=True, host='0.0.0.0')
+    app.run(debug=False, host='0.0.0.0')
