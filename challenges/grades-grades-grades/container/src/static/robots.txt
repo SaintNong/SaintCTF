@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /promote
+
+Sitemap: https://www.example.com/sitemap.xml
