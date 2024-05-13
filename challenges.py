@@ -2,7 +2,6 @@ import datetime
 from datetime import timedelta
 import os
 import tomllib
-import docker
 import signal
 import sys
 
@@ -114,7 +113,15 @@ class ContainerManager:
 class ChallengeManager:
     def __init__(self, app):
         self.challenges = {}
-        self.container_manager = ContainerManager(app)
+
+        try:
+            import docker
+        except ModuleNotFoundError as e:
+            print("Warning:", e)
+            self.container_manager = None
+        else:
+            self.container_manager = ContainerManager(app)
+
         self.read_challenges()
 
     def read_challenges(self):
@@ -145,6 +152,11 @@ class ChallengeManager:
             # Start the challenge's Docker container, if needed
             challenge_data['container'] = {}
             if os.path.exists(container_toml):
+                # Skip challenges that require containers if the Docker API is not present
+                if self.container_manager is None:
+                    print(f"Warning: skipped challenge '{challenge_id}' requiring containerisation")
+                    continue 
+
                 # Read container metadata
                 container_data = self.read_toml_file(container_toml, challenge_id)
                 challenge_data['container'] = container_data
