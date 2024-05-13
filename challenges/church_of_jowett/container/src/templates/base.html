@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- this is used as the base holding the navbar and bootstrap fuck with this and I'll kill you -->
+<!-- this is used as the base holding the navbar and bootstrap screw with this and I'll kill you -->
 
 <style>
     .right-item {
@@ -47,15 +47,12 @@
 
     <div class="collapse navbar-collapse" id="navbarColor01">
         <ul class="navbar-nav ml-md-auto d-block d-sm-flex d-md-flex">
-            {% if is_teacher_role == true %}
+            {% if is_cardinal_role == true %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('api.flag') }}">Grading Tool</a>
+                    <a class="nav-link" href="{{ url_for('api.flag') }}">Revelations for Cardinals</a>
                 </li>
             {% endif %}
             {% if is_auth == true %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('api.grades') }}">Grades</a>
-                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('api.logout') }}">Logout</a>
                 </li>
