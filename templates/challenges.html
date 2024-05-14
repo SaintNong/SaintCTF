@@ -83,10 +83,12 @@
             // Set navbar selected
             $(".challenges-link").addClass("navbar-selected");
 
+            const filters = ['category', 'difficulty'];
+
             // Script for challenge filtering
             $('#filter-form').on("change", function (e) {
-                const selectedCategory = $('[name="category"]').val();
-                const selectedDifficulty = $('[name="difficulty"]').val();
+                // Values of the selected filters
+                const selectedFilters = filters.map((f) => $(`[name="${f}"]`).val());
                 const showSolved = $('[name="solved"]').prop('checked');
 
                 let visibleCount = 0;
@@ -95,16 +97,27 @@
 
                     challenge.stop(true, false); // Clear queue of animations, but do not jump to end of current animation.
 
-                    const matchesCategory = selectedCategory === "" || challenge.data('category') === selectedCategory;
-                    const matchesDifficulty = selectedDifficulty === "" || challenge.data('difficulty') === selectedDifficulty;
+                    // Whether or not the selected filters matches the challenge card's attributes
+                    const matchesFilters = filters.map((f, i, filters) => {
+                        const sf = selectedFilters[i]; // selected filter
+                        return sf === "" || challenge.data(f) === sf;
+                    });
                     const matchesUnsolved = challenge.data('solved') === undefined;
 
                     const effectOptions = {duration: 250, easing: "linear"};
 
-                    if (matchesCategory && matchesDifficulty && (matchesUnsolved || showSolved)) {
+                    if (matchesFilters.every((x) => x) && (matchesUnsolved || showSolved)) {
+                        // If a matched filter is not "All <filter type>", highlight it
+                        //   i.e. only an explicitly selected filter should be highlighted
+                        filters.forEach((f, i, filters) => {
+                            const value = selectedFilters[i] !== "" ? true : null;
+                            challenge.find(`.filter-tag[data-filter-type=${f}]`).attr('data-selected', value);
+                        });
+
                         challenge.slideDown(effectOptions);
                         visibleCount++;
                     } else {
+                        challenge.find(".filter-tag").attr('data-selected', null);
                         challenge.slideUp(effectOptions);
                     }
                 });
@@ -112,12 +125,12 @@
                 $("#visible-count").html(visibleCount);
             });
 
-            // Setup filtering links
-            function setupFilteringLinks(filter) {
-                $(`.${filter}-link`).on('click', function (e) {
+            // Setup filtering tags
+            function setupFilteringTags(filterType) {
+                $(`.filter-tag[data-filter-type=${filterType}]`).on('click', function (e) {
                     // https://stackoverflow.com/a/10086501 Why `currentTarget`?
                     const state = e.currentTarget.innerText;
-                    const stateSelectField = $(`[name="${filter}"]`)
+                    const stateSelectField = $(`[name="${filterType}"]`)
                     if (stateSelectField.val() === state) {
                         stateSelectField.val('').trigger('change');
                     } else {
@@ -126,8 +139,7 @@
                 });
             }
 
-            setupFilteringLinks('difficulty');
-            setupFilteringLinks('category');
+            filters.forEach((f) => setupFilteringTags(f));
         });
 
     </script>
@@ -199,9 +211,9 @@
                     </div>
 
                     <div class="info-block">
-                        <a class="difficulty-link" href="javascript:void(0);" title="Filter by difficulty">{{ challenge.difficulty }}</a>
-                        <a class="category-link" href="javascript:void(0);" title="Filter by category">{{ challenge.category }}</a>
-                        <p class="points">{{ challenge.points}} points</p>
+                        <a class="filter-tag" href="javascript:void(0);" data-filter-type="difficulty" title="Filter by difficulty">{{ challenge.difficulty }}</a>
+                        <a class="filter-tag" href="javascript:void(0);" data-filter-type="category" title="Filter by category">{{ challenge.category }}</a>
+                        <p class="points">{{ challenge.points }} points</p>
                     </div>
                 </header>
                 <p class="description"> {{ challenge.description | safe }} </p>

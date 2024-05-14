@@ -84,8 +84,7 @@ body {
 }
 
 /* Tags */
-.category-link, .difficulty-link {
-
+.filter-tag {
     text-decoration: none;
     background-color: #080808;
     color: var(--fg-color);
@@ -99,10 +98,13 @@ body {
     font-size: 0.85em;
 }
 
-.category-link:hover, .difficulty-link:hover {
+.filter-tag:hover {
     background-color: #111111;
 }
 
+.filter-tag[data-selected] {
+    background-color: var(--purple-1);
+}
 
 
 
