@@ -47,11 +47,17 @@
 
     <div class="collapse navbar-collapse" id="navbarColor01">
         <ul class="navbar-nav ml-md-auto d-block d-sm-flex d-md-flex">
+            {% if is_pope_role == true %}
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('api.pope_win') }}">Revelations for Cardinals</a>
+            </li>
+            {% endif %}
             {% if is_cardinal_role == true %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('api.flag') }}">Revelations for Cardinals</a>
+                    <a class="nav-link" href="{{ url_for('api.cardinal_win') }}">Revelations for Cardinals</a>
                 </li>
             {% endif %}
+
             {% if is_auth == true %}
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('api.logout') }}">Logout</a>

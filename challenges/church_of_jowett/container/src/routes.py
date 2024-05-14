@@ -54,8 +54,13 @@ def promote():
 
 @api.route('/cardinal_revelations', methods=('GET',))
 @requires_cardinal
-def flag():
-    return render_template('flag.html', flag="saint{h1s_h0lyness_w0uld_b3_pr0ud}", is_auth=True, is_cardinal_role=True)
+def cardinal_win():
+    return render_template('cardinal_revelations.html', flag="saint{h1s_h0lyness_w0uld_b3_pr0ud}", is_auth=True, is_cardinal_role=True)
+
+@api.route('/pope_revelations', methods=('GET',))
+@requires_cardinal
+def pope_win():
+    return render_template('pope_revelations.html', flag="saint{j0w3tt_f0rg3ry?_th3r3_c4n_0n1y_b3_0n3!}", is_auth=True, is_cardinal_role=True)
 
 @api.route('/logout')
 def logout():

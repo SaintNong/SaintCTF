@@ -1,0 +1,4 @@
+TODO:
+    - Change the JWT secret from "jowett_is_the_best"
+    - Convert Michal Morgan to the Holy Church of Jowett
+    - Become the official religion of Shenton College

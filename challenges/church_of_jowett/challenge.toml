@@ -1,9 +1,9 @@
-name = "Plagarism"
-author = "donfran"
+name = "Holy church of Jowett Part 1"
+author = "Alex"
 description = """
-Don't feel like coding today, so I stole from a better ctf
+Come join the holy church of Jowett, high ranking cardinals get a flag
 """
 category = "web"
-difficulty = "hard"
-points = 200
+difficulty = "easy"
+points = 100
 flag = "saint{h1s_h0lyness_w0uld_b3_pr0ud}"

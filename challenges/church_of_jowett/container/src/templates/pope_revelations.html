@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block body %}
+
+    <style>
+        .top {
+            top: 0;
+            text-align: center;
+            padding-left:  30px;
+            padding-top: 40px;
+            padding-bottom: 30px;
+            padding-right:  30px;
+        }
+
+        .h1 {
+            font-size: 60px;
+            margin-bottom: 60px;
+        }
+
+        .user_info {
+            font-size:18px;
+            padding-left: 17px;
+            color: black;
+        }
+
+        .table {
+            color: black;
+        }
+
+    </style>
+
+    <div class="top">
+        <h4 style="margin-bottom:20px">Revelations for the Pope:</h4>
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Revelation</th>
+                    <th scope="col">Content</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Flag</td>
+                    <td>{{ flag }}</td>
+                </tr>
+                <tr>
+                    <td>Handbrake turns around tighy corners are a great way to impress new collegues and intimidate rivals</td>
+                </tr>
+                <tr>
+                    <td>SCSA</td>
+                    <td>SCSA does their job properly, and the comp sci curse is well put together</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}
