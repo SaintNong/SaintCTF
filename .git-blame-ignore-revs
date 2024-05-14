@@ -1,0 +1,3 @@
+# Migrate code style to Black
+# https://black.readthedocs.io/en/stable/guides/introducing_black_to_your_project.html#avoiding-ruining-git-blame
+ba962eab075ef44bf222563c777481d95e7862a5
