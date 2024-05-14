@@ -21,6 +21,13 @@ source venv/bin/activate
 pip3 install -r requirements.txt
 ```
 
+   - (optional) install Docker if you need containerisation
+     ```bash
+     pip3 install -r docker==7.0.0
+     ```
+> [!NOTE]
+> Challenges that require containers will **not** run if Docker is not installed.
+
 4. Run SaintCTF
 ```bash
 python3 app.py
