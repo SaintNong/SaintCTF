@@ -24,11 +24,13 @@ class User(db.Model, UserMixin):
 
 class Solve(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     challenge_id = db.Column(db.String, nullable=False)
-    time = db.Column(db.DateTime, default=datetime.now)  # Who cares about UTC, this isn't a global CTF
+    time = db.Column(
+        db.DateTime, default=datetime.now
+    )  # Who cares about UTC, this isn't a global CTF
 
-    user = db.relationship('User', backref=db.backref('solve', lazy=True))
+    user = db.relationship("User", backref=db.backref("solve", lazy=True))
 
     def __repr__(self):
-        return f'<Solve user={self.user.username} challenge_id={self.challenge_id} time={self.time}>'
+        return f"<Solve user={self.user.username} challenge_id={self.challenge_id} time={self.time}>"
