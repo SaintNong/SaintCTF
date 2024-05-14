@@ -181,8 +181,10 @@ class ChallengeManager:
                 # Read container metadata
                 container_data = self.read_toml_file(container_toml, challenge_id)
                 challenge_data["container"] = container_data
-
-                if os.path.exists(container_dir):
+                parent = container_data.get("parent")
+                if parent:
+                  print(f" * Created child challenge for '{challenge_id}' parented to '{parent}'")
+                elif os.path.exists(container_dir):
                     self.container_manager.run_container(
                         container_data, container_dir, challenge_id
                     )
