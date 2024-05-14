@@ -1,4 +1,4 @@
-
+import importlib.util
 
 STATIC_DIRECTORY = 'static'
 CHALLENGES_DIRECTORY = 'challenges'
@@ -13,4 +13,4 @@ DIFFICULTY_MAPPING = {
     'not ok': 5,
 }
 
-
+HAS_DOCKER = importlib.util.find_spec("docker") is not None

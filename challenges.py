@@ -4,9 +4,11 @@ import os
 import tomllib
 import signal
 import sys
-
-from constants import CHALLENGES_DIRECTORY, DIFFICULTY_MAPPING
 from models import Solve, User, db
+
+from constants import CHALLENGES_DIRECTORY, DIFFICULTY_MAPPING, HAS_DOCKER
+if HAS_DOCKER:
+    import docker
 
 
 def serialize_datetime(obj):
@@ -114,13 +116,10 @@ class ChallengeManager:
     def __init__(self, app):
         self.challenges = {}
 
-        try:
-            import docker
-        except ModuleNotFoundError as e:
-            print("Warning:", e)
-            self.container_manager = None
-        else:
+        if HAS_DOCKER:
             self.container_manager = ContainerManager(app)
+        else:
+            self.container_manager = None
 
         self.read_challenges()
 
@@ -153,7 +152,7 @@ class ChallengeManager:
             challenge_data['container'] = {}
             if os.path.exists(container_toml):
                 # Skip challenges that require containers if the Docker API is not present
-                if self.container_manager is None:
+                if not HAS_DOCKER:
                     print(f"Warning: skipped challenge '{challenge_id}' requiring containerisation")
                     continue 
 
