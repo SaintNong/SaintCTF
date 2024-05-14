@@ -81,6 +81,27 @@ def requires_cardinal(f):
 
     return decorated
 
+def requires_pope(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = request.cookies.get('auth_token')
+        if not token:
+            return jsonify({'message': 'Token is missing'}), 401
+        try:
+            data = decode_token(token)
+            if data is None or data.get("is_pope") is None:
+                return jsonify({'message': 'Invalid token'}), 401
+            if data['is_pope']:
+                request.user_data = data
+            else:
+                return jsonify({'message': 'Invalid token'}), 401
+        except jwt.DecodeError:
+            return jsonify({'message': 'Invalid token'}), 401
+
+        return f(*args, **kwargs)
+
+    return decorated
+
 
 def requires_token(f):
     @wraps(f)
