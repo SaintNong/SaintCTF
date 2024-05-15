@@ -120,6 +120,18 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager):
                     message="Username can only contain letters, numbers, and underscores.",
                 )
 
+            # Make sure the username and password are the right length
+            if len(password) < 8 or len(password) > 40:
+                return jsonify(
+                    status="error",
+                    message="Password must be between 8 and 40 characters long.",
+                )
+            elif len(username) < 1 or len(username) > 20:
+                return jsonify(
+                    status="error",
+                    message="Username must be between 1 and 20 characters long.",
+                )
+
             # Hash password before storing
             hashed_password = bcrypt.generate_password_hash(password)
             user = User()
