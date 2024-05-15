@@ -28,6 +28,20 @@ def decode_token(token):
         return None
 
 
+def is_pope_role():
+    # if user isn't authed at all
+    if "auth_token" not in request.cookies:
+        return False
+    token = request.cookies.get("auth_token")
+    try:
+        data = decode_token(token)
+        if data.get("is_pope", False):
+            return True
+    except jwt.DecodeError:
+        return False
+    return False
+
+
 def is_cardinal_role():
     # if user isn't authed at all
     if "auth_token" not in request.cookies:
