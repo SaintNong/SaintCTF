@@ -142,19 +142,13 @@ class ChallengeManager:
     def read_challenges(self):
         print(" * Reading challenges and containers")
         for challenge_id in os.listdir(CHALLENGES_DIRECTORY):
-            challenge_toml = os.path.join(
-                CHALLENGES_DIRECTORY, challenge_id, "challenge.toml"
-            )
-            downloads_dir = os.path.join(
-                CHALLENGES_DIRECTORY, challenge_id, "downloads"
-            )
+            challenge_directory = os.path.join(CHALLENGES_DIRECTORY, challenge_id)
 
-            container_toml = os.path.join(
-                CHALLENGES_DIRECTORY, challenge_id, "container.toml"
-            )
-            container_dir = os.path.join(
-                CHALLENGES_DIRECTORY, challenge_id, "container"
-            )
+            # Get paths for challenge files and folders
+            challenge_toml = os.path.join(challenge_directory, "challenge.toml")
+            downloads_dir = os.path.join(challenge_directory, "downloads")
+            container_toml = os.path.join(challenge_directory, "container.toml")
+            container_dir = os.path.join(challenge_directory, "container")
 
             # Read the challenge configuration file
             challenge_data = self.read_toml_file(challenge_toml, challenge_id)
