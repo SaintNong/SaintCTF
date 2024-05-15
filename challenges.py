@@ -217,8 +217,10 @@ class ChallengeManager:
         with open(file_path, "rb") as file:
             return tomllib.load(file)
 
-    @staticmethod
-    def solve_challenge(id_, user):
+    def solve_challenge(self, id_, user):
+        points = self.challenges[id_]["points"]
+        user.score += points
+
         solve = Solve(user_id=user.id, challenge_id=id_)
         db.session.add(solve)
         db.session.commit()
@@ -244,8 +246,7 @@ class ChallengeManager:
             {
                 "solver": solve.user.username,
                 "challenge": self.challenges[solve.challenge_id],
-                "time": solve.time,
-                "time_ago": time_ago(solve.time),
+                "time": solve.time.isoformat(timespec="milliseconds"),
             }
             for solve in recent_solves
         ]
