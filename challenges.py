@@ -189,7 +189,9 @@ class ChallengeManager:
                 challenge_data["container"] = container_data
                 parent = container_data.get("parent")
                 if parent:
-                  print(f" * Created child challenge for '{challenge_id}' parented to '{parent}'")
+                    print(
+                        f" * Created child challenge for '{challenge_id}' parented to '{parent}'"
+                    )
                 elif os.path.exists(container_dir):
                     self.container_manager.run_container(
                         container_data, container_dir, challenge_id
