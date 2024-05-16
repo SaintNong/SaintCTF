@@ -9,6 +9,7 @@ from flask import (
     url_for,
 )
 from src.auth import (
+    decode_token,
     requires_pope,
     requires_token,
     is_authenticated,
@@ -117,6 +118,33 @@ def cardinal_win():
             flag="saint{h1s_h0lyness_w0uld_b3_pr0ud}",
             is_auth=True,
             is_cardinal_role=True,
+        )
+
+
+@api.route("/profile", methods=("GET",))
+@requires_token
+def info():
+    data = decode_token(request.cookies.get("auth_token"))
+    if is_pope_role() and is_cardinal_role():
+        return render_template(
+            "info.html",
+            name=data["name"],
+            email=data["email"],
+            is_auth=True,
+            is_cardinal_role=True,
+            is_pope_role=True,
+        )
+    elif is_cardinal_role():
+        return render_template(
+            "info.html",
+            name=data["name"],
+            email=data["email"],
+            is_auth=True,
+            is_cardinal_role=True,
+        )
+    else:
+        return render_template(
+            "info.html", name=data["name"], email=data["email"], is_auth=True
         )
 
 

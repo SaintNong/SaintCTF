@@ -13,12 +13,7 @@ def create_token(data):
 
 def token_value(token):
     decoded_token = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
-    return (
-        decoded_token["name"],
-        decoded_token["email"],
-        decoded_token.get("is_cardinal", False),
-        decoded_token.get("is_pope", False),
-    )
+    return decoded_token
 
 
 def decode_token(token):
