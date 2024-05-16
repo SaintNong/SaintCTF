@@ -9,6 +9,7 @@
     html, body {
         margin: 0px;
         padding: 0px;
+        background-color: #751a27;
     }
 
 </style>
@@ -56,6 +57,9 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('api.cardinal_win') }}">Revelations for Cardinals</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('api.todo') }}">To do list</a>
+                </li>
             {% endif %}
 
             {% if is_auth == true %}
@@ -70,7 +74,8 @@
         </ul>
     </div>
 </nav>
-<article id="container">
+<article id="container" style="background-color: #751a27;">
+    <!-- Om nom nom me love cookies https://jwt.io/ -->
     {% block body %}
         // Content will be here
     {% endblock %}
