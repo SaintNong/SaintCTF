@@ -9,6 +9,7 @@ from flask import (
     url_for,
 )
 from src.auth import (
+    requires_pope,
     requires_token,
     is_authenticated,
     token_value,
@@ -114,6 +115,24 @@ def cardinal_win():
         return render_template(
             "cardinal_revelations.html",
             flag="saint{h1s_h0lyness_w0uld_b3_pr0ud}",
+            is_auth=True,
+            is_cardinal_role=True,
+        )
+
+
+@api.route("/todo_list", methods=("GET",))
+@requires_cardinal
+def todo():
+    if is_pope_role:
+        return render_template(
+            "todo.html",
+            is_auth=True,
+            is_cardinal_role=True,
+            is_pope_role=True,
+        )
+    else:
+        return render_template(
+            "todo.html",
             is_auth=True,
             is_cardinal_role=True,
         )
