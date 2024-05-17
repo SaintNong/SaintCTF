@@ -5,12 +5,12 @@ EXPOSE 3001
 
 RUN apk update
 
-WORKDIR /grades_grades_grades
+WORKDIR /church_of_jowett
 
 COPY requirements.txt ./
 RUN python3 -m pip install -r requirements.txt
 
-COPY ./src /grades_grades_grades/src
+COPY ./src /church_of_jowett/src
 
 COPY run.py ./
 

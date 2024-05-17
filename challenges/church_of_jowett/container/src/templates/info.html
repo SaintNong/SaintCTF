@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block body %}
+
+    <style>
+        .top {
+            top: 0;
+            text-align: center;
+            padding-left:  30px;
+            padding-top: 40px;
+            padding-bottom: 30px;
+            padding-right:  30px;
+        }
+
+        .h1 {
+            font-size: 50px;
+        }
+
+        .user_info {
+            font-size:18px;
+            padding-left: 17px;
+            color: white;
+        }
+
+        .table {
+            color: white;
+            table-layout: fixed;
+            width: 100%;
+        }
+
+    </style>
+
+    <div class="top">
+        <h1 style="margin-bottom:10%; color:white">Hello, {{ name }}.</h4>
+        <h2 style="color: white;">Your email is: {{ email }}<br>Your rank is: {% if is_pope_role %}The pope!<br>May Jowett bestow wisdom and power upon you.{% elif is_cardinal_role == true %} Graced cardinal of the Holy Church of Jowett. {% else %} Good priest of the Holy Church of Jowett {% endif%} </p>
+
+{% endblock %}
