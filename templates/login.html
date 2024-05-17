@@ -23,6 +23,9 @@
             <input type="text" name="username" placeholder="Username:" required="required"> <br>
             <input type="password" name="password" placeholder="Password:" required="required">
             <input type="submit" value="Log in">
+
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+
         </form>
         <p>No account? Sign up <a href="/register">here</a></p>
     </section>

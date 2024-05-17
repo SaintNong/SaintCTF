@@ -189,6 +189,8 @@
             <label for="flag"></label><input type="text" id="flag" name="flag" placeholder="saint{EXAMPLE_FLAG}">
             <input type="submit" value="Submit Flag">
 
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+
         </form>
 
     </section>

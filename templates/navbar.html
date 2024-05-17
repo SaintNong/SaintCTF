@@ -14,9 +14,22 @@
                 <li><a class="login-link" href="/login">Login</a></li>
                 <li><a class="signup-link" href="/register">Sign Up</a></li>
             {% else %}
-                <li><a class="logout-link" href="/logout">Logout</a></li>
+                <li><a class="logout-link" href="javascript:void(0);" onclick="performLogout()">Logout</a></li>
                 <li><a class="profile-link" href="/profile/{{ user.id }}">Profile</a></li>
             {% endif %}
         </ul>
     </nav>
+    <!-- Submit CSRF token when logging out -->
+    <form id="logout-form" method="post" action="/logout">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    </form>
+    <form id="delete-form" method="post" action="/delete_account">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    </form>
+
+    <script>
+        performLogout = () => {
+            document.getElementById("logout-form").submit();
+        }
+    </script>
 </header>

@@ -10,6 +10,8 @@ from routes import register_routes
 from flask_login import LoginManager, current_user
 from flask_bcrypt import Bcrypt
 
+from flask_wtf.csrf import CSRFProtect
+
 
 def load_secret_key():
     # Check if a secret key was already generated
@@ -57,6 +59,9 @@ def create_app():
     bcrypt = Bcrypt()
     bcrypt.init_app(app)
 
+    csrf = CSRFProtect(app)
+    csrf.init_app(app)
+
     # Fake extension
     challenge_manager = ChallengeManager(app)
 
@@ -64,7 +69,7 @@ def create_app():
     app.jinja_env.filters["time_ago"] = time_ago
 
     # Register app routes
-    register_routes(app, db, bcrypt, challenge_manager)
+    register_routes(app, db, bcrypt, challenge_manager, csrf)
 
     # Reset the database if data reset flag is checked
     with app.app_context():

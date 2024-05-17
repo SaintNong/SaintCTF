@@ -1,3 +1,4 @@
+import flask_login
 from flask import (
     render_template,
     send_from_directory,
@@ -16,7 +17,7 @@ import itertools
 import re
 
 
-def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager):
+def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager, csrf):
     print("Routes registered")
 
     # ==== Pages ====
@@ -92,10 +93,24 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager):
         # Trying to sneakily list all challenges
         return "Nice try"
 
-    # Logout page
-    @app.route("/logout", methods=["GET", "POST"])
+    # Logout endpoint
+    @app.route("/logout", methods=["POST"])
+    @login_required
     def logout():
         logout_user()
+        return redirect("/")
+
+    # Delete account endpoint
+    @app.route("/delete_account", methods=["POST"])
+    @login_required
+    def delete_account():
+        name = User.query.filter(User.id == current_user.id).first().username
+        print(f"Deleted account {name}")
+        Solve.query.filter(Solve.user_id == current_user.id).delete()
+        User.query.filter(User.id == current_user.id).delete()
+
+        db.session.commit()
+
         return redirect("/")
 
     # Signup page
@@ -184,7 +199,6 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager):
 
     # Shows the profile of specific user with uid
     @app.route("/profile/<int:user_id>")
-    @login_required
     def profile(user_id):
         # Query database for user
         displayed_user = db.session.query(User).filter(User.id == user_id).first()
