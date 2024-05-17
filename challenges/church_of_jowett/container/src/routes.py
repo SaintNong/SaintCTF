@@ -167,7 +167,7 @@ def todo():
 
 
 @api.route("/pope_revelations", methods=("GET",))
-@requires_cardinal
+@requires_pope
 def pope_win():
     return render_template(
         "pope_revelations.html",
