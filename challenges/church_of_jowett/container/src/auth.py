@@ -83,17 +83,24 @@ def requires_cardinal(f):
     def decorated(*args, **kwargs):
         token = request.cookies.get("auth_token")
         if not token:
-            return jsonify({"message": "Token is missing"}), 401
+            return (
+                jsonify(
+                    {
+                        "message": "Token is missing, you must be logged in to access this"
+                    }
+                ),
+                401,
+            )
         try:
             data = decode_token(token)
             if data is None or data.get("is_cardinal") is None:
-                return jsonify({"message": "Invalid token"}), 401
+                return jsonify({"message": "Invalid token, you're not a cardinal"}), 401
             if data["is_cardinal"]:
                 request.user_data = data
             else:
-                return jsonify({"message": "Invalid token"}), 401
+                return jsonify({"message": "Invalid token, data is wrong"}), 401
         except jwt.DecodeError:
-            return jsonify({"message": "Invalid token"}), 401
+            return jsonify({"message": "Invalid token, data is wrong"}), 401
 
         return f(*args, **kwargs)
 
@@ -105,17 +112,24 @@ def requires_pope(f):
     def decorated(*args, **kwargs):
         token = request.cookies.get("auth_token")
         if not token:
-            return jsonify({"message": "Token is missing"}), 401
+            return (
+                jsonify(
+                    {
+                        "message": "Token is missing, you must be logged in to access this"
+                    }
+                ),
+                401,
+            )
         try:
             data = decode_token(token)
             if data is None or data.get("is_pope") is None:
-                return jsonify({"message": "Invalid token"}), 401
+                return jsonify({"message": "Invalid token, you're not the Pope"}), 401
             if data["is_pope"]:
                 request.user_data = data
             else:
-                return jsonify({"message": "Invalid token"}), 401
+                return jsonify({"message": "Invalid token, data is wrong"}), 401
         except jwt.DecodeError:
-            return jsonify({"message": "Invalid token"}), 401
+            return jsonify({"message": "Invalid token, data is wrong"}), 401
 
         return f(*args, **kwargs)
 
@@ -127,15 +141,22 @@ def requires_token(f):
     def decorated(*args, **kwargs):
         token = request.cookies.get("auth_token")
         if not token:
-            return jsonify({"message": "Token is missing"}), 401
+            return (
+                jsonify(
+                    {
+                        "message": "Token is missing, you must be logged in to access this"
+                    }
+                ),
+                401,
+            )
 
         try:
             data = decode_token(token)
             if data is None:
-                return jsonify({"message": "Invalid token"}), 401
+                return jsonify({"message": "Invalid token, data is wrong"}), 401
             request.user_data = data
         except jwt.DecodeError:
-            return jsonify({"message": "Invalid token"}), 401
+            return jsonify({"message": "Invalid token, data is wrong"}), 401
 
         return f(*args, **kwargs)
 
