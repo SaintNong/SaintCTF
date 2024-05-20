@@ -165,7 +165,10 @@
 
 
         function updateChart(newData) {
-            leaderboardChart.data.datasets = newData;
+            newData.forEach(function(newDataset, i) {
+                $.extend(leaderboardChart.data.datasets[i], newDataset);
+            });
+
             leaderboardChart.update();
         }
 
