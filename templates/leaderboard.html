@@ -40,6 +40,8 @@
     </div>
 </div>
 <script>
+    const leaderboardEvents = new EventSource("leaderboard-events");
+
     $(document).ready(function () {
 
         // The current user will be highlighted
@@ -78,7 +80,6 @@
             });
         }, 2500);
 
-        const leaderboardEvents = new EventSource("leaderboard-events");
         leaderboardEvents.addEventListener("leaderboard", (event) => {
             const data = JSON.parse(event.data);
 
@@ -133,12 +134,10 @@
         let leaderboardChart;
         const userColors = {};
 
-        function fetchDataAndRenderChart() {
-            $.getJSON('/get-leaderboard-graph-data', function (data) {
-                const chartData = formatChartData(data);
-                renderChart(chartData);
-            });
-        }
+        leaderboardEvents.addEventListener("chart", (event) => {
+            const chartData = formatChartData(JSON.parse(event.data));
+            renderChart(chartData);
+        });
 
         function formatChartData(rawData) {
             const datasets = {};
@@ -231,10 +230,6 @@
             }
             return color;
         }
-
-
-        fetchDataAndRenderChart();
-        setInterval(fetchDataAndRenderChart, 10000);
     });
 
 </script>

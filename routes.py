@@ -43,6 +43,27 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager):
         recent_solves = challenge_manager.get_recent_solves(12)
         sse_queue.put(("recentActivity", json.dumps(recent_solves)))
 
+        # Update leaderboard chart
+        # NOTE: This relies on *both* the user table and solve table, and ideally,
+        #       the event would be dispatched when either one changes - however,
+        #       the leaderboard chart currently only sorts with the score in the
+        #       user table; all other scoring information used in the chart comes
+        #       from the solve table.
+        # Get top 10 players
+        top_players = (
+            db.session.query(User.id, User.score)
+            .order_by(User.score.desc())
+            .limit(10)
+            .all()
+        )
+        top_ids = []
+        for player in top_players:
+            top_ids.append(player.id)
+
+        # Get datapoints
+        data_points = challenge_manager.get_leaderboard_graph_data(top_ids)
+        sse_queue.put(("chart", json.dumps(data_points)))
+
     # ==== Pages ====
     @app.route("/")
     def index():
@@ -290,24 +311,6 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager):
                 yield f"event: {event_type}\ndata: {data}\n\n"
 
         return Response(eventStream(), mimetype="text/event-stream")
-
-    @app.route("/get-leaderboard-graph-data", methods=["GET"])
-    def get_leaderboard_graph():
-        # Get top 10 players
-        top_players = (
-            db.session.query(User.id, User.score)
-            .order_by(User.score.desc())
-            .limit(10)
-            .all()
-        )
-        top_ids = []
-        for player in top_players:
-            top_ids.append(player.id)
-
-        # Get datapoints
-        data_points = challenge_manager.get_leaderboard_graph_data(top_ids)
-
-        return data_points
 
     # ==== Misc ====
     # Favicon
