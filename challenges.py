@@ -267,16 +267,6 @@ class ChallengeManager:
             challenge = self.challenges[solve.challenge_id]
             points = challenge["points"]
 
-            # The instant before this solve, they were at the score they were at before
-            dataset.append(
-                {
-                    "time": (solve.time - timedelta(milliseconds=1)).isoformat(),
-                    "user": solve.user.username,
-                    "points": top_cumulative_scores[user_id],
-                }
-            )
-
-            # The instant when they solve the challenge, they jump up to however many points the challenge was worth
             top_cumulative_scores[user_id] += points
             dataset.append(
                 {
