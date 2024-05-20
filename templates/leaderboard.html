@@ -26,7 +26,7 @@
 
 <div id="leaderboard-page">
     <h2 id="leaderboard-heading">Top 10 scores over time</h2>
-    <canvas id="leaderboard-graph"></canvas>
+    <canvas id="leaderboard-chart"></canvas>
     <div class="dashboard-container">
         <section id="leaderboard-section" class="dashboard-panel">
             <h2>Leaderboard</h2>
@@ -130,7 +130,7 @@
     });
 
     $(document).ready(function () {
-        const ctx = document.getElementById('leaderboard-graph').getContext('2d');
+        const ctx = document.getElementById('leaderboard-chart').getContext('2d');
         let leaderboardChart;
         const userColors = {};
 

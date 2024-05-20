@@ -61,7 +61,7 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager):
             top_ids.append(player.id)
 
         # Get datapoints
-        data_points = challenge_manager.get_leaderboard_graph_data(top_ids)
+        data_points = challenge_manager.get_leaderboard_chart_data(top_ids)
         sse_queue.put(("chart", json.dumps(data_points)))
 
     # ==== Pages ====

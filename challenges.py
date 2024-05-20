@@ -251,7 +251,7 @@ class ChallengeManager:
             for solve in recent_solves
         ]
 
-    def get_leaderboard_graph_data(self, top_user_ids):
+    def get_leaderboard_chart_data(self, top_user_ids):
         dataset = []
         top_cumulative_scores = {user_id: 0 for user_id in top_user_ids}
 
