@@ -7,6 +7,7 @@ from flask import (
     redirect,
     abort,
     url_for,
+    Response,
 )
 from constants import *
 from flask_login import login_user, logout_user, current_user, login_required
@@ -16,9 +17,53 @@ from datetime import timedelta
 import itertools
 import re
 
+from sqlalchemy import event, select
+import json
+
+from sse import SSEQueue
+
+sse_queue = SSEQueue()
+
 
 def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager, csrf):
     print("Routes registered")
+
+    @event.listens_for(User, "after_update")
+    def userTableChanged(_mapper, connection, _target):
+        top_players = connection.execute(
+            select(User.username, User.score, User.id).order_by(User.score.desc())
+        ).all()
+        result = []
+        for line in top_players:
+            result.append({"username": line[0], "score": line[1], "user_id": line[2]})
+        sse_queue.put(("leaderboard", json.dumps(result)))
+
+    @event.listens_for(Solve, "after_insert")
+    def solveTableChanged(_mapper, connection, _target):
+        # Get last 12 recent solves
+        recent_solves = challenge_manager.get_recent_solves(12)
+        sse_queue.put(("recentActivity", json.dumps(recent_solves)))
+
+        # Update leaderboard chart
+        # NOTE: This relies on *both* the user table and solve table, and ideally,
+        #       the event would be dispatched when either one changes - however,
+        #       the leaderboard chart currently only sorts with the score in the
+        #       user table; all other scoring information used in the chart comes
+        #       from the solve table.
+        # Get top 10 players
+        top_players = (
+            db.session.query(User.id, User.score)
+            .order_by(User.score.desc())
+            .limit(10)
+            .all()
+        )
+        top_ids = []
+        for player in top_players:
+            top_ids.append(player.id)
+
+        # Get datapoints
+        data_points = challenge_manager.get_leaderboard_chart_data(top_ids)
+        sse_queue.put(("chart", json.dumps(data_points)))
 
     # ==== Pages ====
     @app.route("/")
@@ -247,8 +292,6 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager, csrf):
                 ).first()
                 if solve is None:
                     response_message = f"You've earned {challenge['points']} points."
-                    current_user.score += challenge["points"]
-                    db.session.commit()
 
                     challenge_manager.solve_challenge(id_, current_user)
 
@@ -266,45 +309,22 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager, csrf):
         # No hits on any challenges, wrong flag.
         return jsonify({"status": "wrong", "message": "Incorrect flag. Try again!"})
 
-    @app.route("/get-leaderboard", methods=["GET"])
-    def get_leaderboard():
-        # Query users db
-        top_players = (
-            db.session.query(User.username, User.score, User.id)
-            .order_by(User.score.desc())
-            .all()
-        )
+    @app.route("/leaderboard-events", methods=["GET"])
+    def get_leaderboard_events():
+        def eventStream():
+            q = sse_queue.listen()
 
-        result = []
-        for line in top_players:
-            result.append({"username": line[0], "score": line[1], "user_id": line[2]})
+            # Send data when event stream is initially connected to
+            with app.app_context():
+                with db.engine.connect() as connection:
+                    userTableChanged(None, connection, None)
+                    solveTableChanged(None, connection, None)
 
-        return jsonify(result)
+            while True:
+                event_type, data = q.get()
+                yield f"event: {event_type}\ndata: {data}\n\n"
 
-    @app.route("/get-recent-solves", methods=["GET"])
-    def get_recent_solves():
-        # Get last 12 recent solves
-        recent_solves = challenge_manager.get_recent_solves(12)
-
-        return jsonify(recent_solves)
-
-    @app.route("/get-leaderboard-graph-data", methods=["GET"])
-    def get_leaderboard_graph():
-        # Get top 10 players
-        top_players = (
-            db.session.query(User.id, User.score)
-            .order_by(User.score.desc())
-            .limit(10)
-            .all()
-        )
-        top_ids = []
-        for player in top_players:
-            top_ids.append(player.id)
-
-        # Get datapoints
-        data_points = challenge_manager.get_leaderboard_graph_data(top_ids)
-
-        return data_points
+        return Response(eventStream(), mimetype="text/event-stream")
 
     # ==== Misc ====
     # Favicon

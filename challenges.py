@@ -221,8 +221,10 @@ class ChallengeManager:
         with open(file_path, "rb") as file:
             return tomllib.load(file)
 
-    @staticmethod
-    def solve_challenge(id_, user):
+    def solve_challenge(self, id_, user):
+        points = self.challenges[id_]["points"]
+        user.score += points
+
         solve = Solve(user_id=user.id, challenge_id=id_)
         db.session.add(solve)
         db.session.commit()
@@ -248,13 +250,12 @@ class ChallengeManager:
             {
                 "solver": solve.user.username,
                 "challenge": self.challenges[solve.challenge_id],
-                "time": solve.time,
-                "time_ago": time_ago(solve.time),
+                "time": solve.time.isoformat(timespec="milliseconds"),
             }
             for solve in recent_solves
         ]
 
-    def get_leaderboard_graph_data(self, top_user_ids):
+    def get_leaderboard_chart_data(self, top_user_ids):
         dataset = []
         top_cumulative_scores = {user_id: 0 for user_id in top_user_ids}
 
@@ -270,16 +271,6 @@ class ChallengeManager:
             challenge = self.challenges[solve.challenge_id]
             points = challenge["points"]
 
-            # The instant before this solve, they were at the score they were at before
-            dataset.append(
-                {
-                    "time": (solve.time - timedelta(milliseconds=1)).isoformat(),
-                    "user": solve.user.username,
-                    "points": top_cumulative_scores[user_id],
-                }
-            )
-
-            # The instant when they solve the challenge, they jump up to however many points the challenge was worth
             top_cumulative_scores[user_id] += points
             dataset.append(
                 {

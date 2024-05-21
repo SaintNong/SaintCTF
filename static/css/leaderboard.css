@@ -54,7 +54,7 @@ tr#current-user td#username-data::after {
 }
 
 
-/* Format graph */
+/* Format chart */
 #leaderboard-page {
     width: 70%;
     margin: 0 auto;
