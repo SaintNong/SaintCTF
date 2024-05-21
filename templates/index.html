@@ -1,19 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home | SaintCTF</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/nav.css') }}">
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
 
-    <!-- Jquery 3.6.0 -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
-</head>
-<body style="background-color: #121212;">
-    {%  include 'navbar.html' %}
-
+{% block body %}
     <section id="home-section">
         <h1>Welcome to SaintCTF</h1>
         <p>Please sign up <a href="/register">here</a>!</p>
@@ -28,5 +16,4 @@
             $(".home-link").addClass("navbar-selected");
         });
     </script>
-</body>
-</html>
+{% endblock %}

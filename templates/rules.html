@@ -1,20 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rules | SaintCTF</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/nav.css') }}">
+{% extends "base.html" %}
+{% block title %}Rules{% endblock %}
 
-    <!-- Jquery 3.6.0 -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
-</head>
-<body style="background-color: #121212;">
-    {%  include 'navbar.html' %}
-
-
+{% block body %}
     <section id="rules-section">
         <h1>Rulez</h1>
         <article class="rules">
@@ -41,5 +28,4 @@
         </script>
 
     </section>
-</body>
-</html>
+{% endblock %}
