@@ -1,21 +1,28 @@
 <header id="main-header">
+    {# https://stackoverflow.com/a/11665879 #}
+    {% macro nav_item(endpoint, display) -%}
+    <li>
+        <a {% if request.endpoint == endpoint %} class="navbar-selected" {% endif %}
+            href="{{ url_for(endpoint, **kwargs) }}">{{ display }}</a>
+    </li>
+    {%- endmacro %}
     <h1>SaintCTF</h1>
 
     <nav id="main-nav">
         <ul>
-            <li><a class="home-link" href="/">Home</a></li>
-            <li><a class="rules-link" href="/rules">Rules</a></li>
-            <li><a class="leaderboard-link" href="/leaderboard">Leaderboard</a></li>
-            <li><a class="challenges-link" href="/challenges">Challenges</a></li>
+            {{ nav_item("index", "Home") }}
+            {{ nav_item("rules", "Rules") }}
+            {{ nav_item("leaderboard", "Leaderboard") }}
+            {{ nav_item("challenges", "Challenges") }}
 
             <li>|</li>
 
             {% if not user.is_authenticated %}
-                <li><a class="login-link" href="/login">Login</a></li>
-                <li><a class="signup-link" href="/register">Sign Up</a></li>
+                {{ nav_item("login", "Login") }}
+                {{ nav_item("signup", "Sign Up") }}
             {% else %}
-                <li><a class="logout-link" href="javascript:void(0);" onclick="performLogout()">Logout</a></li>
-                <li><a class="profile-link" href="/profile/{{ user.id }}">Profile</a></li>
+                <li><a href="javascript:void(0);" onclick="performLogout()">Logout</a></li>
+                {{ nav_item("profile", "Profile", user_id=user.id) }}
             {% endif %}
         </ul>
     </nav>
