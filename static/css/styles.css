@@ -56,7 +56,7 @@ body {
     margin-bottom: 0;
 }
 
-.challenge header p, .challenge footer p, .challenge footer summary {
+.challenge header p, .challenge footer p, .challenge footer summary, .challenge header a {
     color: lightgrey;
 }
 
@@ -86,8 +86,7 @@ body {
 /* Tags */
 .filter-tag {
     text-decoration: none;
-    background-color: #080808;
-    color: var(--fg-color);
+    background-color: var(--bg-color);
     padding: 6px 16px; /* For text */
     transition: background-color 0.3s;
     border-radius: 10px;
@@ -99,7 +98,7 @@ body {
 }
 
 .filter-tag:hover {
-    background-color: #111111;
+    background-color: var(--form-field-border-color);
 }
 
 .filter-tag[data-selected] {
