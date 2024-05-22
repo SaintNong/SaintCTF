@@ -19,9 +19,11 @@
 {% endblock %}
 
 {% block body %}
-    <div id="leaderboard-page">
+    <main>
         <h2 id="leaderboard-heading">Top 10 scores over time</h2>
-        <canvas id="leaderboard-chart"></canvas>
+        <div id="leaderboard-chart-container">
+            <canvas id="leaderboard-chart"></canvas>
+        </div>
         <div class="dashboard-container">
             <section id="leaderboard-section" class="dashboard-panel">
                 <h2>Leaderboard</h2>
@@ -33,7 +35,7 @@
                 <table id="recent-table"></table>
             </section>
         </div>
-    </div>
+    </main>
     <script>
         const leaderboardEvents = new EventSource("leaderboard-events");
 
@@ -197,6 +199,7 @@
                                 }
                             },
                             responsive: true,
+                            maintainAspectRatio: false,
                             plugins: {
                                 legend: {
                                     position: 'top',
@@ -206,7 +209,10 @@
                                 }
                             },
                             layout: {
-                                padding: 20
+                                padding: {
+                                    x: 20,
+                                    y: 0
+                                }
                             },
                             backgroundColor: '#333333'
                         }

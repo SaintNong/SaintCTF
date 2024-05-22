@@ -53,10 +53,17 @@ tr#current-user td#username-data::after {
     content: " (You)"
 }
 
+main {
+    max-width: 80em;
+    margin: 0 auto;
+}
+
 
 /* Format chart */
-#leaderboard-page {
-    width: 70%;
+#leaderboard-chart-container {
+    height: 50vh;
+    width: 90vw;
+    max-width: 100%;
     margin: 0 auto;
 }
 
