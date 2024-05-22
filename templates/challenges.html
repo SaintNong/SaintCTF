@@ -177,7 +177,7 @@
                 <h2>Flag Submission</h2>
                 <!-- Flag submission form -->
                 <form action="/submit-flag" id="flag-form" method="post">
-                    <label for="flag"></label><input type="text" id="flag" name="flag" placeholder="saint{EXAMPLE_FLAG}">
+                    <input type="text" id="flag" name="flag" placeholder="saint{EXAMPLE_FLAG}">
                     <input type="submit" value="Submit Flag">
 
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>

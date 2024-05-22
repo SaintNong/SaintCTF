@@ -48,7 +48,7 @@ body {
 /* Section styling */
 #challenge-list {
     padding: 40px;
-    flex: 999;
+    flex: 11;
     background: var(--bg-color);
 }
 
@@ -262,16 +262,18 @@ details > summary {
     justify-content: start; /* Aligns items to the start of the form */
     max-width: 100%; /* Ensures the form does not exceed the container width */
     margin-bottom: 20px;
+
+    gap: 5px; /* Space between text input and submit button */
+    flex-wrap: wrap;
 }
 
 #flag-form input[type="text"] {
-    flex-grow: 1; /* Allows the text input to grow and fill available space */
+    flex-grow: 999; /* Allows the text input to grow and fill available space */
     padding: 8px;
     border: 1px solid var(--form-field-border-color);
     background-color: var(--light-bg-color);
     color: #ddd;
     border-radius: 4px;
-    margin-right: 5px; /* Space between text input and submit button */
 }
 
 #flag-form input[type="text"]:focus {
@@ -288,6 +290,7 @@ details > summary {
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    flex: 1;
 }
 
 #flag-form input[type="submit"]:hover {
@@ -297,7 +300,7 @@ details > summary {
 #flag-section-container {
     background-color: var(--light-bg-color);
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
-    flex: 1;
+    flex: 5;
 }
 
 /* Section where flag submission form, and filter form is stored */
