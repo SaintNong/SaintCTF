@@ -5,18 +5,19 @@ body, html {
 }
 
 .container {
-    width: 60%;
+    max-width: 80em;
+    padding: 1em;
     text-align: center;
     margin: 0 auto;
 }
 
 #user-profile-card {
-    margin-top: 30px;
-    margin-bottom: 30px;
+    margin-bottom: 2em;
 }
 
 #recent-solves {
     margin-top: 30px;
+    overflow-x: auto;
 }
 
 #recent-solves h2 {
@@ -25,4 +26,11 @@ body, html {
 
 #username-heading {
     color: var(--purple-1);
+}
+
+#chart-container {
+    height: 50vh;
+    width: 90vw;
+    max-width: 100%;
+    margin: 0 auto;
 }
