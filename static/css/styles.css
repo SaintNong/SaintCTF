@@ -70,16 +70,26 @@ body {
 .challenge header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: stretch;
     margin-bottom: 0.6em;
 }
 
 .challenge .info-block {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+    --gap: 10px;
 
-    padding: 0 5px 5px;
+    display: flex;
+    gap: var(--gap);
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-self: flex-start;
+    margin-top: 0.2em; /* align top of info block with header more accurately */
+    align-items: center;
+}
+
+.info-block .filter-tags {
+    display: flex;
+    gap: var(--gap);
 }
 
 .points {
@@ -94,10 +104,8 @@ body {
     transition: background-color 0.3s;
     border-radius: 10px;
     display: inline-block;
-    margin-right: 10px;
-    margin-bottom: 8px;
-    margin-top: 8px;
     font-size: 0.85em;
+    white-space: nowrap;
 }
 
 .filter-tag:hover {

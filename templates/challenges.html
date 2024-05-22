@@ -205,8 +205,10 @@
                         </div>
 
                         <div class="info-block">
-                            <a class="filter-tag" href="javascript:void(0);" data-filter-type="difficulty" title="Filter by difficulty">{{ challenge.difficulty }}</a>
-                            <a class="filter-tag" href="javascript:void(0);" data-filter-type="category" title="Filter by category">{{ challenge.category }}</a>
+                            <div class="filter-tags">
+                                <a class="filter-tag" href="javascript:void(0);" data-filter-type="difficulty" title="Filter by difficulty">{{ challenge.difficulty }}</a>
+                                <a class="filter-tag" href="javascript:void(0);" data-filter-type="category" title="Filter by category">{{ challenge.category }}</a>
+                            </div>
                             <p class="points">{{ challenge.points }} points</p>
                         </div>
                     </header>
