@@ -40,12 +40,15 @@ body {
 #challenge-main {
     display: flex;
     flex-direction: row-reverse;
+    flex-wrap: wrap;
+    height: 100vh;
 }
 
 /* Section styling */
 #challenge-list {
     padding: 40px;
-    flex: 1;
+    flex: 999;
+    background: var(--bg-color);
 }
 
 .challenge > * {
@@ -282,19 +285,24 @@ details > summary {
     background-color: var(--purple-2); /* Darker purple on hover for visual feedback */
 }
 
+#flag-section-container {
+    background-color: var(--light-bg-color);
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    flex: 1;
+}
+
 /* Section where flag submission form, and filter form is stored */
 #flag-section {
 
     gap: 20px;
     padding: 30px;
 
-    background-color: var(--light-bg-color);
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
 
     /* Andrew god */
     position: sticky;
     top:0;
-    height: 100vh;
+
+    align-self: start;
 }
 
 #flag-section h2 {

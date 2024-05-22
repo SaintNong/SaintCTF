@@ -140,50 +140,52 @@
     <main id="challenge-main">
         {% set unsolved_count = challenges|length - solved_count %}
 
-        <section id="flag-section">
-            <h1>Welcome {{ current_user.username }}!</h1>
-            <p>You have {{ current_user.score }} points.</p>
+        <div id="flag-section-container">
+            <section id="flag-section">
+                <h1>Welcome {{ current_user.username }}!</h1>
+                <p>You have {{ current_user.score }} points.</p>
 
-            <h2>Filter Challenges</h2>
-            <p><span id="visible-count">{{ unsolved_count }}</span> / {{ challenges|length }} challenge(s) visible</p>
+                <h2>Filter Challenges</h2>
+                <p><span id="visible-count">{{ unsolved_count }}</span> / {{ challenges|length }} challenge(s) visible</p>
 
-            <!-- Challenge filtering form -->
-            <form id="filter-form" action="javascript:void(0);">
-                <select name="category">
-                    <option value="">All Categories</option>
-                    <option value="web">web</option>
-                    <option value="crypto">crypto</option>
-                    <option value="pwn">pwn</option>
-                    <option value="rev">rev</option>
-                    <option value="osint">osint</option>
-                    <option value="steg">steg</option>
-                    <option value="misc">misc</option>
-                </select>
-                <select name="difficulty">
-                    <option value="">All Difficulties</option>
-                    <option value="free points">free points</option>
-                    <option value="easy">easy</option>
-                    <option value="medium">medium</option>
-                    <option value="hard">hard</option>
-                </select>
-                <div>
-                    <input type="checkbox" name="solved" id="solved" />
-                    <label for="solved">Show solved challenges ({{ solved_count }})</label>
-                </div>
-            </form>
+                <!-- Challenge filtering form -->
+                <form id="filter-form" action="javascript:void(0);">
+                    <select name="category">
+                        <option value="">All Categories</option>
+                        <option value="web">web</option>
+                        <option value="crypto">crypto</option>
+                        <option value="pwn">pwn</option>
+                        <option value="rev">rev</option>
+                        <option value="osint">osint</option>
+                        <option value="steg">steg</option>
+                        <option value="misc">misc</option>
+                    </select>
+                    <select name="difficulty">
+                        <option value="">All Difficulties</option>
+                        <option value="free points">free points</option>
+                        <option value="easy">easy</option>
+                        <option value="medium">medium</option>
+                        <option value="hard">hard</option>
+                    </select>
+                    <div>
+                        <input type="checkbox" name="solved" id="solved" />
+                        <label for="solved">Show solved challenges ({{ solved_count }})</label>
+                    </div>
+                </form>
 
 
-            <h2>Flag Submission</h2>
-            <!-- Flag submission form -->
-            <form action="/submit-flag" id="flag-form" method="post">
-                <label for="flag"></label><input type="text" id="flag" name="flag" placeholder="saint{EXAMPLE_FLAG}">
-                <input type="submit" value="Submit Flag">
+                <h2>Flag Submission</h2>
+                <!-- Flag submission form -->
+                <form action="/submit-flag" id="flag-form" method="post">
+                    <label for="flag"></label><input type="text" id="flag" name="flag" placeholder="saint{EXAMPLE_FLAG}">
+                    <input type="submit" value="Submit Flag">
 
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 
-            </form>
+                </form>
 
-        </section>
+            </section>
+        </div>
 
         <section id="challenge-list">
             <p>{{ unsolved_count }} challenge(s) left to solve</p>
