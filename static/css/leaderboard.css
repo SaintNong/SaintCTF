@@ -21,14 +21,19 @@ h2 {
 
 /* Container for both sections */
 .dashboard-container {
+    margin: 0 auto;
+    width: 90vw;
+
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-around;
-    padding: 20px;
+    padding-top: 1em;
+    gap: 2em;
 }
 
 /* Individual panels */
 .dashboard-panel {
-    width: 45%;
+    flex: 1 1 18em;
     background-color: var(--light-bg-color);
     padding: 20px;
     border-radius: 8px;
