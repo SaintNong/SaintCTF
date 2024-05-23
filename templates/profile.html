@@ -63,11 +63,9 @@
             let scoreData = [];
             let totalScore = 0;
 
-            {% for solve in solves|reverse %}
-                timeLabels.push('{{ (solve.time-timedelta(microseconds=1)).strftime("%Y-%m-%d %H:%M:%S") }}');
-                timeLabels.push('{{ solve.time.strftime("%Y-%m-%d %H:%M:%S") }}');
-                scoreData.push(totalScore);
+            {% for solve in solves %}
                 totalScore += {{ solve.challenge.points }};
+                timeLabels.push('{{ solve.time.strftime("%Y-%m-%d %H:%M:%S") }}');
                 scoreData.push(totalScore);
             {% endfor %}
 
@@ -80,6 +78,7 @@
                     datasets: [{
                         label: '{{ displayed_user.username }}',
                         data: scoreData,
+                        stepped: "before",
                         backgroundColor: 'rgba(54, 162, 235, 0.5)',
                         borderColor: 'rgba(54, 162, 235, 1)',
                         borderWidth: 1
