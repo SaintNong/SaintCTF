@@ -113,7 +113,10 @@
                             position: 'top',
                             labels: {
                                 color: '#FFFFFF' // White color for legend text
-                            }
+                            },
+                            // Disable legend click behaviour
+                            // https://github.com/chartjs/Chart.js/issues/2190#issuecomment-203444324
+                            onClick: (event, legendItem, legend) => {}
                         }
                     },
                     layout: {
