@@ -242,6 +242,25 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager, csrf):
     def leaderboard():
         return render_template("leaderboard.html", user=current_user)
 
+    @app.route("/solves")
+    def solves():
+        solves = db.session.scalars(db.select(Solve).order_by(Solve.time.asc())).all()
+
+        first_solved = []
+        for solve in solves:
+            if solve.challenge_id not in first_solved:
+                first_solved.append(solve.challenge_id)
+                solve.first_blood = True
+            else:
+                solve.first_blood = False
+
+        return render_template(
+            "solves.html",
+            user=current_user,
+            solves=solves,
+            challenges=challenge_manager.challenges,
+        )
+
     # Shows the profile of specific user with uid
     @app.route("/profile/<int:user_id>")
     def profile(user_id):

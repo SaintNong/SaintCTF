@@ -31,7 +31,10 @@
             </section>
 
             <section id="recent-activity-section" class="dashboard-panel">
-                <h2>Recent Solves</h2>
+                <div class="link-row">
+                    <h2>Recent Solves</h2>
+                    <a href="{{ url_for('solves') }}">See all solves &rarr;</a>
+                </div>
                 <table id="recent-table"></table>
             </section>
         </div>

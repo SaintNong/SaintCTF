@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% block title %}Solves{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        main {
+            max-width: 80em;
+            padding: 1em;
+            margin: 0 auto;
+        }
+        main > * {
+            margin-bottom: 1em;
+        }
+        section {
+            background-color: var(--light-bg-color);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        }
+        h2 {
+            padding-bottom: 10px;
+        }
+        a {
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <main>
+        <section>
+            <div class="link-row">
+                <h2>Solve History</h2>
+                <a href="javascript:window.scrollTo(0, document.body.scrollHeight);">Jump to bottom &darr;</a>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Solver</th>
+                        <th></th>
+                        <th>Challenge</th>
+                        <th>Category</th>
+                        <th>Difficulty</th>
+                        <th>Points</th>
+                        <th>Time</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for solve in solves %}
+                        <tr {% if solve.user.username == current_user.username %}
+                            class="highlight"
+                            {% endif %}
+                            >
+                            <td>{{ solve.user.username }}</td>
+                            {% if solve.first_blood %}
+                            <td title="First blood">🏆</td>
+                            {% else %}
+                            <td></td>
+                            {% endif %}
+                            <td>{{ challenges[solve.challenge_id].name }}</td>
+                            <td>{{ challenges[solve.challenge_id].category }}</td>
+                            <td>{{ challenges[solve.challenge_id].difficulty }}</td>
+                            <td>{{ challenges[solve.challenge_id].points }}</td>
+                            <td><time datetime="{{ solve.time }}">{{ solve.time | time_ago }}</time></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+
+        <section>
+            <h2>Legend</h2>
+            <p>🏆 &mdash; First blood</p>
+        </section>
+    </main>
+    <script>
+        $(document).ready(function () {
+            function divmod(a, b) {
+                return [Math.floor(a/b), a % b];
+            }
+
+            function time_ago(time) {
+                const delta = new Date() - time;
+                let day, hour, minute, second, remainder;
+                [day, remainder] = divmod(delta, (1000 * 60 * 60 * 24));
+                [hour, remainder] = divmod(remainder, (1000 * 60 * 60));
+                [minute, remainder] = divmod(remainder, (1000 * 60));
+                [second, remainder] = divmod(remainder, (1000));
+
+                if (day > 0) {
+                    return `${day} day${day > 1 ? 's' : ''} ${hour} hour${hour > 1 ? 's' : ''} ago`
+                } else if (hour > 0) {
+                    return `${hour} hour${hour > 1 ? 's' : ''} ${minute} minute${minute > 1 ? 's' : ''} ago`
+                } else if (minute > 0) {
+                    return `${minute} minute${minute > 1 ? 's' : ''} ago`
+                } else if (second > 5) {
+                    return `${second} seconds ago`
+                } else {
+                    return "Just now"
+                }
+            }
+
+            // Periodically update relative times
+            setInterval(function () {
+                $("time").each(function () {
+                    const element = $(this);
+                    const datetime = new Date(element.attr("datetime"));
+                    element.text(time_ago(new Date(element.attr("datetime"))));
+                });
+            }, 2500);
+        });
+    </script>
+{% endblock %}
