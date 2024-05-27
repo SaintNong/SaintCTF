@@ -280,6 +280,18 @@ class ChallengeManager:
             .all()
         )
 
+        # At the start of the CTF, all users have 0 points
+        for user_id in top_user_ids:
+            user = User.query.get(user_id)
+
+            dataset.append(
+                {
+                    "time": self.app.config["CTF_START_TIME"],
+                    "user": user.username,
+                    "points": 0,
+                }
+            )
+
         for solve in solves:
             user_id = solve.user_id
             challenge = self.challenges[solve.challenge_id]
