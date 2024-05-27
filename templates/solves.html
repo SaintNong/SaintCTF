@@ -60,7 +60,7 @@
                             {% endif %}
                             >
                             <td>{{ solve.user.username }}</td>
-                            {% if solve.first_blood %}
+                            {% if solve.id in first_blood %}
                             <td title="First blood">🏆</td>
                             {% else %}
                             <td></td>

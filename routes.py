@@ -23,6 +23,7 @@ import json
 from sse import SSEQueue
 
 sse_queue = SSEQueue()
+first_blood = []
 
 
 def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager, csrf):
@@ -40,6 +41,17 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager, csrf):
 
     @event.listens_for(Solve, "after_insert")
     def solveTableChanged(_mapper, connection, _target):
+        # Get 'first blood' solves
+        solves = db.session.scalars(db.select(Solve).order_by(Solve.time.asc())).all()
+
+        global first_blood
+        first_blood = []
+        first_solved = []
+        for solve in solves:
+            if solve.challenge_id not in first_solved:
+                first_solved.append(solve.challenge_id)
+                first_blood.append(solve.id)
+
         # Get last 12 recent solves
         recent_solves = challenge_manager.get_recent_solves(12)
         sse_queue.put(("recentActivity", json.dumps(recent_solves)))
@@ -246,18 +258,11 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager, csrf):
     def solves():
         solves = db.session.scalars(db.select(Solve).order_by(Solve.time.asc())).all()
 
-        first_solved = []
-        for solve in solves:
-            if solve.challenge_id not in first_solved:
-                first_solved.append(solve.challenge_id)
-                solve.first_blood = True
-            else:
-                solve.first_blood = False
-
         return render_template(
             "solves.html",
             user=current_user,
             solves=solves,
+            first_blood=first_blood,
             challenges=challenge_manager.challenges,
         )
 
