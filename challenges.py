@@ -242,13 +242,14 @@ class ChallengeManager:
         ]
 
     # Returns the last n recent solves
-    def get_recent_solves(self, n):
+    def get_recent_solves(self, n, first_blood):
         recent_solves = Solve.query.order_by(Solve.time.desc()).limit(n)
         return [
             {
                 "solver": solve.user.username,
                 "challenge": self.challenges[solve.challenge_id],
                 "time": solve.time.isoformat(timespec="milliseconds"),
+                "first_blood": solve.id in first_blood,
             }
             for solve in recent_solves
         ]

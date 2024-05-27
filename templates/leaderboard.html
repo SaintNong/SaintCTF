@@ -110,7 +110,7 @@
                 recentTable.empty();
 
                 // Define the table headers
-                recentTable.append(`<thead><tr><th>Solver</th><th>Challenge</th><th>Time</th></tr></thead>`);
+                recentTable.append(`<thead><tr><th>Solver</th><th></th><th>Challenge</th><th>Time</th></tr></thead>`);
 
                 // Append data to the table body
                 let tbody = $("<tbody></tbody>");
@@ -120,7 +120,9 @@
 
                     const relative_time = time_ago(new Date(solve.time));
 
-                    tbody.append(`<tr ${highlight}><td>${solve.solver}</td><td>${solve.challenge.name}</td><td><time datetime="${solve.time}">${relative_time}</time></td></tr>`);
+                    const first_blood = solve.first_blood ? ' title="First blood">🏆' : ">";
+
+                    tbody.append(`<tr ${highlight}><td>${solve.solver}</td><td${first_blood}</td><td>${solve.challenge.name}</td><td><time datetime="${solve.time}">${relative_time}</time></td></tr>`);
                 });
                 recentTable.append(tbody);
             });

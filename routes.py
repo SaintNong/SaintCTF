@@ -53,7 +53,7 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager, csrf):
                 first_blood.append(solve.id)
 
         # Get last 12 recent solves
-        recent_solves = challenge_manager.get_recent_solves(12)
+        recent_solves = challenge_manager.get_recent_solves(12, first_blood)
         sse_queue.put(("recentActivity", json.dumps(recent_solves)))
 
         # Update leaderboard chart
