@@ -1,5 +1,5 @@
 .idea/
-secret.txt
+config.toml
 database.db
 __pycache__
 venv/

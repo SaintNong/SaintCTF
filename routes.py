@@ -26,7 +26,7 @@ sse_queue = SSEQueue()
 
 
 def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager, csrf):
-    print("Routes registered")
+    app.logger.info("Routes registered")
 
     @event.listens_for(User, "after_update")
     def userTableChanged(_mapper, connection, _target):
@@ -150,7 +150,7 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager, csrf):
     @login_required
     def delete_account():
         name = User.query.filter(User.id == current_user.id).first().username
-        print(f"Deleted account {name}")
+        app.logger.debug(f"Deleted account {name}")
         Solve.query.filter(Solve.user_id == current_user.id).delete()
         User.query.filter(User.id == current_user.id).delete()
 
