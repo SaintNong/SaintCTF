@@ -32,14 +32,14 @@ body {
 #main-header h1 {
     color: var(--fg-color);
     text-align: center;
-    padding: 20px 0;
+    padding: 0.5em 0;
     background-color: var(--light-bg-color);
 }
 
 /* Navigation Bar Styling */
 #main-nav {
     background-color: var(--light-bg-color);
-    padding: 10px 20px;
+    padding: 0.5em 1em;
     text-align: center;
 
     border-bottom: 1px solid black;
@@ -52,7 +52,7 @@ body {
 
 #main-nav ul li {
     display: inline;
-    margin-right: 10px;
+    margin-right: 0.5em;
 }
 
 /* General styles for links in the navbar */
@@ -81,7 +81,7 @@ table {
 
 th, td {
     text-align: left;
-    padding: 8px;
+    padding: 0.5em;
     border-bottom: 1px solid var(--form-field-border-color);
 }
 
