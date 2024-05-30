@@ -130,7 +130,9 @@ main {
 
 /* Ordered List Styling */
 ol {
-    padding-left: 40px; /* Offset for numbering */
+    /* https://html.spec.whatwg.org/multipage/rendering.html#lists */
+    /* dir, menu, ol, ul { padding-inline-start: 40px; } */
+    padding-left: 40px; /* Default user agent offset for numbering */
 }
 
 ol li {
