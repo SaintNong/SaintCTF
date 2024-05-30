@@ -22,7 +22,7 @@ def load_config_file(app, config_path):
         },
         "CTF_OPTIONS": {
             "RESET_DATABASE": False,
-            "CTF_START_TIME": datetime.datetime.utcnow().isoformat(),
+            "CTF_START_TIME": datetime.datetime.now().isoformat(),
             "FORCE_DISABLE_DOCKER": False,
         },
     }
