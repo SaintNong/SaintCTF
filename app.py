@@ -13,7 +13,7 @@ from challenges import ChallengeManager, time_ago
 from routes import register_routes
 
 
-def load_config_file(config_path):
+def load_config_file(app, config_path):
     # Define default options with appropriate type conversions as necessary
     default_options = {
         "FLASK_OPTIONS": {
@@ -40,7 +40,7 @@ def load_config_file(config_path):
 
     # Read the existing configuration or create a new document
     try:
-        with open(config_path, "r") as config_file:
+        with app.open_instance_resource(config_path, "r") as config_file:
             config_file = tomlkit.parse(config_file.read())
     except FileNotFoundError:
         config_file = tomlkit.document()
@@ -61,7 +61,7 @@ def load_config_file(config_path):
                 config_file[section][key] = value
 
     # Write configuration changes
-    with open(config_path, "w") as file:
+    with app.open_instance_resource(config_path, "w") as file:
         tomlkit.dump(config_file, file)
 
     # Flatten for config
@@ -79,7 +79,7 @@ def create_app():
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.config["TEMPLATES_AUTO_RELOAD"] = True
 
-    config = load_config_file(constants.CONFIG_FILE)
+    config = load_config_file(app, constants.CONFIG_FILE)
     app.config.update(config)
 
     app.logger.setLevel(logging.DEBUG)

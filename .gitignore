@@ -1,5 +1,4 @@
 .idea/
-config.toml
-database.db
+/instance/
 __pycache__
 venv/
