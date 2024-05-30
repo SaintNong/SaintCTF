@@ -48,8 +48,7 @@ def load_config_file(app, config_path):
     # Ensure all required options are present
     for section, options in default_options.items():
         # Check each section
-        if section not in config_file:
-            config_file[section] = tomlkit.table()
+        config_file.setdefault(section, tomlkit.table())
 
         for key, value in options.items():
             # Check every key of config file, filling it with the default value if it isn't present
