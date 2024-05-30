@@ -106,73 +106,6 @@ details > summary {
 }
 
 
-/* Flag Submission Form Styling */
-#flag-form {
-    display: flex;
-    align-items: center; /* Aligns items vertically in the middle */
-    justify-content: start; /* Aligns items to the start of the form */
-    max-width: 100%; /* Ensures the form does not exceed the container width */
-    margin-bottom: 20px;
-
-    gap: 5px; /* Space between text input and submit button */
-    flex-wrap: wrap;
-}
-
-#flag-form input[type="text"] {
-    flex-grow: 999; /* Allows the text input to grow and fill available space */
-    padding: 8px;
-    border: 1px solid var(--form-field-border-color);
-    background-color: var(--light-bg-color);
-    color: #ddd;
-    border-radius: 4px;
-}
-
-#flag-form input[type="text"]:focus {
-    outline: none;
-    border-color: #555;
-}
-
-#flag-form input[type="submit"] {
-    padding: 8px 16px;
-    border: none;
-    background-color: var(--purple-1);
-    color: white;
-    text-transform: uppercase;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    flex: 1;
-}
-
-#flag-form input[type="submit"]:hover {
-    background-color: var(--purple-2); /* Darker purple on hover for visual feedback */
-}
-
-#flag-section-container {
-    background-color: var(--light-bg-color);
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
-    flex: 5;
-}
-
-/* Section where flag submission form, and filter form is stored */
-#flag-section {
-
-    gap: 20px;
-    padding: 30px;
-
-
-    /* Andrew god */
-    position: sticky;
-    top:0;
-
-    align-self: start;
-}
-
-#flag-section h2 {
-    font-size: 22px;
-    margin-top: 0.5em;
-}
-
 /* Rules */
 #rules-section {
     text-align: left;
@@ -186,22 +119,6 @@ details > summary {
     margin-right: auto;
     color: #ddd
 }
-
-#filter-form {
-    /* Centering the form */
-    margin: 0 auto;
-}
-
-#filter-form select {
-    background-color: var(--light-bg-color); /* Darker background for input fields */
-    color: #ccc; /* Light gray text color */
-    border: 2px solid var(--form-field-border-color); /* Darker border for a subtle and elegant look */
-    padding: 10px;
-    margin-bottom: 10px; /* Spacing between form elements */
-    width: 100%; /* Full width */
-    border-radius: 4px; /* Slightly rounded edges for inputs */
-}
-
 
 /* Home page */
 #home-section {
