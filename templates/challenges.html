@@ -193,7 +193,7 @@
             <p>{{ unsolved_count }} challenge(s) left to solve</p>
 
             {% for id, challenge in challenges.items() %}
-                <article class="challenge" data-category="{{ challenge.category }}"
+                <article class="card challenge" data-category="{{ challenge.category }}"
                          data-difficulty="{{ challenge.difficulty }}"
                          {% if solves[id]|map(attribute='user.username')|select('eq', current_user.username)|list %}
                              data-solved style="display: none;"

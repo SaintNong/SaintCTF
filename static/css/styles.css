@@ -109,11 +109,7 @@ details > summary {
 /* Rules */
 #rules-section {
     text-align: left;
-    padding: 20px;
     margin-top: 20px;
-    background-color: var(--light-bg-color);
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
     max-width: 800px;
     margin-left: auto;
     margin-right: auto;
@@ -157,6 +153,12 @@ ol li:before {
     margin-right: 10px; /* Space between the number and text */
 }
 
+.card {
+    background-color: var(--light-bg-color);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
 
 /* Leaderboard & Solves History */
 div.link-row {

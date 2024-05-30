@@ -87,10 +87,8 @@
 
 /* Style for the challenge listings */
 #challenge-list .challenge {
-    background-color: var(--light-bg-color); /* Dark background for each challenge */
     padding: 15px;
     margin-top: 10px;
-    border-radius: 8px; /* Rounded corners for challenge cards */
     border-left: 5px solid var(--purple-2); /* Stylish left border */
 }
 
