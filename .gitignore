@@ -1,4 +1,5 @@
 .idea/
 /instance/
 __pycache__
-venv/
+/venv/
+/challenges/

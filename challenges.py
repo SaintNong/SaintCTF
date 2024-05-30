@@ -153,7 +153,13 @@ class ChallengeManager:
 
     def read_challenges(self):
         self.app.logger.info("Reading challenges")
-        for challenge_id in os.listdir(CHALLENGES_DIRECTORY):
+
+        challenge_folders = [
+            folder
+            for folder in os.listdir(CHALLENGES_DIRECTORY)
+            if not folder.startswith(".")  # Skips ".git"
+        ]
+        for challenge_id in challenge_folders:
             challenge_directory = os.path.join(CHALLENGES_DIRECTORY, challenge_id)
 
             # Get paths for challenge files and folders
