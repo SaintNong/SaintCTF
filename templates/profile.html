@@ -67,30 +67,31 @@
 
 
             // Prepare data for the score chart
-            let timeLabels = [];
-            let scoreData = [];
-            let totalScore = 0;
+            let times = [];
+            let points = [];
 
-            {% for solve in solves|reverse %}
-                timeLabels.push('{{ (solve.time-timedelta(microseconds=1)).strftime("%Y-%m-%d %H:%M:%S") }}');
-                timeLabels.push('{{ solve.time.strftime("%Y-%m-%d %H:%M:%S") }}');
-                scoreData.push(totalScore);
-                totalScore += {{ solve.challenge.points }};
-                scoreData.push(totalScore);
+            {% for datapoint in graph_datapoints %}
+            times.push("{{ datapoint.time }}");
+            points.push({{ datapoint.points }});
             {% endfor %}
+
+            let userColor = getUserColor('{{ displayed_user.username }}');
 
 
             let ctx = document.getElementById('score-history').getContext('2d');
-            let scoreChart = new Chart(ctx, {
+            let chart = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: timeLabels,
+                    labels: times,
                     datasets: [{
                         label: '{{ displayed_user.username }}',
-                        data: scoreData,
-                        backgroundColor: 'rgba(54, 162, 235, 0.5)',
-                        borderColor: 'rgba(54, 162, 235, 1)',
-                        borderWidth: 1
+                        data: points,
+                        stepped: "before",
+
+                        backgroundColor: userColor,
+                        borderColor: userColor,
+
+                        fill: false,
                     }]
                 },
                 options: {
@@ -104,14 +105,15 @@
                         y: {
                             beginAtZero: true,
                             ticks: {
-                                color: '#FFFFFF' // White color for ticks
+                                color: '#FFFFFF', // White color for ticks
                             },
                             grid: {
-                                color: 'rgba(255,255,255,0.1)' // Lighter grid lines against dark background
+                                color: 'rgba(255,255,255,0.1)' // Lighter grid lines against a dark background
                             },
                             title: {
                                 display: true,
-                                text: 'Score'
+                                text: 'Score',
+                                color: '#FFFFFF' // Ensuring the title is also white
                             }
                         }
                     },
@@ -127,11 +129,60 @@
                     layout: {
                         padding: 20
                     },
-                    // Set the overall background color to dark
                     backgroundColor: '#333333'
                 }
             });
         });
+
+        // Gets a predictable user color for each username
+        function getUserColor(username) {
+            let color = '#';
+            let seed = 0;
+
+            // Go through the username and do some bit flipping and flopping
+            for (let i = 0; i < username.length; i++) {
+                seed = username.charCodeAt(i) + ((seed << 6) + 2 * seed);
+
+                // XOR shift
+                seed ^= seed >> 7;
+                seed ^= seed << 11;
+                seed ^= seed << 17;
+            }
+
+            // 3 hex values
+            for (let i = 0; i < 3; i++) {
+                // Flip-flop around some more
+                let value = (seed >> i) & 0xFF;
+
+                // Convert the number to hex
+                color += ('00' + value.toString(16)).slice(-2);
+            }
+
+            // If the color is too dark, run the hash function again
+            if (isDark(color)) {
+                return getUserColor(username + 'a');
+            }
+
+            // And our color is created!
+            return color;
+        }
+
+        // Credit: https://stackoverflow.com/questions/596216/formula-to-determine-perceived-brightness-of-rgb-color
+        function isDark(hex) {
+            const r = parseInt(hex.slice(1, 3), 16) / 255;
+            const g = parseInt(hex.slice(3, 5), 16) / 255;
+            const b = parseInt(hex.slice(5, 7), 16) / 255;
+
+            // Calculate perceived luminance according to ITU-R BT.709
+            const luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+            console.log(luminance);
+            if (luminance < 0.4) {
+                console.log("Retrying");
+            }
+            return luminance < 0.3;
+        }
+
+
     </script>
 </body>
 </html>

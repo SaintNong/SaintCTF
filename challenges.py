@@ -1,5 +1,4 @@
 import datetime
-from datetime import timedelta
 import os
 import tomllib
 import signal
@@ -53,7 +52,7 @@ class ContainerManager:
     def __init__(self, app):
         self.client = docker.from_env()
         self.app = app
-        print("Container manager initialised")
+        self.app.logger.info("Container manager initialised")
 
         # Stop containers when program is closed
         signal.signal(signal.SIGINT, self.exit_flask)
@@ -74,7 +73,7 @@ class ContainerManager:
             self.client.images.build(tag=challenge_id, path=container_dir)
 
         except docker.errors.APIError as e:
-            print(f" * Docker API encountered an error while building")
+            self.app.logger.info(f"Docker API encountered an error while building")
             raise e
 
         try:
@@ -92,55 +91,68 @@ class ContainerManager:
                     ports=port,
                     labels=["CTF", challenge_id],
                 )
-                print(
-                    f' * Started container for challenge "{challenge_id}" with ID of "{container.name}"'
+                self.app.logger.info(
+                    f'Started container for challenge "{challenge_id}" with ID of "{container.name}"'
                 )
             else:
                 for container in containers:
-                    print(
-                        f' * Container already running for "{challenge_id}" with ID of "{container.name}"'
+                    self.app.logger.info(
+                        f'Container already running for "{challenge_id}" with ID of "{container.name}"'
                     )
 
         # Error handling
         except docker.errors.ImageNotFound:
-            print(f" * Dockerfile for {challenge_id} is missing")
+            self.app.logger.info(f"Dockerfile for {challenge_id} is missing")
         except docker.errors.APIError as e:
-            print(f" * Docker API encountered an error while starting {challenge_id}")
+            self.app.logger.info(
+                f"Docker API encountered an error while starting {challenge_id}"
+            )
             raise e
 
     def clean_up_containers(self):
         # Stops all containers - called on program exit and when starting
-        print(" * Stopping containers")
+        self.app.logger.info("Stopping containers")
         # List all containers started by the CTF, and kill them
         for container in self.client.containers.list(filters={"label": ["CTF"]}):
             try:
                 labels = list(container.labels.keys())
                 container.stop()
-                print(
-                    f' * Stopped container for "{labels[1]}" of ID "{container.name}" '
+                self.app.logger.info(
+                    f'Stopped container for "{labels[1]}" of ID "{container.name}" '
                 )
             except docker.errors.APIError as e:
                 # Due to Flask's debug mode, this method may be called twice
                 # where the second invocation fails to find the container, as
                 # it is already stopped - thus we exclude this error
                 if e.status_code != 404:
-                    print(f" * Docker API encountered an error while cleaning")
+                    self.app.logger.info(
+                        f"Docker API encountered an error while cleaning"
+                    )
                     raise e
 
 
 class ChallengeManager:
     def __init__(self, app):
         self.challenges = {}
+        self.app = app
 
-        if HAS_DOCKER:
+        if HAS_DOCKER and self.app.config["FORCE_DISABLE_DOCKER"] is False:
             self.container_manager = ContainerManager(app)
         else:
+            if HAS_DOCKER:
+                self.app.logger.warning("Docker was forcefully disabled")
+                self.app.logger.warning(
+                    "To re-enable docker, set FORCE_DISABLE_DOCKER to false in config.toml"
+                )
+            else:
+                self.app.logger.warning("You do not have docker installed")
+                self.app.logger.warning("Challenges requiring docker will not run")
             self.container_manager = None
 
         self.read_challenges()
 
     def read_challenges(self):
-        print(" * Reading challenges and containers")
+        self.app.logger.info("Reading challenges")
         for challenge_id in os.listdir(CHALLENGES_DIRECTORY):
             challenge_directory = os.path.join(CHALLENGES_DIRECTORY, challenge_id)
 
@@ -159,7 +171,9 @@ class ChallengeManager:
             # Add challenge downloadable files if applicable
             challenge_data["files"] = []
             if os.path.exists(downloads_dir):
-                print(f' * Creating downloads for challenge "{challenge_id}"')
+                self.app.logger.info(
+                    f'Creating downloads for challenge "{challenge_id}"'
+                )
                 for entry in os.scandir(downloads_dir):
                     # Skip non-files (i.e. folders)
                     if not entry.is_file():
@@ -171,10 +185,10 @@ class ChallengeManager:
             # Start the challenge's Docker container, if needed
             challenge_data["container"] = {}
             if os.path.exists(container_toml):
-                # Skip challenges that require containers if the Docker API is not present
-                if not HAS_DOCKER:
-                    print(
-                        f"Warning: skipped challenge '{challenge_id}' requiring containerisation"
+                # Skip challenges with containers if Docker isn't installed or was forcefully disabled
+                if self.container_manager is None:
+                    self.app.logger.warning(
+                        f"Skipped challenge '{challenge_id}' requiring docker"
                     )
                     continue
 
@@ -183,8 +197,8 @@ class ChallengeManager:
                 challenge_data["container"] = container_data
                 parent = container_data.get("parent")
                 if parent:
-                    print(
-                        f" * Created child challenge for '{challenge_id}' parented to '{parent}'"
+                    self.app.logger.info(
+                        f"Created child challenge for '{challenge_id}' parented to '{parent}'"
                     )
                 elif os.path.exists(container_dir):
                     self.container_manager.run_container(
@@ -243,6 +257,52 @@ class ChallengeManager:
             for solve in solves
         ]
 
+    # Gets the datapoints for a profile graph of a specific user id
+    def get_user_profile_graph(self, user_id):
+        # Get the user
+        user = User.query.get(user_id)
+
+        # At the start of the CTF, the user has 0 points
+        datapoints = [
+            {
+                "time": self.app.config["CTF_START_TIME"],
+                "user": user.username,
+                "points": 0,
+            }
+        ]
+
+        # Fetch solves for the given user, sorted from oldest to newest
+        solves = (
+            Solve.query.filter(Solve.user_id == user.id)
+            .order_by(Solve.time.asc())
+            .all()
+        )
+
+        # For every solve, add a datapoint
+        user_score = 0
+        for solve in solves:
+            challenge = self.challenges[solve.challenge_id]
+            points = challenge["points"]
+            user_score += points
+
+            datapoints.append(
+                {
+                    "time": solve.time.isoformat(),
+                    "points": user_score,
+                }
+            )
+
+        # At the current time, the user has the current number of points
+        now = datetime.datetime.now().isoformat()
+        datapoints.append(
+            {
+                "time": now,
+                "points": user_score,
+            }
+        )
+
+        return datapoints
+
     # Returns the last n recent solves
     def get_recent_solves(self, n):
         recent_solves = Solve.query.order_by(Solve.time.desc()).limit(n)
@@ -259,12 +319,24 @@ class ChallengeManager:
         dataset = []
         top_cumulative_scores = {user_id: 0 for user_id in top_user_ids}
 
-        # Fetch solves from the database for the given top users, ordered by time ascending
+        # Fetch solves from the database for the given top users, ordered by from oldest to newest
         solves = (
             Solve.query.filter(Solve.user_id.in_(top_user_ids))
             .order_by(Solve.time.asc())
             .all()
         )
+
+        # At the start of the CTF, all users have 0 points
+        for user_id in top_user_ids:
+            user = User.query.get(user_id)
+
+            dataset.append(
+                {
+                    "time": self.app.config["CTF_START_TIME"],
+                    "user": user.username,
+                    "points": 0,
+                }
+            )
 
         for solve in solves:
             user_id = solve.user_id
