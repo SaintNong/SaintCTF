@@ -157,8 +157,9 @@ class ChallengeManager:
         challenge_folders = [
             folder
             for folder in os.listdir(CHALLENGES_DIRECTORY)
-            if not folder.startswith(".") and not os.path.isdir(folder)
-            # Skips ".git" and README.md
+            if not folder.startswith(".")
+            and os.path.isdir(os.path.join(CHALLENGES_DIRECTORY, folder))
+            # Skips directories starting with "." and only scans folders
         ]
         for challenge_id in challenge_folders:
             challenge_directory = os.path.join(CHALLENGES_DIRECTORY, challenge_id)
