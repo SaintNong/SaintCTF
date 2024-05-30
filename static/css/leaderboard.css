@@ -22,7 +22,7 @@ h2 {
 /* Container for both sections */
 .dashboard-container {
     margin: 0 auto;
-    width: 90vw;
+    max-width: 90vw;
 
     display: flex;
     flex-wrap: wrap;
