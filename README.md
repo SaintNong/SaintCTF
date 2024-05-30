@@ -54,18 +54,19 @@ FORCE_DISABLE_DOCKER = false
 > [!NOTE]
 > If the configuration file is not present, please run the server to generate a new one.
 
-## Creating challenges
-To create a challenge, follow these steps:
+## How do I make challenges?
+To create challenges, follow these steps:
 
-1. Create a folder in /challenges named after your challenge. (e.g. 'example_challenge')
+1. Create a folder in '/challenges/' named after your challenge. (e.g. 'example_challenge')
 
-2. Copy paste the example configuration below, and edit the values to suit your challenge.
-Configuration:
+2. Create the file 'challenge.toml' and copy and paste the example configuration below, then edit the values to suit your challenge.
 ```toml
 name = "Example"
 author = "ning"
 description = """
-This is a great example."""
+This is a great example.
+What a great example challenge!
+Lets all just sit back and admire how great of an example this is..."""
 category = "misc"
 difficulty = "easy"
 points = 10
@@ -82,7 +83,10 @@ An example is provided here:
 tag = "example_container"
 port = 3001
 ```
-6. Create a folder named /container/ in your challenge folder
+
+6. Create a folder named '/container/' in your challenge folder
+>[!NOTE]
+> If 'container.toml' is defined but '/container/' does not exist, the CTF will not run.
 
 7. Place your Dockerfile and your container files in this folder. Be sure to use the same port in your Dockerfile as defined in your 'container.toml'.
 
