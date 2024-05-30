@@ -16,7 +16,7 @@ a:hover {
 
 /* Section headings */
 h2 {
-    padding-bottom: 10px;
+    padding-bottom: var(--spacing);
 }
 
 /* Container for both sections */

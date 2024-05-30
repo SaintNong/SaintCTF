@@ -21,7 +21,7 @@ body, html {
 }
 
 #recent-solves h2 {
-    padding-bottom: 15px;
+    padding-bottom: var(--spacing);
 }
 
 #username-heading {

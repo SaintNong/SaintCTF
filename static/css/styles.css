@@ -8,6 +8,8 @@
     --form-field-border-color: #333;
     --hover-color: #1a1a1a;
     --user-highlight: #004225;
+
+    --spacing: 0.5em;
 }
 
 /* Reset some default styling */
