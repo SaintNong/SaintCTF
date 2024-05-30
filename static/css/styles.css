@@ -123,18 +123,17 @@ details > summary {
 }
 
 #rules-section h1 {
-    padding-left: 50px;
+    padding-left: calc(40px + 1rem);
 }
 
 /* Ordered List Styling */
 ol {
-    margin: 20px 0; /* Adds vertical space around the list */
     padding-left: 40px; /* Offset for numbering */
 }
 
 ol li {
     padding: 10px 0; /* Padding for each list item to space them out */
-    padding-left: 1em; /* Gap between list item and marker */
+    padding-left: 1rem; /* Gap between list item and marker */
     border-bottom: 1px solid var(--form-field-border-color); /* Subtle border for each item */
     line-height: 1.8; /* Slightly larger line height for readability */
 }
