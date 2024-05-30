@@ -134,7 +134,7 @@ ol {
 }
 
 ol li {
-    padding: 10px 0; /* Padding for each list item to space them out */
+    padding: 0.75em 0; /* Padding for each list item to space them out */
     padding-left: 1rem; /* Gap between list item and marker */
     border-bottom: 1px solid var(--form-field-border-color); /* Subtle border for each item */
     line-height: 1.8; /* Slightly larger line height for readability */
@@ -149,8 +149,8 @@ ol li::marker {
 
 .card {
     background-color: var(--light-bg-color);
-    padding: 20px;
-    border-radius: 8px;
+    padding: 1.5em;
+    border-radius: 0.5em;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
 }
 
