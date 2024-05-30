@@ -1,0 +1,140 @@
+/* Andrew cool css */
+#challenge-main {
+    display: flex;
+    flex-direction: row-reverse;
+    flex-wrap: wrap;
+    height: 100vh;
+    justify-content: center;
+}
+
+/* Section styling */
+#challenge-list {
+    padding: 40px;
+    flex: 11;
+    background: var(--bg-color);
+}
+
+.challenge > * {
+    margin-bottom: 0.3em;
+}
+
+.challenge > :last-child {
+    margin-bottom: 0;
+}
+
+.challenge header p, .challenge footer p, .challenge footer summary, .challenge header a {
+    color: lightgrey;
+}
+
+.challenge h2 {
+    color: var(--purple-1); /* purple */
+}
+
+.challenge header {
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    margin-bottom: 0.6em;
+}
+
+.challenge .info-block {
+    --gap: 10px;
+
+    display: flex;
+    gap: var(--gap);
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-self: flex-start;
+    margin-top: 0.2em; /* align top of info block with header more accurately */
+    align-items: center;
+}
+
+.info-block .filter-tags {
+    display: flex;
+    gap: var(--gap);
+}
+
+.points {
+    margin-left: 5px;
+}
+
+/* Tags */
+.filter-tag {
+    text-decoration: none;
+    background-color: var(--bg-color);
+    padding: 6px 16px; /* For text */
+    transition: background-color 0.3s;
+    border-radius: 10px;
+    display: inline-block;
+    font-size: 0.85em;
+    white-space: nowrap;
+}
+
+.filter-tag:hover {
+    background-color: var(--form-field-border-color);
+}
+
+.filter-tag[data-selected] {
+    background-color: var(--purple-1);
+}
+
+
+
+.solves-count {
+    text-align: right;
+}
+
+/* Style for the challenge listings */
+#challenge-list .challenge {
+    background-color: var(--light-bg-color); /* Dark background for each challenge */
+    padding: 15px;
+    margin-top: 10px;
+    border-radius: 8px; /* Rounded corners for challenge cards */
+    border-left: 5px solid var(--purple-2); /* Stylish left border */
+}
+
+
+/* Solved challenges styling */
+#challenge-list .challenge[data-solved] {
+    border-color: #339900;
+}
+
+#challenge-list .challenge[data-solved] h2 {
+    color: darkgrey;
+}
+
+#challenge-list .challenge[data-solved] h2::after {
+    content: ' (Solved)';
+}
+
+.files {
+    --spacing: 1em;
+}
+
+.files h3 {
+    display: inline;
+    margin-right: var(--spacing);
+    font-size: 1em;
+    font-weight: bold;
+}
+
+.files ul {
+    display: inline-flex; /* Enables flexbox layout */
+    flex-wrap: wrap; /* Allows items to wrap to the next line if needed */
+    list-style: none; /* Removes default list styling */
+}
+
+.files li {
+    margin-right: var(--spacing); /* Adds some space between file links */
+    white-space: nowrap; /* Prevents the text from wrapping */
+}
+
+.files a {
+    text-decoration: none;
+}
+
+.files a:hover {
+    text-decoration: underline;
+}
+
