@@ -113,7 +113,6 @@ details > summary {
     max-width: 800px;
     margin-left: auto;
     margin-right: auto;
-    color: #ddd
 }
 
 /* Home page */
@@ -134,7 +133,6 @@ ol {
     margin: 20px 0; /* Adds vertical space around the list */
     padding-left: 40px; /* Offset for numbering */
     list-style-type: decimal; /* Default decimal numbering */
-    color: #ccc; /* Light grey text for better readability against the dark background */
 }
 
 ol li {
