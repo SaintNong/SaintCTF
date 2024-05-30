@@ -105,11 +105,15 @@ details > summary {
 }
 
 
+main {
+    padding: 1em;
+}
+
+
 /* Rules */
 #rules-section {
     text-align: left;
-    margin-top: 20px;
-    max-width: 800px;
+    max-width: 50em;
     margin-left: auto;
     margin-right: auto;
 }
@@ -117,9 +121,7 @@ details > summary {
 /* Home page */
 #home-section {
     text-align: center;
-    margin-top: 50px;
-    padding: 20px;
-
+    margin-top: 2em;
 }
 
 #rules-section h1 {
