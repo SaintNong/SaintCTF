@@ -271,11 +271,7 @@ class ChallengeManager:
             }
         ]
 
-        solves = (
-            Solve.query.filter_by(user_id=user_id).order_by(Solve.time.desc()).all()
-        )
-
-        # Fetch solves from the database for the given top users, ordered from oldest to newest
+        # Fetch solves for the given user, sorted from oldest to newest
         solves = (
             Solve.query.filter(Solve.user_id == user.id)
             .order_by(Solve.time.asc())

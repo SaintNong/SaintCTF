@@ -14,7 +14,7 @@ from routes import register_routes
 
 
 def load_config_file(app, config_path):
-    # Define default options with appropriate type conversions as necessary
+    # The default choices for user options
     default_options = {
         "FLASK_OPTIONS": {
             "SECRET_KEY": secrets.token_hex(64),
@@ -76,7 +76,7 @@ def load_config_file(app, config_path):
 def create_app():
     app = Flask(__name__, template_folder="templates")
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    app.config["TEMPLATES_AUTO_RELOAD"] = True
+    app.config["TEMPLATES_AUTO_RELOAD"] = True  # https://stackoverflow.com/a/38371484
 
     config = load_config_file(app, constants.CONFIG_FILE)
     app.config.update(config)
@@ -91,7 +91,7 @@ def create_app():
     login_manager = LoginManager()
     login_manager.init_app(app)
 
-    from models import User  # Solve is used when the db is reset
+    from models import User
 
     @login_manager.user_loader
     def load_user(user_id):
