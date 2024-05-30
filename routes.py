@@ -248,10 +248,17 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager, csrf):
         # Query database for user
         displayed_user = db.session.query(User).filter(User.id == user_id).first()
 
+        # Ensure user exists
         if displayed_user is None:
             abort(404, "This player does not exist.")
 
+        # For solve table
         solves = challenge_manager.get_user_solved_challenges(displayed_user.id)
+
+        # For graph
+        user_graph_datapoints = challenge_manager.get_user_profile_graph(
+            displayed_user.id
+        )
 
         # Calculate user rank
         top_players = (
@@ -269,6 +276,7 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager, csrf):
             "profile.html",
             user=current_user,
             displayed_user=displayed_user,
+            graph_datapoints=user_graph_datapoints,
             solves=solves,
             timedelta=timedelta,
             rank=rank,

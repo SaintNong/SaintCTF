@@ -67,16 +67,12 @@
 
 
             // Prepare data for the score chart
-            let timeLabels = [];
-            let scoreData = [];
-            let totalScore = 0;
+            let times = [];
+            let points = [];
 
-            {% for solve in solves|reverse %}
-                timeLabels.push('{{ (solve.time-timedelta(microseconds=1)).strftime("%Y-%m-%d %H:%M:%S") }}');
-                timeLabels.push('{{ solve.time.strftime("%Y-%m-%d %H:%M:%S") }}');
-                scoreData.push(totalScore);
-                totalScore += {{ solve.challenge.points }};
-                scoreData.push(totalScore);
+            {% for datapoint in graph_datapoints %}
+            times.push("{{ datapoint.time }}");
+            points.push({{ datapoint.points }});
             {% endfor %}
 
 
@@ -84,10 +80,12 @@
             let scoreChart = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: timeLabels,
+                    labels: times,
                     datasets: [{
                         label: '{{ displayed_user.username }}',
-                        data: scoreData,
+                        data: points,
+                        stepped: "before",
+
                         backgroundColor: 'rgba(54, 162, 235, 0.5)',
                         borderColor: 'rgba(54, 162, 235, 1)',
                         borderWidth: 1
@@ -98,16 +96,16 @@
                         x: {
                             type: 'time',
                             ticks: {
-                                color: '#FFFFFF' // White color for ticks
+                                color: '#FFFFFF'
                             },
                         },
                         y: {
                             beginAtZero: true,
                             ticks: {
-                                color: '#FFFFFF' // White color for ticks
+                                color: '#FFFFFF'
                             },
                             grid: {
-                                color: 'rgba(255,255,255,0.1)' // Lighter grid lines against dark background
+                                color: 'rgba(255,255,255,0.1)'
                             },
                             title: {
                                 display: true,
@@ -120,15 +118,13 @@
                         legend: {
                             position: 'top',
                             labels: {
-                                color: '#FFFFFF' // White color for legend text
+                                color: '#FFFFFF'
                             }
                         }
                     },
                     layout: {
                         padding: 20
                     },
-                    // Set the overall background color to dark
-                    backgroundColor: '#333333'
                 }
             });
         });

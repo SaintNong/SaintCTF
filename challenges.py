@@ -257,6 +257,56 @@ class ChallengeManager:
             for solve in solves
         ]
 
+    # Gets the datapoints for a profile graph of a specific user id
+    def get_user_profile_graph(self, user_id):
+        # Get the user
+        user = User.query.get(user_id)
+
+        # At the start of the CTF, the user has 0 points
+        datapoints = [
+            {
+                "time": self.app.config["CTF_START_TIME"],
+                "user": user.username,
+                "points": 0,
+            }
+        ]
+
+        solves = (
+            Solve.query.filter_by(user_id=user_id).order_by(Solve.time.desc()).all()
+        )
+
+        # Fetch solves from the database for the given top users, ordered from oldest to newest
+        solves = (
+            Solve.query.filter(Solve.user_id == user.id)
+            .order_by(Solve.time.asc())
+            .all()
+        )
+
+        # For every solve, add a datapoint
+        user_score = 0
+        for solve in solves:
+            challenge = self.challenges[solve.challenge_id]
+            points = challenge["points"]
+            user_score += points
+
+            datapoints.append(
+                {
+                    "time": solve.time.isoformat(),
+                    "points": user_score,
+                }
+            )
+
+        # At the current time, the user has the current number of points
+        now = datetime.datetime.now().isoformat()
+        datapoints.append(
+            {
+                "time": now,
+                "points": user_score,
+            }
+        )
+
+        return datapoints
+
     # Returns the last n recent solves
     def get_recent_solves(self, n):
         recent_solves = Solve.query.order_by(Solve.time.desc()).limit(n)
@@ -273,7 +323,7 @@ class ChallengeManager:
         dataset = []
         top_cumulative_scores = {user_id: 0 for user_id in top_user_ids}
 
-        # Fetch solves from the database for the given top users, ordered by time ascending
+        # Fetch solves from the database for the given top users, ordered by from oldest to newest
         solves = (
             Solve.query.filter(Solve.user_id.in_(top_user_ids))
             .order_by(Solve.time.asc())
