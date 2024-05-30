@@ -1,0 +1,67 @@
+/* Login form styling */
+/* styles.css */
+#login-section {
+    width: 400px; /* Width adjusted for a larger form */
+    margin: 80px auto; /* Increased vertical margin for more central focus */
+    padding: 40px; /* Increased padding for a spacious interior */
+    border: 2px solid var(--form-field-border-color); /* Darker border for a subtle and elegant look */
+    border-radius: 10px; /* Smoothed rounded corners */
+    background-color: var(--light-bg-color); /* Dark background */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.9); /* Enhanced shadow for a deeper 3D effect */
+}
+
+#login-section h1 {
+    text-align: center;
+    color: var(--purple-1); /* Purple accent for the title */
+    font-size: 24px; /* Larger font size for visibility */
+    margin-bottom: 30px; /* More space below the header */
+}
+
+#login-section form {
+    display: flex;
+    flex-direction: column;
+}
+
+#login-section input[type="text"],
+#login-section input[type="password"] {
+    padding: 15px; /* Comfortable padding */
+    margin-bottom: 15px; /* Adequate spacing between fields */
+    border: 1px solid var(--form-field-border-color); /* Darker border to match the outer border */
+    background-color: var(--bg-color); /* Consistent dark theme for input fields */
+    color: #ccc; /* Lighter text for readability */
+    border-radius: 5px; /* Soft rounded corners for the inputs */
+    font-size: 16px; /* Increased font size for ease of reading */
+}
+
+#login-section input[type="submit"] {
+    padding: 15px; /* Generous padding for a substantial button */
+    color: white;
+    background-color: var(--purple-1); /* Purple accent color */
+    border: none;
+    border-radius: 5px; /* Consistent radius with other elements */
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 16px; /* Larger text for a bold statement */
+}
+
+#login-section input[type="submit"]:hover {
+    background-color: var(--purple-2); /* Darker purple on hover for visual feedback */
+}
+
+#login-section p {
+    color: #ccc; /* Light grey color for readability against the dark background */
+    font-size: 14px; /* Slightly smaller font size for less emphasis compared to input fields */
+    text-align: center; /* Center-align text for consistency with the form's alignment */
+    margin-top: 20px; /* Spacing above the paragraph to separate it from the form */
+}
+
+#login-section a {
+    color: var(--purple-1); /* Purple color for the link to match the accent color */
+    text-decoration: none; /* No underline to keep it clean and modern */
+}
+
+#login-section a:hover {
+    color: var(--purple-2); /* Darker purple on hover for visual feedback */
+    text-decoration: underline; /* Underline on hover to indicate it's clickable */
+}
+
