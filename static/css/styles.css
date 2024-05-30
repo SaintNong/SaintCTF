@@ -14,7 +14,6 @@
 body, h1, h2, p, ul, li {
     margin: 0;
     padding: 0;
-    list-style: none;
 }
 
 /* Basic body styling */
@@ -129,26 +128,22 @@ details > summary {
 
 /* Ordered List Styling */
 ol {
-    counter-reset: item;
     margin: 20px 0; /* Adds vertical space around the list */
     padding-left: 40px; /* Offset for numbering */
-    list-style-type: decimal; /* Default decimal numbering */
 }
 
 ol li {
     padding: 10px 0; /* Padding for each list item to space them out */
+    padding-left: 1em; /* Gap between list item and marker */
     border-bottom: 1px solid var(--form-field-border-color); /* Subtle border for each item */
     line-height: 1.8; /* Slightly larger line height for readability */
 }
 
 
 /* Enhancing the number styling */
-ol li:before {
-    content: counter(item) ". "; /* Adds a period after the number */
-    counter-increment: item; /* Automatically increments the numbers */
-    color: var(--purple-1); /* Stylish purple color for numbers to match headers */
+ol li::marker {
+    color: var(--purple-1);
     font-weight: bold; /* Makes the numbers bold */
-    margin-right: 10px; /* Space between the number and text */
 }
 
 .card {
