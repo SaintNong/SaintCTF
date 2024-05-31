@@ -8,6 +8,8 @@
     <!-- Sweet alert -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5/dark.css" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>    <!-- as lazy as normal alerts, better than you could make them yourself -->
+
+    <script src="{{ url_for('static', filename='js/register.js') }}"></script>
 {% endblock %}
 
 {% block body %}
@@ -22,43 +24,4 @@
 
         </form>
     </section>
-
-    <script>
-
-
-        $(document).ready(function() {
-            $('#signup-form').submit(function(e) {
-                e.preventDefault();  // Prevent default form submission
-
-                const formData = $(this).serialize();  // Serialize form data
-
-                $.ajax({
-                    type: 'POST',
-                    url: '/register',
-                    data: formData,
-                    success: function(response) {
-                        if (response.status === 'success') {
-                            // On successful signup we go straight to challenges
-                            window.location.href = '/challenges'
-                        } else if (response.status === 'error') {
-                            Swal.fire({
-                                title: "Registration Failed!",
-                                text: response.message,
-                                icon: "error"
-                            });
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        // Handler if AJAX itself fails (network issues, etc.)
-                        Swal.fire({
-                            title: "Error",
-                            text: "Something went wrong: " + error,
-                            icon: "error"
-                        });
-                    }
-                });
-            });
-        });
-
-    </script>
 {% endblock %}
