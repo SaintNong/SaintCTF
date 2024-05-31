@@ -1,6 +1,7 @@
 import datetime
 import secrets
 import logging
+import os
 
 import tomlkit
 from flask import Flask, render_template
@@ -77,6 +78,10 @@ def create_app():
     app = Flask(__name__, template_folder="templates")
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.config["TEMPLATES_AUTO_RELOAD"] = True  # https://stackoverflow.com/a/38371484
+
+    os.makedirs(
+        app.instance_path, exist_ok=True
+    )  # Ensure that the instance folder exists
 
     config = load_config_file(app, constants.CONFIG_FILE)
     app.config.update(config)
