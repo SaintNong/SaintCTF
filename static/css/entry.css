@@ -1,13 +1,7 @@
-/* Login form styling */
-/* styles.css */
 #login-section {
-    width: 400px; /* Width adjusted for a larger form */
-    margin: 80px auto; /* Increased vertical margin for more central focus */
-    padding: 40px; /* Increased padding for a spacious interior */
+    max-width: 25em; /* Width adjusted for a larger form */
+    margin: 3em auto 0; /* Increased vertical margin for more central focus */
     border: 2px solid var(--form-field-border-color); /* Darker border for a subtle and elegant look */
-    border-radius: 10px; /* Smoothed rounded corners */
-    background-color: var(--light-bg-color); /* Dark background */
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.9); /* Enhanced shadow for a deeper 3D effect */
 }
 
 #login-section h1 {
