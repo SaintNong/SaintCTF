@@ -1,7 +1,6 @@
 #login-section {
     max-width: 25em; /* Width adjusted for a larger form */
     margin: 3em auto 0; /* Increased vertical margin for more central focus */
-    border: 2px solid var(--form-field-border-color); /* Darker border for a subtle and elegant look */
 }
 
 #login-section h1 {

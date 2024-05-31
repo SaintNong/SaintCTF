@@ -97,7 +97,7 @@
 
 /* Solved challenges styling */
 #challenge-list .challenge[data-solved] {
-    border-color: #339900;
+    border-left-color: #339900;
 }
 
 #challenge-list .challenge[data-solved] h2 {
