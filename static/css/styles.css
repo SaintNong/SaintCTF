@@ -18,6 +18,10 @@ body, h1, h2, p, ul, li {
     padding: 0;
 }
 
+html {
+    height: 100%;
+}
+
 /* Basic body styling */
 body {
     height: 100%; /* Make body fill entire page, but dont extend further */
