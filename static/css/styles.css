@@ -29,8 +29,6 @@ body {
     line-height: 1.6;
     color: var(--fg-color);
     background-color: var(--bg-color);
-    display: flex;
-    flex-direction: column;
 }
 
 
@@ -116,7 +114,6 @@ details > summary {
 
 
 body > main {
-    flex: 1;
     padding: 1em;
 }
 
