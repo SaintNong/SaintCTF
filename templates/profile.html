@@ -14,47 +14,45 @@
 {% endblock %}
 
 {% block body %}
-    <main class="container">
-        <section id="user-profile-card">
-            <h2 id="username-heading">{{ displayed_user.username }}</h2>
-            <h2>Rank {{ rank }}</h2>
-            <h2>{{ displayed_user.score }} Points</h2>
-        </section>
+    <section id="user-profile-card">
+        <h2 id="username-heading">{{ displayed_user.username }}</h2>
+        <h2>Rank {{ rank }}</h2>
+        <h2>{{ displayed_user.score }} Points</h2>
+    </section>
 
-        <div id="chart-container">
-            <canvas id="score-history"></canvas>
-        </div>
+    <div id="chart-container">
+        <canvas id="score-history"></canvas>
+    </div>
 
-        <section id="recent-solves">
-            <h2>Solves</h2>
-            {% if solves %}
-                <table class="solves-table">
-                    <thead>
-                        <tr>
-                            <th>Challenge</th>
-                            <th>Category</th>
-                            <th>Difficulty</th>
-                            <th>Points</th>
-                            <th>Time</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for solve in solves %}
-                        <tr>
-                            <td>{{ solve.challenge.name }}</td>
-                            <td>{{ solve.challenge.category }}</td>
-                            <td>{{ solve.challenge.difficulty }}</td>
-                            <td>{{ solve.challenge.points }}</td>
-                            <td>{{ solve.time_ago }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            {% else %}
-                <p>No solves yet :(</p>
-            {% endif %}
-        </section>
-    </main>
+    <section id="recent-solves">
+        <h2>Solves</h2>
+        {% if solves %}
+            <table class="solves-table">
+                <thead>
+                    <tr>
+                        <th>Challenge</th>
+                        <th>Category</th>
+                        <th>Difficulty</th>
+                        <th>Points</th>
+                        <th>Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for solve in solves %}
+                    <tr>
+                        <td>{{ solve.challenge.name }}</td>
+                        <td>{{ solve.challenge.category }}</td>
+                        <td>{{ solve.challenge.difficulty }}</td>
+                        <td>{{ solve.challenge.points }}</td>
+                        <td>{{ solve.time_ago }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No solves yet :(</p>
+        {% endif %}
+    </section>
 
     <script>
         $(document).ready(function() {

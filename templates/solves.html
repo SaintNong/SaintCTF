@@ -8,6 +8,7 @@
             scroll-behavior: smooth;
         }
         main {
+            width: 100%;
             max-width: 80em;
             margin: 0 auto;
         }
@@ -21,53 +22,51 @@
 {% endblock %}
 
 {% block body %}
-    <main>
-        <section class="card">
-            <div class="link-row">
-                <h2>Solve History</h2>
-                <a href="javascript:window.scrollTo(0, document.body.scrollHeight);">Jump to bottom &darr;</a>
-            </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Solver</th>
-                        <th></th>
-                        <th>Challenge</th>
-                        <th>Category</th>
-                        <th>Difficulty</th>
-                        <th>Points</th>
-                        <th>Time</th>
+    <section class="card">
+        <div class="link-row">
+            <h2>Solve History</h2>
+            <a href="javascript:window.scrollTo(0, document.body.scrollHeight);">Jump to bottom &darr;</a>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Solver</th>
+                    <th></th>
+                    <th>Challenge</th>
+                    <th>Category</th>
+                    <th>Difficulty</th>
+                    <th>Points</th>
+                    <th>Time</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for solve in solves %}
+                    <tr {% if solve.user.username == current_user.username %}
+                        class="highlight"
+                        {% endif %}
+                        >
+                        <td>{{ solve.user.username }}</td>
+                        {% if solve.id in first_blood %}
+                        <td title="First blood">🏆</td>
+                        {% else %}
+                        <td></td>
+                        {% endif %}
+                        <td>{{ challenges[solve.challenge_id].name }}</td>
+                        <td>{{ challenges[solve.challenge_id].category }}</td>
+                        <td>{{ challenges[solve.challenge_id].difficulty }}</td>
+                        <td>{{ challenges[solve.challenge_id].points }}</td>
+                        <td><time datetime="{{ solve.time }}">{{ solve.time | time_ago }}</time></td>
                     </tr>
-                </thead>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
 
-                <tbody>
-                    {% for solve in solves %}
-                        <tr {% if solve.user.username == current_user.username %}
-                            class="highlight"
-                            {% endif %}
-                            >
-                            <td>{{ solve.user.username }}</td>
-                            {% if solve.id in first_blood %}
-                            <td title="First blood">🏆</td>
-                            {% else %}
-                            <td></td>
-                            {% endif %}
-                            <td>{{ challenges[solve.challenge_id].name }}</td>
-                            <td>{{ challenges[solve.challenge_id].category }}</td>
-                            <td>{{ challenges[solve.challenge_id].difficulty }}</td>
-                            <td>{{ challenges[solve.challenge_id].points }}</td>
-                            <td><time datetime="{{ solve.time }}">{{ solve.time | time_ago }}</time></td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </section>
-
-        <section class="card">
-            <h2>Legend</h2>
-            <p>🏆 &mdash; First blood</p>
-        </section>
-    </main>
+    <section class="card">
+        <h2>Legend</h2>
+        <p>🏆 &mdash; First blood</p>
+    </section>
     <script>
         $(document).ready(function () {
             function divmod(a, b) {

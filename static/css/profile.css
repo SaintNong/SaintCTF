@@ -4,7 +4,7 @@ body, html {
     padding-bottom: 100px;
 }
 
-.container {
+main {
     max-width: 80em;
     padding: 1em;
     text-align: center;

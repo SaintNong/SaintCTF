@@ -139,136 +139,134 @@
 {% endblock %}
 
 {% block body %}
-    <main id="challenge-main">
-        {% set unsolved_count = challenges|length - solved_count %}
+    {% set unsolved_count = challenges|length - solved_count %}
 
-        <div id="flag-section-container">
-            <section id="flag-section">
-                <h1>Welcome {{ current_user.username }}!</h1>
-                <p>You have {{ current_user.score }} points.</p>
+    <div id="flag-section-container">
+        <section id="flag-section">
+            <h1>Welcome {{ current_user.username }}!</h1>
+            <p>You have {{ current_user.score }} points.</p>
 
-                <h2>Filter Challenges</h2>
-                <p><span id="visible-count">{{ unsolved_count }}</span> / {{ challenges|length }} challenge(s) visible</p>
+            <h2>Filter Challenges</h2>
+            <p><span id="visible-count">{{ unsolved_count }}</span> / {{ challenges|length }} challenge(s) visible</p>
 
-                <!-- Challenge filtering form -->
-                <form id="filter-form" action="javascript:void(0);">
-                    <select name="category">
-                        <option value="">All Categories</option>
-                        <option value="web">web</option>
-                        <option value="crypto">crypto</option>
-                        <option value="pwn">pwn</option>
-                        <option value="rev">rev</option>
-                        <option value="osint">osint</option>
-                        <option value="steg">steg</option>
-                        <option value="misc">misc</option>
-                    </select>
-                    <select name="difficulty">
-                        <option value="">All Difficulties</option>
-                        <option value="free points">free points</option>
-                        <option value="easy">easy</option>
-                        <option value="medium">medium</option>
-                        <option value="hard">hard</option>
-                    </select>
-                    <div>
-                        <input type="checkbox" name="solved" id="solved" />
-                        <label for="solved">Show solved challenges ({{ solved_count }})</label>
-                    </div>
-                </form>
-
-
-                <h2>Flag Submission</h2>
-                <!-- Flag submission form -->
-                <form action="/submit-flag" id="flag-form" method="post">
-                    <input type="text" id="flag" name="flag" placeholder="saint{EXAMPLE_FLAG}">
-                    <input type="submit" value="Submit Flag">
-
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-
-                </form>
-
-            </section>
-        </div>
-
-        <section id="challenge-list">
-            <p>{{ unsolved_count }} challenge(s) left to solve</p>
-
-            {% for id, challenge in challenges.items() %}
-                <article class="card challenge" data-category="{{ challenge.category }}"
-                         data-difficulty="{{ challenge.difficulty }}"
-                         {% if solves[id]|map(attribute='user.username')|select('eq', current_user.username)|list %}
-                             data-solved style="display: none;"
-                         {% endif %}
-                     >
-                    <!-- Challenge info -->
-                    <header>
-                        <div>
-                            <h2>{{ challenge.name }} </h2>
-                            <p class="author">{{ challenge.author }}</p>
-                        </div>
-
-                        <div class="info-block">
-                            <div class="filter-tags">
-                                <a class="filter-tag" href="javascript:void(0);" data-filter-type="difficulty" title="Filter by difficulty">{{ challenge.difficulty }}</a>
-                                <a class="filter-tag" href="javascript:void(0);" data-filter-type="category" title="Filter by category">{{ challenge.category }}</a>
-                            </div>
-                            <p class="points">{{ challenge.points }} points</p>
-                        </div>
-                    </header>
-                    <p class="description"> {{ challenge.description | safe }} </p>
-
-                    {% if challenge.files %}
-                        <!-- Challenge downloads -->
-                        <div class="files">
-                            <h3>Files</h3>
-                            <ul>
-                                {% for file in challenge.files %}
-                                    <li><a href="downloads/{{ id }}/{{ file }}" download="{{ file }}">{{ file }}</a></li>
-
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    {% endif %}
-
-                    {% if challenge.container %}
-                        <!-- Challenge Links-->
-                        <div class = "files">
-                            <h3>Link</h3>
-                            <ul>
-                                <li><a href="{{ challenge.container.url }}">{{ challenge.container.url }}</a></li>
-                            </ul>
-                        </div>
-                    {% endif %}
-                  
-                    <footer>
-                        {% if solves[id] %}
-                            <details class="solves-count">
-                                <summary>{{ solves[id]|length }} solve(s)</summary>
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Username</th>
-                                            <th>Time</th>
-                                        </tr>
-                                    </thead>
-                                    {% for solve in solves[id] %}
-                                        <tr {% if solve.user.username == current_user.username %}
-                                            class="highlight"
-                                            {% endif %}
-                                            >
-                                            <td>{{solve.user.username}}</td>
-                                            <td>{{solve.time | time_ago}}</td>
-                                        </tr>
-                                    {% endfor %}
-                                </table>
-                            </details>
-                        {% else %}
-                            <p class="solves-count">0 solves</p>
-                        {% endif %}
-                    </footer>
+            <!-- Challenge filtering form -->
+            <form id="filter-form" action="javascript:void(0);">
+                <select name="category">
+                    <option value="">All Categories</option>
+                    <option value="web">web</option>
+                    <option value="crypto">crypto</option>
+                    <option value="pwn">pwn</option>
+                    <option value="rev">rev</option>
+                    <option value="osint">osint</option>
+                    <option value="steg">steg</option>
+                    <option value="misc">misc</option>
+                </select>
+                <select name="difficulty">
+                    <option value="">All Difficulties</option>
+                    <option value="free points">free points</option>
+                    <option value="easy">easy</option>
+                    <option value="medium">medium</option>
+                    <option value="hard">hard</option>
+                </select>
+                <div>
+                    <input type="checkbox" name="solved" id="solved" />
+                    <label for="solved">Show solved challenges ({{ solved_count }})</label>
+                </div>
+            </form>
 
 
-                </article>
-            {% endfor %}
+            <h2>Flag Submission</h2>
+            <!-- Flag submission form -->
+            <form action="/submit-flag" id="flag-form" method="post">
+                <input type="text" id="flag" name="flag" placeholder="saint{EXAMPLE_FLAG}">
+                <input type="submit" value="Submit Flag">
+
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+
+            </form>
+
         </section>
-    </main>
+    </div>
+
+    <section id="challenge-list">
+        <p>{{ unsolved_count }} challenge(s) left to solve</p>
+
+        {% for id, challenge in challenges.items() %}
+            <article class="card challenge" data-category="{{ challenge.category }}"
+                     data-difficulty="{{ challenge.difficulty }}"
+                     {% if solves[id]|map(attribute='user.username')|select('eq', current_user.username)|list %}
+                         data-solved style="display: none;"
+                     {% endif %}
+                 >
+                <!-- Challenge info -->
+                <header>
+                    <div>
+                        <h2>{{ challenge.name }} </h2>
+                        <p class="author">{{ challenge.author }}</p>
+                    </div>
+
+                    <div class="info-block">
+                        <div class="filter-tags">
+                            <a class="filter-tag" href="javascript:void(0);" data-filter-type="difficulty" title="Filter by difficulty">{{ challenge.difficulty }}</a>
+                            <a class="filter-tag" href="javascript:void(0);" data-filter-type="category" title="Filter by category">{{ challenge.category }}</a>
+                        </div>
+                        <p class="points">{{ challenge.points }} points</p>
+                    </div>
+                </header>
+                <p class="description"> {{ challenge.description | safe }} </p>
+
+                {% if challenge.files %}
+                    <!-- Challenge downloads -->
+                    <div class="files">
+                        <h3>Files</h3>
+                        <ul>
+                            {% for file in challenge.files %}
+                                <li><a href="downloads/{{ id }}/{{ file }}" download="{{ file }}">{{ file }}</a></li>
+
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+
+                {% if challenge.container %}
+                    <!-- Challenge Links-->
+                    <div class = "files">
+                        <h3>Link</h3>
+                        <ul>
+                            <li><a href="{{ challenge.container.url }}">{{ challenge.container.url }}</a></li>
+                        </ul>
+                    </div>
+                {% endif %}
+              
+                <footer>
+                    {% if solves[id] %}
+                        <details class="solves-count">
+                            <summary>{{ solves[id]|length }} solve(s)</summary>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Username</th>
+                                        <th>Time</th>
+                                    </tr>
+                                </thead>
+                                {% for solve in solves[id] %}
+                                    <tr {% if solve.user.username == current_user.username %}
+                                        class="highlight"
+                                        {% endif %}
+                                        >
+                                        <td>{{solve.user.username}}</td>
+                                        <td>{{solve.time | time_ago}}</td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        </details>
+                    {% else %}
+                        <p class="solves-count">0 solves</p>
+                    {% endif %}
+                </footer>
+
+
+            </article>
+        {% endfor %}
+    </section>
 {% endblock %}
