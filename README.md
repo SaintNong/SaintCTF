@@ -23,7 +23,7 @@ pip3 install -r requirements.txt
 
    - (optional) install Docker if you need containerisation
      ```bash
-     pip3 install docker==7.0.0
+     pip3 install docker==7.1.0
      ```
 > [!NOTE]
 > Challenges that require containers will **not** run if Docker is not installed.
