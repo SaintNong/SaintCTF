@@ -57,11 +57,4 @@
 
 #login-section a {
     color: var(--purple-1); /* Purple color for the link to match the accent color */
-    text-decoration: none; /* No underline to keep it clean and modern */
 }
-
-#login-section a:hover {
-    color: var(--purple-2); /* Darker purple on hover for visual feedback */
-    text-decoration: underline; /* Underline on hover to indicate it's clickable */
-}
-

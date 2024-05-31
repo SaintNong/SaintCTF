@@ -73,6 +73,7 @@
 }
 
 .filter-tag:hover {
+    text-decoration: none;
     background-color: var(--form-field-border-color);
 }
 
@@ -127,14 +128,6 @@
 .files li {
     margin-right: var(--spacing); /* Adds some space between file links */
     white-space: nowrap; /* Prevents the text from wrapping */
-}
-
-.files a {
-    text-decoration: none;
-}
-
-.files a:hover {
-    text-decoration: underline;
 }
 
 

@@ -4,16 +4,6 @@ body, html {
     padding-bottom: 100px;
 }
 
-/* Styling links */
-a {
-    color: var(--link-color);
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-
 /* Section headings */
 h2 {
     padding-bottom: var(--spacing);
