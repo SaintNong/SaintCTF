@@ -27,7 +27,7 @@ first_blood = []
 
 
 def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager, csrf):
-    print("Routes registered")
+    app.logger.info("Routes registered")
 
     @event.listens_for(User, "after_update")
     def userTableChanged(_mapper, connection, _target):
@@ -162,7 +162,7 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager, csrf):
     @login_required
     def delete_account():
         name = User.query.filter(User.id == current_user.id).first().username
-        print(f"Deleted account {name}")
+        app.logger.debug(f"Deleted account {name}")
         Solve.query.filter(Solve.user_id == current_user.id).delete()
         User.query.filter(User.id == current_user.id).delete()
 
@@ -272,10 +272,17 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager, csrf):
         # Query database for user
         displayed_user = db.session.query(User).filter(User.id == user_id).first()
 
+        # Ensure user exists
         if displayed_user is None:
             abort(404, "This player does not exist.")
 
+        # For solve table
         solves = challenge_manager.get_user_solved_challenges(displayed_user.id)
+
+        # For graph
+        user_graph_datapoints = challenge_manager.get_user_profile_graph(
+            displayed_user.id
+        )
 
         # Calculate user rank
         top_players = (
@@ -293,6 +300,7 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager, csrf):
             "profile.html",
             user=current_user,
             displayed_user=displayed_user,
+            graph_datapoints=user_graph_datapoints,
             solves=solves,
             timedelta=timedelta,
             rank=rank,

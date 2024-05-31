@@ -2,7 +2,7 @@ import importlib.util
 
 STATIC_DIRECTORY = "static"
 CHALLENGES_DIRECTORY = "challenges"
-SECRET_KEY_FILE = "secret.txt"
+CONFIG_FILE = "config.toml"
 
 DIFFICULTY_MAPPING = {
     "free points": 0,

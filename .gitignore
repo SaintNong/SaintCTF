@@ -1,5 +1,5 @@
 .idea/
-secret.txt
-database.db
+/instance/
 __pycache__
-venv/
+/venv/
+/challenges/
