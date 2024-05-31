@@ -4,6 +4,8 @@ STATIC_DIRECTORY = "static"
 CHALLENGES_DIRECTORY = "challenges"
 CONFIG_FILE = "config.toml"
 
+SECRET_KEY_FILE = "secret.txt"
+
 DIFFICULTY_MAPPING = {
     "free points": 0,
     "easy": 1,

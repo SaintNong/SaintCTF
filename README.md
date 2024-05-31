@@ -37,19 +37,14 @@ python3 app.py
 To configure your deployment of SaintCTF, simply edit '/instance/config.toml' and restart the server.
 Example configuration:
 ```toml
-[FLASK_OPTIONS]
-# A random secret key for session management
-SECRET_KEY = "REDACTED"
-# URI for the SQL Alchemy database
+# The SQLAlchemy database URL.
 SQLALCHEMY_DATABASE_URI = "sqlite:///database.db"
-
-[CTF_OPTIONS]
-# Option to reset the database on start
+# The start time for this event, in ISO 8601 format
+CTF_START_TIME = "2024-05-31T22:40:18.732776"
+# Option to forcibly disable docker containerized challenges
+FORCE_DISABLE_DOCKER = true
+# Option to reset the database when the server is started.
 RESET_DATABASE = false
-# The starting time for the event
-CTF_START_TIME = "2024-05-30T18:30:05.718239"
-# Forcefully disables docker, even if you have it installed.
-FORCE_DISABLE_DOCKER = false
 ```
 > [!NOTE]
 > If the configuration file is not present, please run the server to generate a new one.
