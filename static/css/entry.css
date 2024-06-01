@@ -1,12 +1,13 @@
 #login-section {
     max-width: 25em; /* Width adjusted for a larger form */
-    margin: 3em auto 0; /* Increased vertical margin for more central focus */
+    margin: 1em auto 0; /* Increased vertical margin for more central focus */
+    --form-spacing: 1.5rem;
 }
 
 #login-section h1 {
     text-align: center;
     color: var(--purple-1); /* Purple accent for the title */
-    margin-bottom: 1em; /* More space below the header */
+    margin-bottom: var(--spacing); /* More space below the header */
 }
 
 #login-section form {
@@ -17,7 +18,7 @@
 #login-section input[type="text"],
 #login-section input[type="password"] {
     padding: 1em; /* Comfortable padding */
-    margin-bottom: 1em; /* Adequate spacing between fields */
+    margin-bottom: var(--form-spacing); /* Adequate spacing between fields */
     border: 1px solid var(--form-field-border-color); /* Darker border to match the outer border */
     background-color: var(--bg-color); /* Consistent dark theme for input fields */
     color: #ccc; /* Lighter text for readability */
@@ -44,7 +45,7 @@
     color: #ccc; /* Light grey color for readability against the dark background */
     font-size: 0.9em; /* Slightly smaller font size for less emphasis compared to input fields */
     text-align: center; /* Center-align text for consistency with the form's alignment */
-    margin-top: 1.25rem; /* Spacing above the paragraph to separate it from the form */
+    margin-top: var(--form-spacing); /* Spacing above the paragraph to separate it from the form */
 }
 
 #login-section a {
