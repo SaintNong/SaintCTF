@@ -1,9 +1,3 @@
-/* Enable scrolling again */
-body, html {
-    overflow: auto;
-    padding-bottom: 100px;
-}
-
 main {
     max-width: 80em;
     padding: 1em;
