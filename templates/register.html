@@ -16,8 +16,8 @@
     <section class="card" id="login-section">
         <h1>Sign Up</h1>
         <form id="signup-form" action="/register" method="POST">
-            <input type="text" name="username" placeholder="Username:" required="required" autocapitalize="none">
-            <input type="password" name="password" placeholder="Password:" required="required">
+            <input type="text" name="username" placeholder="Username" required="required" autocapitalize="none">
+            <input type="password" name="password" placeholder="Password" required="required">
             <input type="submit" value="Sign Up">
 
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
