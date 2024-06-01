@@ -24,7 +24,7 @@ html {
 
 /* Basic body styling */
 body {
-    height: 100%; /* Make body fill entire page, but dont extend further */
+    min-height: 100%; /* Make body fill entire page at minimum *https://stackoverflow.com/a/17555766) */
     font-family: Arial, sans-serif;
     line-height: 1.6;
     color: var(--fg-color);
