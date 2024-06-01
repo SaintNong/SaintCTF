@@ -170,4 +170,7 @@ div.link-row {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.2em;
+    padding-bottom: var(--spacing);
 }
