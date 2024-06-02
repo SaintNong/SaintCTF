@@ -12,6 +12,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/date-fns/1.30.1/date_fns.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js" defer></script>
 
+    <script src="{{ url_for('static', filename='js/utils.js') }}" defer></script>
     <script data-username="{{ displayed_user.username }}" data-datapoints='{{ graph_datapoints|tojson }}'
         src="{{ url_for('static', filename='js/profile.js') }}" defer></script>
 {% endblock %}
