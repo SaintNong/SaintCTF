@@ -1,3 +1,28 @@
+function time_ago(time) {
+    function divmod(a, b) {
+        return [Math.floor(a/b), a % b];
+    }
+
+    const delta = new Date() - time;
+    let day, hour, minute, second, remainder;
+    [day, remainder] = divmod(delta, (1000 * 60 * 60 * 24));
+    [hour, remainder] = divmod(remainder, (1000 * 60 * 60));
+    [minute, remainder] = divmod(remainder, (1000 * 60));
+    [second, remainder] = divmod(remainder, (1000));
+
+    if (day > 0) {
+        return `${day} day${day > 1 ? 's' : ''} ${hour} hour${hour > 1 ? 's' : ''} ago`
+    } else if (hour > 0) {
+        return `${hour} hour${hour > 1 ? 's' : ''} ${minute} minute${minute > 1 ? 's' : ''} ago`
+    } else if (minute > 0) {
+        return `${minute} minute${minute > 1 ? 's' : ''} ago`
+    } else if (second > 5) {
+        return `${second} seconds ago`
+    } else {
+        return "Just now"
+    }
+}
+
 function getChartOptions(options) {
     const defaults = {
         scales: {
@@ -91,3 +116,13 @@ function isDark(hex) {
     }
     return luminance < 0.3;
 }
+
+$(document).ready(function () {
+    // Periodically update relative times
+    setInterval(function () {
+        $("time").each(function () {
+            const element = $(this);
+            element.text(time_ago(new Date(element.attr("datetime"))));
+        });
+    }, 2500);
+});

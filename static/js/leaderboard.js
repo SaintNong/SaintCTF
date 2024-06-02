@@ -4,39 +4,6 @@ const currentUsername = document.currentScript.dataset.username;
 const leaderboardEvents = new EventSource("leaderboard-events");
 
 $(document).ready(function () {
-    function divmod(a, b) {
-        return [Math.floor(a/b), a % b];
-    }
-
-    function time_ago(time) {
-        const delta = new Date() - time;
-        let day, hour, minute, second, remainder;
-        [day, remainder] = divmod(delta, (1000 * 60 * 60 * 24));
-        [hour, remainder] = divmod(remainder, (1000 * 60 * 60));
-        [minute, remainder] = divmod(remainder, (1000 * 60));
-        [second, remainder] = divmod(remainder, (1000));
-
-        if (day > 0) {
-            return `${day} day${day > 1 ? 's' : ''} ${hour} hour${hour > 1 ? 's' : ''} ago`
-        } else if (hour > 0) {
-            return `${hour} hour${hour > 1 ? 's' : ''} ${minute} minute${minute > 1 ? 's' : ''} ago`
-        } else if (minute > 0) {
-            return `${minute} minute${minute > 1 ? 's' : ''} ago`
-        } else if (second > 5) {
-            return `${second} seconds ago`
-        } else {
-            return "Just now"
-        }
-    }
-
-    // Periodically update relative times
-    setInterval(function () {
-        $("time").each(function () {
-            const element = $(this);
-            element.text(time_ago(new Date(element.attr("datetime"))));
-        });
-    }, 2500);
-
     leaderboardEvents.addEventListener("leaderboard", (event) => {
         const data = JSON.parse(event.data);
 
