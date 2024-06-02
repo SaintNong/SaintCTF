@@ -12,7 +12,7 @@ $(document).ready(function () {
         leaderboard.empty();
 
         // Make header
-        leaderboard.append(`<thead> <tr><th style="width: 50px;">Rank</th> <th>Name</th> <th>Score</th></tr> </thead>`);
+        leaderboard.append(`<thead> <tr><th class="number-col">Rank</th> <th class="expand">Name</th> <th class="number-col">Score</th></tr> </thead>`);
 
 
         // Rebuild the leaderboard
@@ -20,7 +20,12 @@ $(document).ready(function () {
         $.each(data, function (index, user) {
             // Check if the user is the current user, and highlight if they are
             let highlight = user.username === currentUsername ? 'class="highlight" id="current-user"' : '';
-            tbody.append(`<tr ${highlight}><td>${index + 1}</td><td id="username-data"><a href="/profile/${user.user_id}">${user.username}</a></td><td>${user.score}</td></tr>`);
+            let trophy = "";
+            if (index < 3) {
+                const icons = ["🥇","🥈","🥉"];
+                trophy = `<span>${icons[index]}</span>`;
+            }
+            tbody.append(`<tr ${highlight}><td class="number-col">${trophy}${index + 1}</td><td class="username-data"><a href="/profile/${user.user_id}">${user.username}</a></td><td class="number-col">${user.score}</td></tr>`);
 
         });
         leaderboard.append(tbody);

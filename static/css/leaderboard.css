@@ -29,8 +29,17 @@ table {
 
 
 /* Current user has "You" suffix  */
-tr#current-user td#username-data::after {
+tr#current-user td.username-data::after {
     content: " (You)"
+}
+
+.number-col {
+    text-align: right;
+}
+
+/* https://stackoverflow.com/a/11414056 */
+th.expand {
+    width: 100%;
 }
 
 main {
