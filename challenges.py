@@ -1,6 +1,6 @@
 import datetime
 import os
-import tomllib
+import tomlkit
 import signal
 import sys
 from models import Solve, User, db
@@ -241,7 +241,7 @@ class ChallengeManager:
             )
 
         with open(file_path, "rb") as file:
-            return tomllib.load(file)
+            return tomlkit.load(file)
 
     def solve_challenge(self, id_, user):
         points = self.challenges[id_]["points"]
