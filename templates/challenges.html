@@ -68,7 +68,7 @@
     <section id="challenge-list">
         <p>{{ unsolved_count }} challenge(s) left to solve</p>
 
-        {% for id, challenge in challenges.items() %}
+        {% for id, challenge in challenges.items()|sort(attribute='1.points') %}
             <article class="card challenge" data-category="{{ challenge.category }}"
                      data-difficulty="{{ challenge.difficulty }}"
                      {% if solves[id]|map(attribute='user.username')|select('eq', current_user.username)|list %}
