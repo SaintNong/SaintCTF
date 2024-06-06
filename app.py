@@ -91,19 +91,15 @@ def load_config_file(app, config_path):
 
 def create_app():
     app = Flask(__name__, template_folder="templates")
-    app.config["SECRET_KEY"] = load_secret(app)
-    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    app.config["TEMPLATES_AUTO_RELOAD"] = True  # https://stackoverflow.com/a/38371484
-    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
-
-    try:
-        os.makedirs(app.instance_path)
-    except OSError:
-        pass
 
     os.makedirs(
         app.instance_path, exist_ok=True
     )  # Ensure that the instance folder exists
+
+    app.config["SECRET_KEY"] = load_secret(app)
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    app.config["TEMPLATES_AUTO_RELOAD"] = True  # https://stackoverflow.com/a/38371484
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
 
     config = load_config_file(app, constants.CONFIG_FILE)
     app.config.update(config)
