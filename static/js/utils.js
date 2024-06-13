@@ -66,7 +66,7 @@ function getChartOptions(options) {
         backgroundColor: '#333333'
     }
 
-    return Object.assign({}, defaults, options);
+    return $.extend(true, {}, defaults, options);
 }
 
 // Gets a predictable user color for each username
