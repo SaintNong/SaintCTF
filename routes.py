@@ -323,7 +323,7 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager, csrf):
                     user_id=current_user.id, challenge_id=id_
                 ).first()
                 if solve is None:
-                    response_message = f"You've earned {challenge['points']} points."
+                    response_message = f"You've earned {challenge['points']} points for <code>{challenge['name']}</code>."
 
                     challenge_manager.solve_challenge(id_, current_user)
 
@@ -334,7 +334,7 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager, csrf):
                     return jsonify(
                         {
                             "status": "already_submitted",
-                            "message": "You've already submitted that flag!",
+                            "message": f"You've already submitted that flag for <code>{challenge['name']}</code>!",
                         }
                     )
 

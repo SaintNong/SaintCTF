@@ -21,7 +21,7 @@ $(document).ready(function () {
                     // Correct alert
                     Swal.fire({
                         title: "Correct flag!",
-                        text: response.message,
+                        html: response.message,
                         icon: "success"
 
                     }).then(
@@ -37,7 +37,7 @@ $(document).ready(function () {
                     // Already submitted alert
                     Swal.fire({
                         title: "Already submitted!",
-                        text: response.message,
+                        html: response.message,
                         icon: "warning"
                     });
 
