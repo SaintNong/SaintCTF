@@ -41,7 +41,7 @@ def get_default_config():
             "comment": "The start time for this event, in ISO 8601 format",
         },
         "FORCE_DISABLE_DOCKER": {
-            "default": True,
+            "default": False,
             "comment": "Option to forcibly disable docker containerized challenges",
         },
         "RESET_DATABASE": {
