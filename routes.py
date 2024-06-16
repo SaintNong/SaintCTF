@@ -31,12 +31,7 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager, csrf):
 
     @event.listens_for(User, "after_update")
     def userTableChanged(_mapper, connection, _target):
-        top_players = connection.execute(
-            select(User.username, User.score, User.id).order_by(User.score.desc())
-        ).all()
-        result = []
-        for line in top_players:
-            result.append({"username": line[0], "score": line[1], "user_id": line[2]})
+        result = challenge_manager.get_top_players()
         sse_queue.put(("leaderboard", json.dumps(result)))
 
     @event.listens_for(Solve, "after_insert")
@@ -63,15 +58,10 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager, csrf):
         #       user table; all other scoring information used in the chart comes
         #       from the solve table.
         # Get top 10 players
-        top_players = (
-            db.session.query(User.id, User.score)
-            .order_by(User.score.desc())
-            .limit(10)
-            .all()
-        )
+        top_players = challenge_manager.get_top_players()[:10]
         top_ids = []
         for player in top_players:
-            top_ids.append(player.id)
+            top_ids.append(player["user_id"])
 
         # Get datapoints
         data_points = challenge_manager.get_leaderboard_chart_data(top_ids)
@@ -108,8 +98,14 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager, csrf):
         # (in case challenges have been removed)
         solves = [x for x in solves if x.challenge_id in challenge_manager.challenges]
 
+        # Save list of user's solved challenges
+        user_solves = [x for x in solves if x.user == current_user]
+
+        # Calculate score
+        score = challenge_manager.get_total_points(user_solves)
+
         # Save count of user's solved challenges
-        solved_count = len([x for x in solves if x.user == current_user])
+        solved_count = len(user_solves)
 
         # Group solves by challenge_id
         # https://stackoverflow.com/a/51416299
@@ -124,6 +120,7 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager, csrf):
             solves=solves,
             solved_count=solved_count,
             user=current_user,
+            score=score,
         )
 
     # Setting up challenge downloads
@@ -276,8 +273,11 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager, csrf):
         if displayed_user is None:
             abort(404, "This player does not exist.")
 
+        solves = Solve.query.filter_by(user_id=user_id).order_by(Solve.time.asc()).all()
+        score = challenge_manager.get_total_points(solves)
+
         # For solve table
-        solves = challenge_manager.get_user_solved_challenges(displayed_user.id)
+        solves = challenge_manager.get_user_solved_challenges(solves)
 
         # For graph
         user_graph_datapoints = challenge_manager.get_user_profile_graph(
@@ -285,20 +285,17 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager, csrf):
         )
 
         # Calculate user rank
-        top_players = (
-            db.session.query(User.username, User.score, User.id)
-            .order_by(User.score.desc())
-            .all()
-        )
+        top_players = challenge_manager.get_top_players()
         rank = 1
         for player in top_players:
-            if player.id == user_id:
+            if player["user_id"] == user_id:
                 break
             rank += 1
 
         return render_template(
             "profile.html",
             user=current_user,
+            score=score,
             displayed_user=displayed_user,
             graph_datapoints=user_graph_datapoints,
             solves=solves,

@@ -10,13 +10,12 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String, unique=True, nullable=False)
     password = db.Column(db.String, nullable=False)
-    score = db.Column(db.Integer, nullable=True)
 
     def is_active(self):
         return True
 
     def __repr__(self):
-        return f"<User '{self.id}', '{self.username}', '{self.score}>"
+        return f"<User '{self.id}', '{self.username}'>"
 
     def get_id(self):
         return self.id

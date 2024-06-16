@@ -244,16 +244,12 @@ class ChallengeManager:
             return tomlkit.load(file)
 
     def solve_challenge(self, id_, user):
-        points = self.challenges[id_]["points"]
-        user.score += points
-
         solve = Solve(user_id=user.id, challenge_id=id_)
         db.session.add(solve)
         db.session.commit()
 
     # Gets the all challenges the user has solved, and how long ago they solved it
-    def get_user_solved_challenges(self, user_id):
-        solves = Solve.query.filter_by(user_id=user_id).order_by(Solve.time.asc()).all()
+    def get_user_solved_challenges(self, solves):
         return [
             {
                 "time": solve.time,
@@ -262,6 +258,22 @@ class ChallengeManager:
             }
             for solve in solves
         ]
+
+    def get_total_points(self, solves):
+        return sum([self.challenges[solve.challenge_id]["points"] for solve in solves])
+
+    def get_top_players(self):
+        top_players = User.query.all()
+        result = []
+        for user in top_players:
+            result.append(
+                {
+                    "username": user.username,
+                    "score": self.get_total_points(user.solve),
+                    "user_id": user.id,
+                }
+            )
+        return sorted(result, key=lambda x: x["score"], reverse=True)
 
     # Gets the datapoints for a profile graph of a specific user id
     def get_user_profile_graph(self, user_id):
