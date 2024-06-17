@@ -268,9 +268,9 @@ class ChallengeManager:
         for user in top_players:
             result.append(
                 {
+                    "id": user.id,
                     "username": user.username,
                     "score": self.get_total_points(user.solve),
-                    "user_id": user.id,
                 }
             )
         return sorted(result, key=lambda x: x["score"], reverse=True)

@@ -61,7 +61,7 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager, csrf):
         top_players = challenge_manager.get_top_players()[:10]
         top_ids = []
         for player in top_players:
-            top_ids.append(player["user_id"])
+            top_ids.append(player["id"])
 
         # Get datapoints
         data_points = challenge_manager.get_leaderboard_chart_data(top_ids)
@@ -288,7 +288,7 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager, csrf):
         top_players = challenge_manager.get_top_players()
         rank = 1
         for player in top_players:
-            if player["user_id"] == user_id:
+            if player["id"] == user_id:
                 break
             rank += 1
 

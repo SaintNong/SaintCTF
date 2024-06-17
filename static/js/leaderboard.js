@@ -25,7 +25,7 @@ $(document).ready(function () {
                 const icons = ["🥇","🥈","🥉"];
                 trophy = `<span>${icons[index]}</span>`;
             }
-            tbody.append(`<tr ${highlight}><td class="number-col">${trophy}${index + 1}</td><td class="username-data"><a href="/profile/${user.user_id}">${user.username}</a></td><td class="number-col">${user.score}</td></tr>`);
+            tbody.append(`<tr ${highlight}><td class="number-col">${trophy}${index + 1}</td><td class="username-data"><a href="/profile/${user.id}">${user.username}</a></td><td class="number-col">${user.score}</td></tr>`);
 
         });
         leaderboard.append(tbody);
