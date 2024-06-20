@@ -29,11 +29,6 @@ first_blood = []
 def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager, csrf):
     app.logger.info("Routes registered")
 
-    @event.listens_for(User, "after_update")
-    def userTableChanged(_mapper, connection, _target):
-        result = challenge_manager.get_top_players()
-        sse_queue.put(("leaderboard", json.dumps(result)))
-
     @event.listens_for(Solve, "after_insert")
     def solveTableChanged(_mapper, connection, _target):
         # Get 'first blood' solves
@@ -51,6 +46,9 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager, csrf):
         recent_solves = challenge_manager.get_recent_solves(12, first_blood)
         sse_queue.put(("recentActivity", json.dumps(recent_solves)))
 
+        top_players = challenge_manager.get_top_players()
+        sse_queue.put(("leaderboard", json.dumps(top_players)))
+
         # Update leaderboard chart
         # NOTE: This relies on *both* the user table and solve table, and ideally,
         #       the event would be dispatched when either one changes - however,
@@ -58,7 +56,7 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager, csrf):
         #       user table; all other scoring information used in the chart comes
         #       from the solve table.
         # Get top 10 players
-        top_players = challenge_manager.get_top_players()[:10]
+        top_players = top_players[:10]
         top_ids = []
         for player in top_players:
             top_ids.append(player["id"])
@@ -346,7 +344,6 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager, csrf):
             # Send data when event stream is initially connected to
             with app.app_context():
                 with db.engine.connect() as connection:
-                    userTableChanged(None, connection, None)
                     solveTableChanged(None, connection, None)
 
             while True:
