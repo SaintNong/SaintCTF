@@ -278,7 +278,11 @@ class ChallengeManager:
     # Gets the datapoints for a profile graph of a specific user id
     def get_user_profile_graph(self, user_id):
         # Get the user
-        user = User.query.get(user_id)
+        user = db.session.scalar(
+            db.select(User)
+            .options(db.load_only(User.id, User.username))
+            .where(User.id == user_id)
+        )
 
         # At the start of the CTF, the user has 0 points
         datapoints = [
@@ -347,7 +351,7 @@ class ChallengeManager:
 
         # At the start of the CTF, all users have 0 points
         for user_id in top_user_ids:
-            user = User.query.get(user_id)
+            user = db.session.get(User, user_id)
 
             dataset.append(
                 {
@@ -374,7 +378,7 @@ class ChallengeManager:
         # At the current time, all users have their current points
         now = datetime.datetime.now().isoformat()
         for user_id in top_cumulative_scores:
-            user = User.query.get(user_id)
+            user = db.session.get(User, user_id)
 
             # Add current score
             dataset.append(
