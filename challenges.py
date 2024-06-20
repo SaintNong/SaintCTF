@@ -263,17 +263,17 @@ class ChallengeManager:
         return sum([self.challenges[solve.challenge_id]["points"] for solve in solves])
 
     def get_top_players(self):
-        top_players = User.query.all()
-        result = []
-        for user in top_players:
-            result.append(
-                {
-                    "id": user.id,
-                    "username": user.username,
-                    "score": self.get_total_points(user.solve),
-                }
-            )
-        return sorted(result, key=lambda x: x["score"], reverse=True)
+        top_players = [
+            {
+                "id": user.id,
+                "username": user.username,
+                "score": self.get_total_points(user.solve),
+            }
+            for user in db.session.scalars(
+                db.select(User).options(db.load_only(User.id, User.username))
+            ).all()
+        ]
+        return sorted(top_players, key=lambda x: x["score"], reverse=True)
 
     # Gets the datapoints for a profile graph of a specific user id
     def get_user_profile_graph(self, user_id):
