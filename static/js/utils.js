@@ -125,4 +125,11 @@ $(document).ready(function () {
             element.text(time_ago(new Date(element.attr("datetime"))));
         });
     }, 2500);
+
+    // Show username colour in border when input changes
+    $('input[name="username"]').on('input', (e) => {
+        e.target.style.setProperty("--color", getUserColor(e.target.value));
+        e.target.style.setProperty("--width", e.target.value.length !== 0
+            ? "var(--width-present)" : "var(--width-empty)");
+    });
 });

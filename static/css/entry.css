@@ -26,6 +26,22 @@
     font-size: 1em; /* Increased font size for ease of reading */
 }
 
+#login-section input[name="username"] {
+    --width-empty: 0;
+    --width-present: 1.5em;
+
+    /* controlled in JavaScript, depending on the input's length */
+    --width: var(--width-empty);
+
+    /* `--color` is set via JavaScript based on `getUserColor()` */
+    color: var(--color);
+    border-right: var(--width) var(--color) solid;
+
+    transition-property: border-right, color;
+    transition-duration: 0.1s;
+    transition-timing-function: ease-in-out;
+}
+
 #login-section input[type="submit"] {
     padding: 1em; /* Generous padding for a substantial button */
     color: white;
