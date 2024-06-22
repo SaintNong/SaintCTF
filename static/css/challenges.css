@@ -108,6 +108,10 @@ svg.feather-link:hover {
     background-color: var(--purple-1);
 }
 
+.challenge .description img {
+    max-width: 100%;
+}
+
 
 
 .solves-count {
@@ -119,6 +123,7 @@ svg.feather-link:hover {
     padding: 15px;
     margin-top: 10px;
     border-left: 5px solid var(--purple-2); /* Stylish left border */
+    overflow-wrap: anywhere;
 }
 
 
