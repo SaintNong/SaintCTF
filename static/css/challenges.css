@@ -38,6 +38,26 @@ body > main {
     color: var(--purple-1); /* purple */
 }
 
+.challenge h2 a {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.challenge h2:hover a {
+    visibility: visible;
+    opacity: 1;
+}
+
+svg.feather-link {
+    color: grey;
+    transition: color 0.3s ease;
+}
+
+svg.feather-link:hover {
+    color: lightgrey;
+}
+
 .challenge header {
     display: flex;
     justify-content: space-between;
