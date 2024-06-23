@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 {% block title %}Home{% endblock %}
 
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+{% endblock %}
+
 {% block body %}
     <section id="home-section">
         <h1>Welcome to SaintCTF</h1>

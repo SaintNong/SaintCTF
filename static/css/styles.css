@@ -126,12 +126,6 @@ body > main {
     margin-right: auto;
 }
 
-/* Home page */
-#home-section {
-    text-align: center;
-    margin-top: 2em;
-}
-
 #rules-section h1 {
     padding-left: calc(40px + 1rem);
 }
