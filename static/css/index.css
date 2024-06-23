@@ -1,8 +1,13 @@
-main {
+body > main {
+    padding: 0;
+    text-align: center;
+}
+
+.container {
     display: flex;
+    padding: 1em;
     gap: 2em;
     flex-wrap: wrap;
-    text-align: center;
 }
 
 /* Shared styling */

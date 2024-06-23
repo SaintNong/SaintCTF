@@ -7,41 +7,43 @@
 {% endblock %}
 
 {% block body %}
-    <section class="card small" id="welcome">
-        <h1>Welcome to SaintCTF</h1>
-        <p>Please sign up <a href="/register">here</a>!</p>
-        <p>Make sure to read the <a href="{{ url_for('rules') }}">rules</a> before competing in any <a href="{{ url_for('challenges') }}">challenges</a>!</p>
-    </section>
+    <div class="container">
+        <section class="card small" id="welcome">
+            <h1>Welcome to SaintCTF</h1>
+            <p>Please sign up <a href="/register">here</a>!</p>
+            <p>Make sure to read the <a href="{{ url_for('rules') }}">rules</a> before competing in any <a href="{{ url_for('challenges') }}">challenges</a>!</p>
+        </section>
 
-    <section class="card large" id="what-is-ctf">
-        <h1>What's a CTF?</h1>
-        <p>If you are new to CTFs, then here's an explanation:</p>
-        <p>A Capture the Flag (CTF) is a cybersecurity competition, where teams compete to solve as many challenges as they can, as fast as possible.</p>
-        <p>Challenges range across several categories, such as Crypto(graphy), reverse engineering, and web exploitation.</p>
-        <p>Wikipedia explains it better than I can <a href="https://en.wikipedia.org/wiki/Capture_the_flag_(cybersecurity)">here</a></p>
-    </section>
+        <section class="card large" id="what-is-ctf">
+            <h1>What's a CTF?</h1>
+            <p>If you are new to CTFs, then here's an explanation:</p>
+            <p>A Capture the Flag (CTF) is a cybersecurity competition, where teams compete to solve as many challenges as they can, as fast as possible.</p>
+            <p>Challenges range across several categories, such as Crypto(graphy), reverse engineering, and web exploitation.</p>
+            <p>Wikipedia explains it better than I can <a href="https://en.wikipedia.org/wiki/Capture_the_flag_(cybersecurity)">here</a></p>
+        </section>
 
-    <section class="card large" id="getting-started">
-        <h1>Where do I get started?</h1>
-        <p>There are many ways to get started with a CTF &mdash; you'll get the most out of it just by trying!</p>
-        <p>Just searching for things will get you further than you think in a CTF, especially if it's an unfamiliar topic &mdash; your search engine is your friend.</p>
+        <section class="card large" id="getting-started">
+            <h1>Where do I get started?</h1>
+            <p>There are many ways to get started with a CTF &mdash; you'll get the most out of it just by trying!</p>
+            <p>Just searching for things will get you further than you think in a CTF, especially if it's an unfamiliar topic &mdash; your search engine is your friend.</p>
 
-        <p>Here are some tools to get you started:</p>
-        <h2 id="tools">Tools</h2>
-        <ul>
-            <li><a href="https://gchq.github.io/CyberChef">CyberChef</a> &mdash; The Swiss Army knife of cybersecurity tools</li>
-        </ul>
-    </section>
+            <p>Here are some tools to get you started:</p>
+            <h2 id="tools">Tools</h2>
+            <ul>
+                <li><a href="https://gchq.github.io/CyberChef">CyberChef</a> &mdash; The Swiss Army knife of cybersecurity tools</li>
+            </ul>
+        </section>
 
-    <section class="card small" id="statistics">
-        <h1>Statistics</h1>
-        <ul>
-            <li>{{ stats["challenges"] }} challenges</li>
-            <li>{{ stats["solves"] }} solves</li>
-            <li>{{ stats["players"] }} players</li>
-            <li>{{ stats["points"] }} points (total)</li>
-        </ul>
-    </section>
+        <section class="card small" id="statistics">
+            <h1>Statistics</h1>
+            <ul>
+                <li>{{ stats["challenges"] }} challenges</li>
+                <li>{{ stats["solves"] }} solves</li>
+                <li>{{ stats["players"] }} players</li>
+                <li>{{ stats["points"] }} points (total)</li>
+            </ul>
+        </section>
+    </div>
     <footer>
         <p>©Ning, Alex, Andrew, 2024</p>
     </footer>
