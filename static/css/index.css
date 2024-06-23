@@ -5,6 +5,15 @@ main {
     text-align: center;
 }
 
+/* Shared styling */
+main p {
+    margin-bottom: 0.5em;
+}
+
+main p:last-child {
+    margin-bottom: 0em;
+}
+
 /* Card types */
 .large {
     flex: 6 1 20em;
