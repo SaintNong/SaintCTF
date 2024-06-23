@@ -5,12 +5,13 @@ main {
     text-align: center;
 }
 
-#welcome {
-    flex: 2 1;
+/* Card types */
+.large {
+    flex: 6 1 20em;
 }
 
-#what-is-ctf {
-    flex: 6 1;
+.small {
+    flex: 2 1 10em;
 }
 
 footer {
