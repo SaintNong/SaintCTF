@@ -7,13 +7,18 @@
 {% endblock %}
 
 {% block body %}
-    <section id="home-section">
+    <section class="card" id="welcome">
         <h1>Welcome to SaintCTF</h1>
         <p>Please sign up <a href="/register">here</a>!</p>
+    </section>
+
+    <section class="card" id="what-is-ctf">
         <p>If you are new to CTFs, then here's an explanation:</p>
         <p>A CTF is a cybersecurity competition, where teams compete to solve as many challenges as they can, as fast as possible.</p>
         <p>Challenges range across several categories, such as Crypto(graphy), reverse engineering, and web exploitation.</p>
         <p>Wikipedia explains it better than I can <a href="https://en.wikipedia.org/wiki/Capture_the_flag_(cybersecurity)">here</a></p>
-        <p>©Ning, Alex, Andrew, 2024</p>
     </section>
+    <footer>
+        <p>©Ning, Alex, Andrew, 2024</p>
+    </footer>
 {% endblock %}

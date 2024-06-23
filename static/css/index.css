@@ -1,5 +1,19 @@
-/* Home page */
-#home-section {
+main {
+    display: flex;
+    gap: 2em;
+    flex-wrap: wrap;
     text-align: center;
-    margin-top: 2em;
+}
+
+#welcome {
+    flex: 2 1;
+}
+
+#what-is-ctf {
+    flex: 6 1;
+}
+
+footer {
+    flex-basis: 100%;
+    background-color: var(--form-field-border-color);
 }
