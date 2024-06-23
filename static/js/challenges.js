@@ -1,3 +1,13 @@
+function checkHash() {
+    // If the linked challenge is solved, all
+    // solved challenges are automatically shown
+    const solved = $(location.hash).data("solved") !== undefined;
+    if (solved) {
+        // https://stackoverflow.com/a/426276
+        $('[name="solved"]').prop('checked', true).trigger('change');
+    }
+}
+
 // OH MY GOD ITS JQUERY RUNNNNNN
 $(document).ready(function () {
     $('#flag-form').submit(function (e) {
@@ -120,5 +130,8 @@ $(document).ready(function () {
     }
 
     filters.forEach((f) => setupFilteringTags(f));
+
+    checkHash();
 });
 
+window.addEventListener("hashchange", checkHash);
