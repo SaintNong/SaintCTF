@@ -1,0 +1,60 @@
+body > main {
+    padding: 0;
+    text-align: center;
+}
+
+.container {
+    display: flex;
+    padding: 1em;
+    gap: 2em;
+    flex-wrap: wrap;
+}
+
+/* Shared styling */
+main h2 {
+    font-size: 1.25em;
+}
+
+main p {
+    margin-bottom: 0.5em;
+}
+
+main p:last-child {
+    margin-bottom: 0em;
+}
+
+/* Card types */
+.large {
+    flex: 6 1 20em;
+}
+
+.small {
+    flex: 2 1 10em;
+}
+
+#help main {
+    padding-top: 0.5em;
+}
+
+/* increased specificity */
+#help #flag-section, #help #challenge-list {
+    padding-top: 1em;
+}
+
+#help #challenge-list {
+    border-radius: 1em; /* More cohesive appearance */
+}
+
+#help .challenge {
+    text-align: initial; /* Reset text alignment */
+}
+
+#help .filter-tags {
+    flex-wrap: wrap; /* Force wrapping */
+    justify-content: flex-end; /* Align tags to the right */
+}
+
+main > footer {
+    flex-basis: 100%;
+    background-color: var(--form-field-border-color);
+}

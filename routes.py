@@ -68,7 +68,17 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager, csrf):
     # ==== Pages ====
     @app.route("/")
     def index():
-        return render_template("index.html", user=current_user)
+        statistics = {
+            "challenges": len(challenge_manager.challenges),
+            "solves": db.session.scalar(db.select(db.func.count(Solve.id))),
+            "points": challenge_manager.get_total_points(
+                db.session.scalars(
+                    db.select(Solve).options(db.load_only(Solve.challenge_id))
+                )
+            ),
+            "players": db.session.scalar(db.select(db.func.count(User.id))),
+        }
+        return render_template("index.html", user=current_user, stats=statistics)
 
     @app.route("/challenges")
     @login_required
