@@ -4,6 +4,7 @@
 {% block head %}
     {{ super() }}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/challenges.css') }}">
 {% endblock %}
 
 {% block body %}
@@ -43,7 +44,56 @@
                 <li>{{ stats["points"] }} points (total)</li>
             </ul>
         </section>
+
+        <section class="card large" id="help">
+            <h1>How do I play?</h1>
+            <main class="challenge-main">
+                <div id="flag-section-container">
+                    <section id="flag-section">
+                        <p>When you've solved a challenge, enter the flag into the <strong>Flag Submission</strong> text field, and press <em>Submit Flag</em>.</p>
+                            <form action="javascript:void(0);" id="flag-form">
+                                <input type="text" id="flag" name="flag" value="saint{EXAMPLE_FLAG}" disabled>
+                                <input type="submit" value="Submit Flag">
+                            </form>
+                    </section>
+                </div>
+
+                <section id="challenge-list">
+                    <p>You'll see challenges like this:</p>
+                    <article class="card challenge">
+                        <!-- Challenge info -->
+                        <header>
+                            <div>
+                                <h2><span>My First Challenge!</span></h2>
+                                <p class="author">Author</p>
+                            </div>
+
+                            <div class="info-block">
+                                <div class="filter-tags">
+                                    <a class="filter-tag" href="javascript:void(0);" data-filter-type="difficulty" title="Filter by difficulty">easy</a>
+                                    <a class="filter-tag" href="javascript:void(0);" data-filter-type="category" title="Filter by category">category</a>
+                                </div>
+                                <p class="points">20 points</p>
+                            </div>
+                        </header>
+
+                        <p class="description">
+                            This is the description, where authors can provide information and context for the challenge.<br>
+                            <strong>Pay attention to the challenge's name and description, as they may provide useful clues!</strong>
+                        </p>
+
+                        <footer>
+                            <p><em>If there are any resources, you'll see them listed here.</em></p>
+                            <p class="solves-count">8 solves</p>
+                        </footer>
+                    </article>
+                </section>
+
+            </main>
+        </section>
+
     </div>
+
     <footer>
         <p>©Ning, Alex, Andrew, 2024</p>
     </footer>
