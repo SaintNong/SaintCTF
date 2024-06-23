@@ -6,6 +6,10 @@ main {
 }
 
 /* Shared styling */
+main h2 {
+    font-size: 1.25em;
+}
+
 main p {
     margin-bottom: 0.5em;
 }
