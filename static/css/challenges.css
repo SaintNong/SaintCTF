@@ -140,6 +140,19 @@ svg.feather-link:hover {
     content: ' (Solved)';
 }
 
+/* https://stackoverflow.com/a/55835473 */
+/* `auto` appears to work as well? */
+@keyframes highlight {
+    from {
+        border-left-color: yellowgreen;
+        background-color: var(--user-highlight);
+    }
+}
+
+#challenge-list .challenge:target {
+    animation: 1s ease-in highlight;
+}
+
 .files {
     --spacing: 1em;
 }
