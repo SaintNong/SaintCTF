@@ -1,4 +1,5 @@
 import datetime
+import jinja2
 import os
 import tomlkit
 import signal
@@ -44,6 +45,12 @@ def time_ago(time):
         return f"{second} seconds ago"
     else:
         return "Just now"
+
+
+# A Jinja filter that converts a regular challenge ID into a URL-encoded ID for anchor links
+@jinja2.pass_environment
+def challenge_anchor_id(env, id_):
+    return "chall-" + env.filters["urlencode"](id_)
 
 
 class ContainerManager:
@@ -332,7 +339,9 @@ class ChallengeManager:
             {
                 "solver": solve.user.username,
                 "solver_id": solve.user.id,
-                "challenge_id": solve.challenge_id,
+                "challenge_id": challenge_anchor_id(
+                    self.app.jinja_env, solve.challenge_id
+                ),
                 "challenge": self.challenges[solve.challenge_id],
                 "time": solve.time.isoformat(timespec="milliseconds"),
                 "first_blood": solve.id in first_blood,

@@ -11,7 +11,7 @@ from flask_login import LoginManager, current_user
 from flask_wtf.csrf import CSRFProtect
 
 import constants
-from challenges import ChallengeManager, time_ago
+from challenges import ChallengeManager, time_ago, challenge_anchor_id
 from routes import register_routes
 
 
@@ -136,6 +136,7 @@ def create_app():
 
     # https://flask.palletsprojects.com/en/3.0.x/templating/#registering-filters
     app.jinja_env.filters["time_ago"] = time_ago
+    app.jinja_env.filters["challenge_anchor_id"] = challenge_anchor_id
 
     # Register app routes
     register_routes(app, db, bcrypt, challenge_manager, csrf)
