@@ -11,19 +11,19 @@ body > main {
 }
 
 /* Shared styling */
-main h2 {
+body > main h2 {
     font-size: 1.25em;
 }
 
-main p {
+body > main p {
     margin-bottom: 0.5em;
 }
 
-main p:last-child {
+body > main p:last-child {
     margin-bottom: 0em;
 }
 
-main ul {
+body > main ul {
     text-align: initial; /* Reset text alignment */
 }
 
@@ -62,7 +62,7 @@ main ul {
     justify-content: flex-end; /* Align tags to the right */
 }
 
-main > footer {
+body > main > footer {
     flex-basis: 100%;
     background-color: var(--form-field-border-color);
 }
