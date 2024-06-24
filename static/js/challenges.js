@@ -1,10 +1,13 @@
 function checkHash() {
-    // If the linked challenge is solved, all
-    // solved challenges are automatically shown
+    // If the linked challenge is solved, all solved challenges are automatically shown
     const solved = $(location.hash).data("solved") !== undefined;
     if (solved) {
         // https://stackoverflow.com/a/426276
         $('[name="solved"]').prop('checked', true).trigger('change');
+
+        // https://stackoverflow.com/a/62546650 (scrollIntoView)
+        // https://stackoverflow.com/a/4884904 (jQuery usage)
+        $(location.hash)[0].scrollIntoView(); // force challenge into view
     }
 }
 
