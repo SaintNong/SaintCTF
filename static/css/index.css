@@ -23,8 +23,16 @@ main p:last-child {
     margin-bottom: 0em;
 }
 
+main ul {
+    text-align: initial; /* Reset text alignment */
+}
+
 /* Card types */
 .large {
+    flex: 6 1 40em;
+}
+
+.medium {
     flex: 6 1 20em;
 }
 

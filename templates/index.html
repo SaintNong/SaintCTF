@@ -15,7 +15,7 @@
             <p>Make sure to read the <a href="{{ url_for('rules') }}">rules</a> before competing in any <a href="{{ url_for('challenges') }}">challenges</a>!</p>
         </section>
 
-        <section class="card large" id="what-is-ctf">
+        <section class="card medium" id="what-is-ctf">
             <h1>What's a CTF?</h1>
             <p>If you are new to CTFs, then here's an explanation:</p>
             <p>A <em>capture the flag</em> (CTF) is a cybersecurity competition, where teams compete to solve as many challenges as they can, as fast as possible.</p>
@@ -23,7 +23,7 @@
             <p>Wikipedia explains it better than I can <a href="https://en.wikipedia.org/wiki/Capture_the_flag_(cybersecurity)">here</a>.</p>
         </section>
 
-        <section class="card large" id="getting-started">
+        <section class="card medium" id="getting-started">
             <h1>Where do I get started?</h1>
             <p>There are many ways to get started with a CTF &mdash; you'll get the most out of it just by trying!</p>
             <p>Just searching for things will get you further than you think in a CTF, especially if it's an unfamiliar topic &mdash; your search engine is your friend.</p>
@@ -32,6 +32,10 @@
             <h2 id="tools">Tools</h2>
             <ul>
                 <li><a href="https://gchq.github.io/CyberChef">CyberChef</a> &mdash; The Swiss Army knife of cybersecurity tools</li>
+                <li><a href="https://dcode.fr/en">dCode</a> &mdash; A great tool with solvers for many common ciphers</li>
+                <li><a href="https://github.com/NationalSecurityAgency/ghidra">Ghidra</a> &mdash; The industry standard tool for reverse engineering developed by the NSA (Yes, that NSA!)</li>
+                <li><a href="https://portswigger.net/burp/communitydownload">Burp Suite</a> &mdash; A great web penetration testing framework</li>
+
             </ul>
         </section>
 
@@ -41,7 +45,8 @@
                 <li>{{ stats["challenges"] }} challenges</li>
                 <li>{{ stats["solves"] }} solves</li>
                 <li>{{ stats["players"] }} players</li>
-                <li>{{ stats["points"] }} points (total)</li>
+                <li>{{ stats["points"]["accrued"] }} points (accrued)</li>
+                <li>{{ stats["points"]["available"] }} points (available)</li>
             </ul>
         </section>
 

@@ -71,11 +71,16 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager, csrf):
         statistics = {
             "challenges": len(challenge_manager.challenges),
             "solves": db.session.scalar(db.select(db.func.count(Solve.id))),
-            "points": challenge_manager.get_total_points(
-                db.session.scalars(
-                    db.select(Solve).options(db.load_only(Solve.challenge_id))
-                )
-            ),
+            "points": {
+                "accrued": challenge_manager.get_total_points(
+                    db.session.scalars(
+                        db.select(Solve).options(db.load_only(Solve.challenge_id))
+                    )
+                ),
+                "available": sum(
+                    map(lambda x: x["points"], challenge_manager.challenges.values())
+                ),
+            },
             "players": db.session.scalar(db.select(db.func.count(User.id))),
         }
         return render_template("index.html", user=current_user, stats=statistics)
