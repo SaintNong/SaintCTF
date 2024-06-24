@@ -29,6 +29,10 @@ main ul {
 
 /* Card types */
 .large {
+    flex: 6 1 40em;
+}
+
+.medium {
     flex: 6 1 20em;
 }
 
