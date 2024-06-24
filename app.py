@@ -5,7 +5,7 @@ import logging
 import os
 
 import tomlkit
-from flask import Flask, render_template
+from flask import Flask, flash, redirect, url_for
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, current_user
 from flask_wtf.csrf import CSRFProtect
@@ -122,7 +122,8 @@ def create_app():
 
     @login_manager.unauthorized_handler
     def unauthorised():
-        return render_template("login.html", user=current_user, login_msg=True)
+        flash("You have to log in to do that!")
+        return redirect(url_for("login"))
 
     bcrypt = Bcrypt()
     bcrypt.init_app(app)

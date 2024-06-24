@@ -1,9 +1,9 @@
-// Capture redirects to this page
-// https://stackoverflow.com/a/17877279
-if (document.currentScript.dataset.login_msg !== undefined) {
+// Handle flashed messages passed via custom data attribute
+const messages = JSON.parse(document.currentScript.dataset.messages);
+for (const message of messages) {
     $(document).ready(function() {
         Swal.fire({
-            title: "You have to log in to do that!",
+            title: message,
             icon: "info"
         });
     });

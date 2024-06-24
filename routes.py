@@ -258,7 +258,7 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager, csrf):
                     message="Either the username or password is incorrect",
                 )
         else:
-            return render_template("login.html", user=current_user, login_msg=False)
+            return render_template("login.html", user=current_user)
 
     @app.route("/leaderboard")
     def leaderboard():
