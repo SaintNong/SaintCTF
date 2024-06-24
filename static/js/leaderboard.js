@@ -51,7 +51,7 @@ $(document).ready(function () {
 
             const first_blood = solve.first_blood ? ' title="First blood">🏆' : ">";
 
-            tbody.append(`<tr ${highlight}><td>${solve.solver}</td><td${first_blood}</td><td>${solve.challenge.name}</td><td><time datetime="${solve.time}">${relative_time}</time></td></tr>`);
+            tbody.append(`<tr ${highlight}><td><a href="/profile/${solve.solver_id}">${solve.solver}</a></td><td${first_blood}</td><td>${solve.challenge.name}</td><td><time datetime="${solve.time}">${relative_time}</time></td></tr>`);
         });
         recentTable.append(tbody);
     });

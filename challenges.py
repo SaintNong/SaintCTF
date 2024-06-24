@@ -331,6 +331,7 @@ class ChallengeManager:
         return [
             {
                 "solver": solve.user.username,
+                "solver_id": solve.user.id,
                 "challenge": self.challenges[solve.challenge_id],
                 "time": solve.time.isoformat(timespec="milliseconds"),
                 "first_blood": solve.id in first_blood,
