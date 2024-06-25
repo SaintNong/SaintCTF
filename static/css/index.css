@@ -50,7 +50,7 @@ body > main ul {
 }
 
 #help #challenge-list {
-    border-radius: 1em; /* More cohesive appearance */
+    border-radius: 0.5em; /* More cohesive appearance */
 }
 
 #help .challenge {
