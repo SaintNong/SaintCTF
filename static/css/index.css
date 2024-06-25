@@ -40,6 +40,12 @@ body > main ul {
     flex: 2 1 10em;
 }
 
+#help {
+    --padding: 0.5em;
+    padding-left: var(--padding);
+    padding-right: var(--padding);
+}
+
 #help main {
     padding-top: 0.5em;
 }
@@ -50,7 +56,12 @@ body > main ul {
 }
 
 #help #challenge-list {
+    --padding: 1em;
     border-radius: 0.5em; /* More cohesive appearance */
+    /* padding-top already set by rule above */
+    padding-left: var(--padding);
+    padding-right: var(--padding);
+    padding-bottom: var(--padding);
 }
 
 #help .challenge {
