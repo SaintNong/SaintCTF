@@ -52,7 +52,7 @@
                             {% else %}
                             <td></td>
                             {% endif %}
-                            <td>{{ challenges[solve.challenge_id].name }}</td>
+                            <td><a href="{{ url_for('challenges') }}#{{ solve.challenge_id | challenge_anchor_id }}">{{ challenges[solve.challenge_id].name }}</a></td>
                             <td>{{ challenges[solve.challenge_id].category }}</td>
                             <td>{{ challenges[solve.challenge_id].difficulty }}</td>
                             <td>{{ challenges[solve.challenge_id].points }}</td>
