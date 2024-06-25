@@ -46,7 +46,7 @@
                             class="highlight"
                             {% endif %}
                             >
-                            <td>{{ solve.user.username }}</td>
+                            <td><a href="{{ url_for('profile', user_id=solve.user_id) }}">{{ solve.user.username }}</a></td>
                             {% if solve.id in first_blood %}
                             <td title="First blood">🏆</td>
                             {% else %}
