@@ -44,7 +44,7 @@
                 <tbody>
                     {% for solve in solves %}
                     <tr>
-                        <td>{{ solve.challenge.name }}</td>
+                        <td><a href="{{ url_for('challenges') }}#{{ solve.challenge_id | challenge_anchor_id }}">{{ solve.challenge.name }}</a></td>
                         <td>{{ solve.challenge.category }}</td>
                         <td>{{ solve.challenge.difficulty }}</td>
                         <td>{{ solve.challenge.points }}</td>

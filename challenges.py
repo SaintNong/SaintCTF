@@ -261,6 +261,7 @@ class ChallengeManager:
             {
                 "time": solve.time,
                 "challenge": self.challenges[solve.challenge_id],
+                "challenge_id": solve.challenge_id,
                 "time_ago": time_ago(solve.time),
             }
             for solve in solves
