@@ -63,8 +63,14 @@
                 <div id="flag-section-container">
                     <section id="flag-section">
                         <p>When you've solved a challenge, enter the flag into the <strong>Flag Submission</strong> text field, and press <em>Submit Flag</em>.</p>
-                            <form action="javascript:void(0);" id="flag-form">
+                            <form action="javascript:void(0);" class="flag-form" id="flag-form">
                                 <input type="text" id="flag" name="flag" value="saint{EXAMPLE_FLAG}" disabled>
+                                <input type="submit" value="Submit Flag">
+                            </form>
+
+                        <p>Don't worry if you enter an incorrect flag &mdash; you won't lose points.</p>
+                            <form action="javascript:void(0);" class="flag-form" id="flag-form-incorrect">
+                                <input type="text" id="flag" name="flag" value="saint{I_don't_know}" disabled>
                                 <input type="submit" value="Submit Flag">
                             </form>
                     </section>

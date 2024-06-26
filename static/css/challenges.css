@@ -180,7 +180,7 @@ svg.feather-link:hover {
 
 
 /* Flag Submission Form Styling */
-#flag-form {
+.flag-form {
     display: flex;
     align-items: center; /* Aligns items vertically in the middle */
     justify-content: start; /* Aligns items to the start of the form */
@@ -191,7 +191,7 @@ svg.feather-link:hover {
     flex-wrap: wrap;
 }
 
-#flag-form input[type="text"] {
+.flag-form input[type="text"] {
     flex-grow: 999; /* Allows the text input to grow and fill available space */
     padding: 8px;
     border: 1px solid var(--form-field-border-color);
@@ -200,12 +200,12 @@ svg.feather-link:hover {
     border-radius: 4px;
 }
 
-#flag-form input[type="text"]:focus {
+.flag-form input[type="text"]:focus {
     outline: none;
     border-color: #555;
 }
 
-#flag-form input[type="submit"] {
+.flag-form input[type="submit"] {
     padding: 8px 16px;
     border: none;
     background-color: var(--purple-1);
@@ -217,7 +217,7 @@ svg.feather-link:hover {
     flex: 1;
 }
 
-#flag-form input[type="submit"]:hover {
+.flag-form input[type="submit"]:hover {
     background-color: var(--purple-2); /* Darker purple on hover for visual feedback */
 }
 

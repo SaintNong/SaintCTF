@@ -11,3 +11,15 @@ $('#flag-form').submit(function (e) {
         footer: "This alert tells you how many points you've earned by completing a challenge."
     });
 });
+
+
+$('#flag-form-incorrect').submit(function (e) {
+    e.preventDefault();
+
+    Swal.fire({
+        title: "Wrong flag!",
+        text: "Incorrect flag. Try again!",
+        icon: "error",
+        footer: "This alert tells you that you should keep trying &mdash; you are not penalised for this action."
+    });
+});
