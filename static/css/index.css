@@ -48,6 +48,7 @@ body > main ul {
 
 #help main {
     padding-top: 0.5em;
+    margin-bottom: 1em;
 }
 
 /* increased specificity */
