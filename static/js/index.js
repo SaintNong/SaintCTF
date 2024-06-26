@@ -8,7 +8,7 @@ $('#flag-form').submit(function (e) {
         title: "Correct flag!",
         html: "You've earned 20 points for <code>My First Challenge!</code>.",
         icon: "success",
-        footer: "This alert tells you how many points you've earned by completing a challenge."
+        footer: "This <strong>example alert</strong> tells you how many points you've earned by completing a challenge."
     });
 });
 
@@ -20,7 +20,7 @@ $('#flag-form-incorrect').submit(function (e) {
         title: "Wrong flag!",
         text: "Incorrect flag. Try again!",
         icon: "error",
-        footer: "This alert tells you that you should keep trying &mdash; you are not penalised for this action."
+        footer: "This <strong> example alert</strong> tells you that you should keep trying &mdash; you are not penalised for this action."
     });
 });
 
