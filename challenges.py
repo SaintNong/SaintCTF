@@ -1,3 +1,4 @@
+from collections import defaultdict
 import datetime
 import jinja2
 import os
@@ -161,6 +162,8 @@ class ChallengeManager:
     def read_challenges(self):
         self.app.logger.info("Reading challenges")
 
+        related_challenges = defaultdict(list)
+
         challenge_folders = [
             folder
             for folder in os.listdir(CHALLENGES_DIRECTORY)
@@ -215,6 +218,9 @@ class ChallengeManager:
                     self.app.logger.info(
                         f"Created child challenge for '{challenge_id}' parented to '{parent}'"
                     )
+
+                    # Store challenge relation in dictionary
+                    related_challenges[parent].append(challenge_id)
                 elif os.path.exists(container_dir):
                     self.container_manager.run_container(
                         container_data, container_dir, challenge_id
@@ -238,6 +244,16 @@ class ChallengeManager:
         except KeyError:
             # Oh no, someone made a new difficulty
             raise KeyError("It seems someone tried to make a new difficulty...")
+
+        # Flatten dictionary into a list where (key, [...values]) -> [key, ...values]
+        related_challenges = [[x[0]] + x[1] for x in related_challenges.items()]
+
+        for related_set in related_challenges:
+            for related_challenge in related_set:
+                # Associate related challenges with each other
+                self.challenges[related_challenge]["container"]["related"] = [
+                    x for x in related_set if x != related_challenge
+                ]
 
     @staticmethod
     def read_toml_file(file_path, challenge_id):

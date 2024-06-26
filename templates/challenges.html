@@ -120,7 +120,19 @@
                         </ul>
                     </div>
                 {% endif %}
-              
+
+                {% if challenge.container.related %}
+                    <!-- Related challenge backlinks -->
+                    <div class="files">
+                        <h3>Related</h3>
+                        <ul>
+                            {% for related_id in challenge.container.related %}
+                                <li><a href="#{{ related_id | challenge_anchor_id }}">{{ challenges[related_id].name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+
                 <footer>
                     {% if solves[id] %}
                         <details class="solves-count">
