@@ -5,6 +5,13 @@
     {{ super() }}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/challenges.css') }}">
+
+    <!-- Sweet alert -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5/dark.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js" defer></script>
+    <!-- as lazy as normal alerts, better than you could make them yourself -->
+
+    <script src="{{ url_for('static', filename='js/index.js') }}" defer></script>
 {% endblock %}
 
 {% block body %}
@@ -56,8 +63,14 @@
                 <div id="flag-section-container">
                     <section id="flag-section">
                         <p>When you've solved a challenge, enter the flag into the <strong>Flag Submission</strong> text field, and press <em>Submit Flag</em>.</p>
-                            <form action="javascript:void(0);" id="flag-form">
+                            <form action="javascript:void(0);" class="flag-form" id="flag-form">
                                 <input type="text" id="flag" name="flag" value="saint{EXAMPLE_FLAG}" disabled>
+                                <input type="submit" value="Submit Flag">
+                            </form>
+
+                        <p>Don't worry if you enter an incorrect flag &mdash; you won't lose points.</p>
+                            <form action="javascript:void(0);" class="flag-form" id="flag-form-incorrect">
+                                <input type="text" id="flag" name="flag" value="saint{I_don't_know}" disabled>
                                 <input type="submit" value="Submit Flag">
                             </form>
                     </section>
@@ -75,8 +88,8 @@
 
                             <div class="info-block">
                                 <div class="filter-tags">
-                                    <a class="filter-tag" href="javascript:void(0);" data-filter-type="difficulty" title="Filter by difficulty">easy</a>
-                                    <a class="filter-tag" href="javascript:void(0);" data-filter-type="category" title="Filter by category">category</a>
+                                    <a class="filter-tag" href="javascript:void(0);" id="difficulty-tag" title="Filter by difficulty">easy</a>
+                                    <a class="filter-tag" href="javascript:void(0);" id="category-tag" title="Filter by category">category</a>
                                 </div>
                                 <p class="points">20 points</p>
                             </div>
@@ -95,6 +108,8 @@
                 </section>
 
             </main>
+
+            <p>Complete challenges in any order to gain points and make it to the top of the <a href="{{ url_for('leaderboard') }}">leaderboard</a>!</p>
         </section>
 
     </div>
