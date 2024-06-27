@@ -75,6 +75,7 @@ class ContainerManager:
     def run_container(self, container_data, container_dir, challenge_id):
         client = self.client
 
+        self.app.logger.info(f"{challenge_id}: Building container")
         # Try creating the container
         try:
             # Build container
