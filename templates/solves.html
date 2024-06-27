@@ -18,6 +18,11 @@
             overflow-x: auto;
         }
     </style>
+
+    <script src="https://unpkg.com/@popperjs/core@2" defer></script>
+    <script src="https://unpkg.com/tippy.js@6" defer></script>
+
+    <script src="{{ url_for('static', filename='js/solves.js') }}" defer></script>
 {% endblock %}
 
 {% block body %}
@@ -47,11 +52,7 @@
                             {% endif %}
                             >
                             <td><a href="{{ url_for('profile', user_id=solve.user_id) }}">{{ solve.user.username }}</a></td>
-                            {% if solve.id in first_blood %}
-                            <td title="First blood">🏆</td>
-                            {% else %}
-                            <td></td>
-                            {% endif %}
+                            <td>{% if solve.id in first_blood %}<span title="First blood">🏆</span>{% endif %}</td>
                             <td><a href="{{ url_for('challenges') }}#{{ solve.challenge_id | challenge_anchor_id }}">{{ challenges[solve.challenge_id].name }}</a></td>
                             <td>{{ challenges[solve.challenge_id].category }}</td>
                             <td>{{ challenges[solve.challenge_id].difficulty }}</td>
