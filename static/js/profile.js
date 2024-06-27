@@ -1,3 +1,5 @@
+absoluteTimeTooltip("time");
+
 // Prepare data for the score chart
 const username = document.currentScript.dataset.username;
 const datapoints = JSON.parse(document.currentScript.dataset.datapoints);

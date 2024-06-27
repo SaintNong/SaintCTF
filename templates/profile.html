@@ -6,6 +6,8 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
 
 
+    <script src="https://unpkg.com/@popperjs/core@2" defer></script>
+    <script src="https://unpkg.com/tippy.js@6" defer></script>
 
     <!-- Chart.js 3.5.1 with date-fns adapter -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.js" defer></script>
@@ -48,7 +50,7 @@
                         <td>{{ solve.challenge.category }}</td>
                         <td>{{ solve.challenge.difficulty }}</td>
                         <td>{{ solve.challenge.points }}</td>
-                        <td>{{ solve.time_ago }}</td>
+                        <td><time datetime="{{ solve.time.isoformat() }}">{{ solve.time_ago }}</time></td>
                     </tr>
                     {% endfor %}
                 </tbody>
