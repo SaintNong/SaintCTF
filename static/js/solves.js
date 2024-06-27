@@ -7,3 +7,4 @@ tippy("[title]", {
     delay: [250, null],
     placement: 'right',
 });
+absoluteTimeTooltip("time");
