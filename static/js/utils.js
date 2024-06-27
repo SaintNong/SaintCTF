@@ -117,6 +117,23 @@ function isDark(hex) {
     return luminance < 0.3;
 }
 
+const fmt = new Intl.DateTimeFormat(undefined, {
+    dateStyle: "long",
+    timeStyle: "medium"
+});
+
+// Show absolute time in tooltip
+function absoluteTimeTooltip(o) {
+    tippy(o, {
+        content(reference) {
+            const date = new Date(reference.getAttribute("datetime"));
+            return fmt.format(date);
+        },
+        delay: [250, null],
+        placement: 'top',
+    });
+}
+
 $(document).ready(function () {
     // Periodically update relative times
     setInterval(function () {
