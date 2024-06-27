@@ -92,6 +92,7 @@ class ContainerManager:
 
             if not containers:
                 port = {container_data["port"]: container_data["port"]}
+                self.app.logger.info(f"{challenge_id}: Starting container")
                 container = client.containers.run(
                     challenge_id,
                     auto_remove=True,
@@ -100,20 +101,20 @@ class ContainerManager:
                     labels=["CTF", challenge_id],
                 )
                 self.app.logger.info(
-                    f'Started container for challenge "{challenge_id}" with ID of "{container.name}"'
+                    f"{challenge_id}: Started container '{container.name}'"
                 )
             else:
                 for container in containers:
                     self.app.logger.info(
-                        f'Container already running for "{challenge_id}" with ID of "{container.name}"'
+                        f"{challenge_id}: Container already running ({container.name})"
                     )
 
         # Error handling
         except docker.errors.ImageNotFound:
-            self.app.logger.info(f"Dockerfile for {challenge_id} is missing")
+            self.app.logger.info(f"{challenge_id}: Dockerfile is missing")
         except docker.errors.APIError as e:
             self.app.logger.info(
-                f"Docker API encountered an error while starting {challenge_id}"
+                f"{challenge_id}: Docker API encountered an error while starting"
             )
             raise e
 
@@ -126,7 +127,7 @@ class ContainerManager:
                 labels = list(container.labels.keys())
                 container.stop()
                 self.app.logger.info(
-                    f'Stopped container for "{labels[1]}" of ID "{container.name}" '
+                    f"{labels[1]}: Stopped container ({container.name})"
                 )
             except docker.errors.APIError as e:
                 # Due to Flask's debug mode, this method may be called twice
@@ -189,9 +190,7 @@ class ChallengeManager:
             # Add challenge downloadable files if applicable
             challenge_data["files"] = []
             if os.path.exists(downloads_dir):
-                self.app.logger.info(
-                    f'Creating downloads for challenge "{challenge_id}"'
-                )
+                self.app.logger.info(f"{challenge_id}: Creating downloads")
                 for entry in os.scandir(downloads_dir):
                     # Skip non-files (i.e. folders)
                     if not entry.is_file():
@@ -215,9 +214,7 @@ class ChallengeManager:
                 challenge_data["container"] = container_data
                 parent = container_data.get("parent")
                 if parent:
-                    self.app.logger.info(
-                        f"Created child challenge for '{challenge_id}' parented to '{parent}'"
-                    )
+                    self.app.logger.info(f"{challenge_id}: Parented to '{parent}'")
 
                     # Store challenge relation in dictionary
                     related_challenges[parent].append(challenge_id)
@@ -227,7 +224,7 @@ class ChallengeManager:
                     )
                 else:
                     raise FileNotFoundError(
-                        f"No container folder found for '{challenge_id}', but container.toml was defined"
+                        f"{challenge_id}: No container folder found, but container.toml was defined"
                     )
 
             # Add the challenge data
