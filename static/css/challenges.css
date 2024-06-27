@@ -135,11 +135,11 @@ svg.feather-link:hover {
     border-left-color: #339900;
 }
 
-#challenge-list .challenge[data-solved] h2 > span {
+#challenge-list .challenge[data-solved] h2 > span, .related-solved::after {
     color: darkgrey;
 }
 
-#challenge-list .challenge[data-solved] h2 > span::after {
+#challenge-list .challenge[data-solved] h2 > span::after, .related-solved::after {
     content: ' (Solved)';
 }
 

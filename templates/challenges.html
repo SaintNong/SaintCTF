@@ -1,3 +1,8 @@
+{% macro challenge_solved(id) -%}
+    {% if solves[id]|map(attribute='user.username')|select('eq', current_user.username)|list %}
+        {{ caller() }}
+    {% endif %}
+{%- endmacro %}
 {% extends "base.html" %}
 {% block title %}Challenges{% endblock %}
 
@@ -72,9 +77,9 @@
             <article class="card challenge" id="{{ id | challenge_anchor_id }}"
                      data-category="{{ challenge.category }}"
                      data-difficulty="{{ challenge.difficulty }}"
-                     {% if solves[id]|map(attribute='user.username')|select('eq', current_user.username)|list %}
+                     {% call challenge_solved(id) %}
                          data-solved style="display: none;"
-                     {% endif %}
+                     {% endcall %}
                  >
                 <!-- Challenge info -->
                 <header>
@@ -127,7 +132,11 @@
                         <h3>Related</h3>
                         <ul>
                             {% for related_id in challenge.container.related %}
-                                <li><a href="#{{ related_id | challenge_anchor_id }}">{{ challenges[related_id].name }}</a></li>
+                                <li><a href="#{{ related_id | challenge_anchor_id }}"
+                                        {% call challenge_solved(related_id) %}
+                                            class="related-solved"
+                                        {% endcall %}
+                                        >{{ challenges[related_id].name }}</a></li>
                             {% endfor %}
                         </ul>
                     </div>
