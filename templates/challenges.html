@@ -18,6 +18,7 @@
     <script src="https://unpkg.com/@popperjs/core@2" defer></script>
     <script src="https://unpkg.com/tippy.js@6" defer></script>
 
+    <script src="{{ url_for('static', filename='js/utils.js') }}" defer></script>
     <script src="{{ url_for('static', filename='js/challenges.js') }}" defer></script>
 {% endblock %}
 
@@ -162,7 +163,7 @@
                                         {% endif %}
                                         >
                                         <td>{{solve.user.username}}</td>
-                                        <td>{{solve.time | time_ago}}</td>
+                                        <td><time datetime="{{ solve.time.isoformat() }}">{{solve.time | time_ago}}</time></td>
                                     </tr>
                                 {% endfor %}
                             </table>

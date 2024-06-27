@@ -148,3 +148,5 @@ tippy("[title]", {
     delay: [250, null],
     placement: 'top'
 });
+
+absoluteTimeTooltip("time");
