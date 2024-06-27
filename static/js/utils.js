@@ -122,6 +122,19 @@ const fmt = new Intl.DateTimeFormat(undefined, {
     timeStyle: "medium"
 });
 
+// Show tooltip for elements with `title` attribute
+function titleTooltip(placement) {
+    tippy("[title]", {
+        content(reference) {
+            const title = reference.getAttribute('title');
+            reference.removeAttribute('title');
+            return title;
+        },
+        delay: [250, null],
+        placement: placement
+    });
+}
+
 // Show absolute time in tooltip
 function absoluteTimeTooltip(o) {
     tippy(o, {

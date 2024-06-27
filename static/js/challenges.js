@@ -139,14 +139,5 @@ $(document).ready(function () {
 
 window.addEventListener("hashchange", checkHash);
 
-tippy("[title]", {
-    content(reference) {
-        const title = reference.getAttribute('title');
-        reference.removeAttribute('title');
-        return title;
-    },
-    delay: [250, null],
-    placement: 'top'
-});
-
+titleTooltip('top'); // filter tags
 absoluteTimeTooltip("time");
