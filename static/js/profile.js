@@ -1,4 +1,5 @@
 absoluteTimeTooltip("time");
+titleTooltip('right'); // first blood
 
 // Prepare data for the score chart
 const username = document.currentScript.dataset.username;

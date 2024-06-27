@@ -270,13 +270,14 @@ class ChallengeManager:
         db.session.commit()
 
     # Gets the all challenges the user has solved, and how long ago they solved it
-    def get_user_solved_challenges(self, solves):
+    def get_user_solved_challenges(self, solves, first_blood):
         return [
             {
                 "time": solve.time,
                 "challenge": self.challenges[solve.challenge_id],
                 "challenge_id": solve.challenge_id,
                 "time_ago": time_ago(solve.time),
+                "first_blood": solve.id in first_blood,
             }
             for solve in solves
         ]

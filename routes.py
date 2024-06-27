@@ -290,7 +290,7 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager, csrf):
         score = challenge_manager.get_total_points(solves)
 
         # For solve table
-        solves = challenge_manager.get_user_solved_challenges(solves)
+        solves = challenge_manager.get_user_solved_challenges(solves, first_blood)
 
         # For graph
         user_graph_datapoints = challenge_manager.get_user_profile_graph(
