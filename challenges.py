@@ -290,7 +290,7 @@ class ChallengeManager:
             {
                 "id": user.id,
                 "username": user.username,
-                "score": self.get_total_points(user.solve),
+                "score": self.get_total_points(user.solves),
             }
             for user in db.session.scalars(
                 db.select(User).options(db.load_only(User.id, User.username))

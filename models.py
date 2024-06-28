@@ -13,7 +13,7 @@ class User(db.Model, UserMixin):
     username: Mapped[str] = db.mapped_column(unique=True)
     password: Mapped[str]
 
-    solve: Mapped[List["Solve"]] = db.relationship(back_populates="user")
+    solves: Mapped[List["Solve"]] = db.relationship(back_populates="user")
 
     def is_active(self):
         return True
@@ -33,7 +33,7 @@ class Solve(db.Model):
         default=datetime.now
     )  # Who cares about UTC, this isn't a global CTF
 
-    user: Mapped["User"] = db.relationship(back_populates="solve")
+    user: Mapped["User"] = db.relationship(back_populates="solves")
 
     def __repr__(self):
         return f"<Solve user={self.user.username} challenge_id={self.challenge_id} time={self.time}>"
