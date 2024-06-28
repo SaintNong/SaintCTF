@@ -1,5 +1,7 @@
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import Mapped
+from typing import List
 from datetime import datetime
 
 db = SQLAlchemy()
@@ -7,9 +9,11 @@ db = SQLAlchemy()
 
 # Why the usage of `id` is allowable: https://stackoverflow.com/a/76108267
 class User(db.Model, UserMixin):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String, unique=True, nullable=False)
-    password = db.Column(db.String, nullable=False)
+    id: Mapped[int] = db.mapped_column(primary_key=True)
+    username: Mapped[str] = db.mapped_column(unique=True)
+    password: Mapped[str]
+
+    solve: Mapped[List["Solve"]] = db.relationship(back_populates="user")
 
     def is_active(self):
         return True
@@ -22,14 +26,14 @@ class User(db.Model, UserMixin):
 
 
 class Solve(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
-    challenge_id = db.Column(db.String, nullable=False)
-    time = db.Column(
-        db.DateTime, default=datetime.now
+    id: Mapped[int] = db.mapped_column(primary_key=True)
+    user_id: Mapped[int] = db.mapped_column(db.ForeignKey("user.id"))
+    challenge_id: Mapped[str]
+    time: Mapped[datetime] = db.mapped_column(
+        default=datetime.now
     )  # Who cares about UTC, this isn't a global CTF
 
-    user = db.relationship("User", backref=db.backref("solve", lazy=True))
+    user: Mapped["User"] = db.relationship(back_populates="solve")
 
     def __repr__(self):
         return f"<Solve user={self.user.username} challenge_id={self.challenge_id} time={self.time}>"
