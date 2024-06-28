@@ -375,11 +375,7 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager, csrf):
             STATIC_DIRECTORY, "images/favicon.ico", mimetype="image/vnd.microsoft.icon"
         )
 
-    # === Robots challenge ===
+    # Robots
     @app.route("/robots.txt")
     def robots():
         return send_from_directory(STATIC_DIRECTORY, "robots.txt")
-
-    @app.route("/owo_secret.html")
-    def owo_secret():
-        return send_from_directory(STATIC_DIRECTORY, "owo_secret.html")
