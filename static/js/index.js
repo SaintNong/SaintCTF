@@ -25,9 +25,17 @@ function tagClickHandler(e) {
     const tag = $(e.currentTarget);
     const selected = tag.attr('data-selected') !== undefined;
 
+    // Like a normal title tooltip, but only triggered manually
+    const t = tippy(e.currentTarget, {
+        delay: [250, null],
+        placement: "top",
+        trigger: "manual"
+    });
+
     if (selected) {
         tag.attr('data-selected', null);
     } else {
+        t.show();
         tag.attr('data-selected', true);
     }
 }
