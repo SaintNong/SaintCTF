@@ -3,6 +3,7 @@ import importlib.util
 STATIC_DIRECTORY = "static"
 CHALLENGES_DIRECTORY = "challenges"
 CONFIG_FILE = "config.toml"
+WORDLIST_FILE = "wordlist.txt"
 
 SECRET_KEY_FILE = "secret.txt"
 

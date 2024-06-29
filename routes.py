@@ -17,7 +17,7 @@ from datetime import timedelta
 import itertools
 import re
 
-from sqlalchemy import event, select
+from sqlalchemy import event, false, select
 import json
 
 from sse import SSEQueue
@@ -81,7 +81,7 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager, csrf):
                     map(lambda x: x["points"], challenge_manager.challenges.values())
                 ),
             },
-            "players": db.session.scalar(db.select(db.func.count(User.id))),
+            "players": db.session.scalar(db.select(db.func.count(User.id)).filter(User.admin == False)),
         }
         return render_template("index.html", user=current_user, stats=statistics)
 
@@ -219,7 +219,7 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager, csrf):
             user = User()
             user.username = username
             user.password = hashed_password
-            user.score = 0
+            user.admin = False
 
             # Add user to database
             db.session.add(user)
@@ -279,6 +279,11 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager, csrf):
     # Shows the profile of specific user with uid
     @app.route("/profile/<int:user_id>")
     def profile(user_id):
+        if db.session.query(User).filter(User.id == user_id).filter(User.admin == True).first():
+            admin = True
+        else:
+            admin = False
+
         # Query database for user
         displayed_user = db.session.query(User).filter(User.id == user_id).first()
 
@@ -314,6 +319,7 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager, csrf):
             solves=solves,
             timedelta=timedelta,
             rank=rank,
+            admin=admin,
         )
 
     # ==== API ====
