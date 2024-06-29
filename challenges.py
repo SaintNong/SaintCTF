@@ -10,6 +10,8 @@ from models import Solve, User, db
 from constants import CHALLENGES_DIRECTORY, DIFFICULTY_MAPPING, HAS_DOCKER
 
 if HAS_DOCKER:
+    from multiprocessing import Process
+    import logging
     import docker
 
 
@@ -60,6 +62,7 @@ class ContainerManager:
     def __init__(self, app):
         self.client = docker.from_env()
         self.app = app
+        self.processes = []
         self.app.logger.info("Container manager initialised")
 
         # Stop containers when program is closed
@@ -72,54 +75,88 @@ class ContainerManager:
         self.clean_up_containers()
         sys.exit()
 
-    def run_container(self, container_data, container_dir, challenge_id):
-        client = self.client
-
-        self.app.logger.info(f"{challenge_id}: Building container")
-        # Try creating the container
+    @staticmethod
+    def _run_container(
+        logging_level, logger_fmt, challenge_id, container_dir, container_data
+    ):
         try:
-            # Build container
-            self.client.images.build(tag=challenge_id, path=container_dir)
+            # As this is a separate process, we need to reinitialise the logger
+            # to match the server's logger
+            logger = logging.getLogger(__name__)
+            logger.setLevel(logging_level)
+            logging.basicConfig(stream=sys.stdout, format=logger_fmt)
 
-        except docker.errors.APIError as e:
-            self.app.logger.info(f"Docker API encountered an error while building")
-            raise e
+            client = docker.from_env()
+            logger.info(f"{challenge_id}: Building container")
+            # Try creating the container
+            try:
+                # Build container
+                client.images.build(tag=challenge_id, path=container_dir)
 
-        try:
-            # Check if the container we need is already running, if not, start it
-            containers = self.client.containers.list(
-                filters={"label": ["CTF", challenge_id]}
-            )
+            except docker.errors.APIError as e:
+                self.app.logger.info(f"Docker API encountered an error while building")
+                raise e
 
-            if not containers:
-                port = {container_data["port"]: container_data["port"]}
-                self.app.logger.info(f"{challenge_id}: Starting container")
-                container = client.containers.run(
-                    challenge_id,
-                    auto_remove=True,
-                    detach=True,
-                    ports=port,
-                    labels=["CTF", challenge_id],
+            try:
+                # Check if the container we need is already running, if not, start it
+                containers = client.containers.list(
+                    filters={"label": ["CTF", challenge_id]}
                 )
-                self.app.logger.info(
-                    f"{challenge_id}: Started container '{container.name}'"
-                )
-            else:
-                for container in containers:
-                    self.app.logger.info(
-                        f"{challenge_id}: Container already running ({container.name})"
+
+                if not containers:
+                    port = {container_data["port"]: container_data["port"]}
+                    logger.info(f"{challenge_id}: Starting container")
+                    container = client.containers.run(
+                        challenge_id,
+                        auto_remove=True,
+                        detach=True,
+                        ports=port,
+                        labels=["CTF", challenge_id],
                     )
+                    logger.info(f"{challenge_id}: Started container '{container.name}'")
+                else:
+                    for container in containers:
+                        logger.info(
+                            f"{challenge_id}: Container already running ({container.name})"
+                        )
 
-        # Error handling
-        except docker.errors.ImageNotFound:
-            self.app.logger.info(f"{challenge_id}: Dockerfile is missing")
-        except docker.errors.APIError as e:
-            self.app.logger.info(
-                f"{challenge_id}: Docker API encountered an error while starting"
-            )
-            raise e
+            # Error handling
+            except docker.errors.ImageNotFound:
+                logger.info(f"{challenge_id}: Dockerfile is missing")
+            except docker.errors.APIError as e:
+                logger.info(
+                    f"{challenge_id}: Docker API encountered an error while starting"
+                )
+                raise e
+        except KeyboardInterrupt:
+            logger.info(f"{challenge_id}: Cancelled!")
+
+    def run_container(self, container_data, container_dir, challenge_id):
+        # We start a separate process to build and run each container, as these
+        # operations can take extensive amounts of time
+        process = Process(
+            target=ContainerManager._run_container,
+            args=(
+                self.app.logger.level,
+                self.app.logger.handlers[
+                    0
+                ].formatter._fmt,  # https://stackoverflow.com/a/38413697
+                challenge_id,
+                container_dir,
+                container_data,
+            ),
+            name=challenge_id,
+        )
+        process.start()
+        self.processes.append(process)
 
     def clean_up_containers(self):
+        self.app.logger.info("Stopping in-progress container operations")
+        for process in self.processes:
+            if process.is_alive():
+                self.app.logger.info(f"{process.name}: Stopping container process")
+                process.terminate()
+
         # Stops all containers - called on program exit and when starting
         self.app.logger.info("Stopping containers")
         # List all containers started by the CTF, and kill them
