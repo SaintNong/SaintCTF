@@ -132,23 +132,28 @@ class ContainerManager:
             logger.info(f"{challenge_id}: Cancelled!")
 
     def run_container(self, container_data, container_dir, challenge_id):
-        # We start a separate process to build and run each container, as these
-        # operations can take extensive amounts of time
-        process = Process(
-            target=ContainerManager._run_container,
-            args=(
-                self.app.logger.level,
-                self.app.logger.handlers[
-                    0
-                ].formatter._fmt,  # https://stackoverflow.com/a/38413697
-                challenge_id,
-                container_dir,
-                container_data,
-            ),
-            name=challenge_id,
-        )
-        process.start()
-        self.processes.append(process)
+        # We only run a container process on first startup to prevent race
+        # conditions, that is, never during restarts in debug mode.
+        # https://stackoverflow.com/a/9476701
+        if os.environ.get("WERKZEUG_RUN_MAIN") != "true":
+            # We start a separate process to build and run each container, as these
+            # operations can take extensive amounts of time
+            process = Process(
+                target=ContainerManager._run_container,
+                args=(
+                    self.app.logger.level,
+                    self.app.logger.handlers[
+                        0
+                    ].formatter._fmt,  # https://stackoverflow.com/a/38413697
+                    challenge_id,
+                    container_dir,
+                    container_data,
+                ),
+                name=challenge_id,
+            )
+            process.daemon = True
+            process.start()
+            self.processes.append(process)
 
     def clean_up_containers(self):
         self.app.logger.info("Stopping in-progress container operations")
