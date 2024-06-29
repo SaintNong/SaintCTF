@@ -22,10 +22,15 @@
 {% block body %}
     <section id="user-profile-card">
         <h2 id="username-heading">{{ displayed_user.username }}</h2>
+        {% if not admin %}
         <h2>Rank {{ rank }}</h2>
         <h2>{{ score }} Points</h2>
+        {% else %}
+        <h2>This user is an admin</h2>
+        {% endif %}
     </section>
 
+    {% if not admin %}
     <div id="chart-container">
         <canvas id="score-history"></canvas>
     </div>
@@ -61,4 +66,5 @@
             <p>No solves yet :(</p>
         {% endif %}
     </section>
+    {% endif %}
 {% endblock %}
