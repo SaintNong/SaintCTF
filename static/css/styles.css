@@ -168,3 +168,8 @@ div.link-row {
     gap: 0.2em;
     padding-bottom: var(--spacing);
 }
+
+/* Chart pages */
+button.reset-zoom {
+    float: right;
+}

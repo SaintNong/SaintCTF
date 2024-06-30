@@ -60,6 +60,8 @@ $(document).ready(function () {
     });
 });
 
+let resetChartZoom;
+
 $(document).ready(function () {
     const ctx = document.getElementById('leaderboard-chart').getContext('2d');
     let leaderboardChart;
@@ -113,6 +115,8 @@ $(document).ready(function () {
                 },
                 options: getChartOptions()
             });
+
+            resetChartZoom = leaderboardChart.resetZoom;
         }
     }
 });
