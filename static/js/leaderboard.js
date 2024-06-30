@@ -61,6 +61,7 @@ $(document).ready(function () {
 });
 
 let resetChartZoom;
+let fullscreenChart;
 
 $(document).ready(function () {
     const ctx = document.getElementById('leaderboard-chart').getContext('2d');
@@ -117,6 +118,9 @@ $(document).ready(function () {
             });
 
             resetChartZoom = leaderboardChart.resetZoom;
+            fullscreenChart = () => {
+                document.getElementById("leaderboard-chart-container").requestFullscreen();
+            };
         }
     }
 });
