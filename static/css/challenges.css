@@ -52,13 +52,15 @@ body > main {
     opacity: 1;
 }
 
-svg.feather-link {
-    color: grey;
-    transition: color 0.3s ease;
+.challenge > header svg {
+    width: 0.8em;
+    height: 0.8em;
+    fill: grey;
+    transition: fill 0.3s ease;
 }
 
-svg.feather-link:hover {
-    color: lightgrey;
+.challenge > header svg:hover {
+    fill: lightgrey;
 }
 
 .challenge header {
