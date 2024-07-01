@@ -36,7 +36,10 @@
             {# hardcoded width and height prevents resizing when SVGs are loaded #}
             {# SVGs from https://carbondesignsystem.com/elements/icons/library #}
             <button onclick="resetChartZoom()" title="Reset zoom"><object data="{{ url_for('static', filename='images/zoom--fit.svg') }}" type="image/svg+xml" width="32" height="32"></object></button>
-            <button onclick="fullscreenChart()" title="Fullscreen chart"><object data="{{ url_for('static', filename='images/maximize.svg') }}" type="image/svg+xml" width="32" height="32"></object></button>
+            <button onclick="fullscreenChart()" title="Fullscreen chart">
+                <object id="maximize-icon" data="{{ url_for('static', filename='images/maximize.svg') }}" type="image/svg+xml" width="32" height="32"></object>
+                <object id="minimize-icon" data="{{ url_for('static', filename='images/minimize.svg') }}" type="image/svg+xml" width="32" height="32" style="display: none;"></object>
+            </button>
         </div>
         <canvas id="leaderboard-chart"></canvas>
     </div>

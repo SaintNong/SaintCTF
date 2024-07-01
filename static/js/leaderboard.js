@@ -120,8 +120,12 @@ $(document).ready(function () {
             resetChartZoom = leaderboardChart.resetZoom;
             fullscreenChart = () => {
                 if (document.fullscreenElement === null) {
+                    $("#maximize-icon").hide();
+                    $("#minimize-icon").show();
                     document.getElementById("chart-container").requestFullscreen();
                 } else {
+                    $("#minimize-icon").hide();
+                    $("#maximize-icon").show();
                     document.exitFullscreen();
                 }
             };
