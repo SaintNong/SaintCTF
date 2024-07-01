@@ -168,3 +168,41 @@ div.link-row {
     gap: 0.2em;
     padding-bottom: var(--spacing);
 }
+
+/* Chart pages */
+div.chart-toolbar {
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    opacity: 0.1;
+    transition: opacity 0.3s ease;
+}
+
+div.chart-toolbar:hover {
+    opacity: 1;
+}
+
+div.chart-toolbar button {
+    border: 2px solid var(--form-field-border-color);
+    background-color: var(--bg-color);
+}
+
+div.chart-toolbar button svg {
+    width: 2em;
+    height: 2em;
+    fill: grey;
+    transition: fill 0.3s ease;
+}
+
+div.chart-toolbar button:hover svg {
+    fill: lightgrey;
+}
+
+div#chart-container {
+    height: 50vh;
+    width: 90vw;
+    max-width: 100%;
+    margin: 0 auto;
+    position: relative;
+}

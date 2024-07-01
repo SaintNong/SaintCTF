@@ -12,6 +12,8 @@ for (const datapoint of datapoints) {
     points.push(datapoint.points);
 }
 
+let resetChartZoom;
+
 $(document).ready(function() {
     let userColor = getUserColor(username);
 
@@ -42,4 +44,6 @@ $(document).ready(function() {
             },
         })
     });
+
+    resetChartZoom = chart.resetZoom;
 });

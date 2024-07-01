@@ -55,6 +55,35 @@ function getChartOptions(options) {
                 labels: {
                     color: '#FFFFFF' // White color for legend text
                 }
+            },
+            zoom: {
+                pan: {
+                    enabled: true,
+                    modifierKey: 'shift',
+                },
+                limits: {
+                    x: {
+                        min: 'original',
+                        max: 'original',
+                    },
+                    y: {
+                        min: 'original',
+                        max: 'original',
+                    },
+                },
+                zoom: {
+                    wheel: {
+                        enabled: true,
+                        modifierKey: 'shift',
+                    },
+                    pinch: {
+                        enabled: true,
+                    },
+                    drag: {
+                        enabled: true,
+                    },
+                    mode: 'x'
+                },
             }
         },
         layout: {

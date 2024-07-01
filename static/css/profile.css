@@ -21,10 +21,3 @@ main {
 #username-heading {
     color: var(--purple-1);
 }
-
-#chart-container {
-    height: 50vh;
-    width: 90vw;
-    max-width: 100%;
-    margin: 0 auto;
-}
