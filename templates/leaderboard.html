@@ -33,8 +33,10 @@
     <p>Drag/pinch, or hold shift and use mouse wheel/drag to zoom/pan</p>
     <div id="chart-container">
         <div class="chart-toolbar">
-            <button onclick="resetChartZoom()">Reset Zoom</button>
-            <button onclick="fullscreenChart()">Fullscreen</button>
+            {# hardcoded width and height prevents resizing when SVGs are loaded #}
+            {# SVGs from https://carbondesignsystem.com/elements/icons/library #}
+            <button onclick="resetChartZoom()" title="Reset zoom"><object data="{{ url_for('static', filename='images/zoom--fit.svg') }}" type="image/svg+xml" width="32" height="32"></object></button>
+            <button onclick="fullscreenChart()" title="Fullscreen chart"><object data="{{ url_for('static', filename='images/maximize.svg') }}" type="image/svg+xml" width="32" height="32"></object></button>
         </div>
         <canvas id="leaderboard-chart"></canvas>
     </div>
