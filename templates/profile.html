@@ -1,3 +1,4 @@
+{% import 'icons.html' as icons %}
 {% extends "base.html" %}
 {% block title %}Profile{% endblock %}
 
@@ -33,8 +34,7 @@
 
     <div id="chart-container">
         <div class="chart-toolbar">
-            {# hardcoded width and height prevents resizing when SVGs are loaded #}
-            <button onclick="resetChartZoom()" title="Reset zoom"><object data="{{ url_for('static', filename='images/zoom--fit.svg') }}" type="image/svg+xml" width="32" height="32"></object></button>
+            <button onclick="resetChartZoom()" title="Reset zoom">{{ icons.zoom__fit() }}</button>
         </div>
         <canvas id="score-history"></canvas>
     </div>

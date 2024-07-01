@@ -183,10 +183,6 @@ div.chart-toolbar:hover {
     opacity: 1;
 }
 
-div.chart-toolbar object {
-    pointer-events: none;
-}
-
 div#chart-container {
     height: 50vh;
     width: 90vw;
