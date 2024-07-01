@@ -183,6 +183,20 @@ div.chart-toolbar:hover {
     opacity: 1;
 }
 
+div.chart-toolbar button {
+    border: 2px solid var(--form-field-border-color);
+    background-color: var(--bg-color);
+}
+
+div.chart-toolbar button svg {
+    fill: grey;
+    transition: fill 0.3s ease;
+}
+
+div.chart-toolbar button:hover svg {
+    fill: lightgrey;
+}
+
 div#chart-container {
     height: 50vh;
     width: 90vw;
