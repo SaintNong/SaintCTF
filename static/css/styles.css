@@ -173,3 +173,10 @@ div.link-row {
 button.reset-zoom {
     float: right;
 }
+
+div#chart-container {
+    height: 50vh;
+    width: 90vw;
+    max-width: 100%;
+    margin: 0 auto;
+}

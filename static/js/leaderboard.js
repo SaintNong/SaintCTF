@@ -119,7 +119,7 @@ $(document).ready(function () {
 
             resetChartZoom = leaderboardChart.resetZoom;
             fullscreenChart = () => {
-                document.getElementById("leaderboard-chart-container").requestFullscreen();
+                document.getElementById("chart-container").requestFullscreen();
             };
         }
     }
