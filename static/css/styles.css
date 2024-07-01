@@ -189,6 +189,8 @@ div.chart-toolbar button {
 }
 
 div.chart-toolbar button svg {
+    width: 2em;
+    height: 2em;
     fill: grey;
     transition: fill 0.3s ease;
 }
