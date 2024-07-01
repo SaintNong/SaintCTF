@@ -29,14 +29,16 @@
 
 {% block body %}
     <h2 id="leaderboard-heading">Top 10 scores over time</h2>
-    <div>
-        <p>Drag/pinch, or hold shift and use mouse wheel/drag to zoom/pan</p>
-        <button class="reset-zoom" onclick="resetChartZoom()">Reset Zoom</button>
-        <button class="reset-zoom" onclick="fullscreenChart()">Fullscreen</button>
-    </div>
+
+    <p>Drag/pinch, or hold shift and use mouse wheel/drag to zoom/pan</p>
     <div id="chart-container">
+        <div class="chart-toolbar">
+            <button onclick="resetChartZoom()">Reset Zoom</button>
+            <button onclick="fullscreenChart()">Fullscreen</button>
+        </div>
         <canvas id="leaderboard-chart"></canvas>
     </div>
+
     <div class="dashboard-container">
         <section id="leaderboard-section" class="card dashboard-panel">
             <h2>Leaderboard</h2>

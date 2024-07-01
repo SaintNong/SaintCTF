@@ -28,13 +28,13 @@
         <h2 id="username-heading">{{ displayed_user.username }}</h2>
         <h2>Rank {{ rank }}</h2>
         <h2>{{ score }} Points</h2>
-        <div>
-            <p>Drag/pinch, or hold shift and use mouse wheel/drag to zoom/pan</p>
-            <button class="reset-zoom" onclick="resetChartZoom()">Reset Zoom</button>
-        </div>
+        <p>Drag/pinch, or hold shift and use mouse wheel/drag to zoom/pan</p>
     </section>
 
     <div id="chart-container">
+        <div class="chart-toolbar">
+            <button onclick="resetChartZoom()">Reset Zoom</button>
+        </div>
         <canvas id="score-history"></canvas>
     </div>
 

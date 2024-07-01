@@ -170,8 +170,10 @@ div.link-row {
 }
 
 /* Chart pages */
-button.reset-zoom {
-    float: right;
+div.chart-toolbar {
+    position: absolute;
+    top: 0;
+    right: 0;
 }
 
 div#chart-container {
@@ -179,4 +181,5 @@ div#chart-container {
     width: 90vw;
     max-width: 100%;
     margin: 0 auto;
+    position: relative;
 }
