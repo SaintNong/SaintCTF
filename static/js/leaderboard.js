@@ -3,8 +3,30 @@
 const currentUsername = document.currentScript.dataset.username;
 const leaderboardEvents = new EventSource("leaderboard-events");
 
+// Show a loading toast until SSE has loaded any data
+// https://github.com/sweetalert2/sweetalert2/issues/2508#issuecomment-1263293979 (prevent toast from being dismissed)
+Swal.fire({
+    toast: true,
+    position: 'top-end',
+
+    showConfirmButton: false,
+    showCloseButton: true,
+    customClass: {
+        closeButton: 'toast-hidden',
+    },
+
+    title: "Loading...",
+    didOpen: () => {
+        Swal.showLoading();
+    }
+});
+
 $(document).ready(function () {
     leaderboardEvents.addEventListener("leaderboard", (event) => {
+        if (Swal.isLoading()) {
+            Swal.close(); // Dismiss any loading toasts
+        }
+
         const data = JSON.parse(event.data);
 
         // Nuke the old leaderboard
@@ -32,6 +54,10 @@ $(document).ready(function () {
     });
 
     leaderboardEvents.addEventListener("recentActivity", (event) => {
+        if (Swal.isLoading()) {
+            Swal.close(); // Dismiss any loading toasts
+        }
+
         const data = JSON.parse(event.data);
 
         let recentTable = $("#recent-table");
@@ -68,6 +94,10 @@ $(document).ready(function () {
     let leaderboardChart;
 
     leaderboardEvents.addEventListener("chart", (event) => {
+        if (Swal.isLoading()) {
+            Swal.close(); // Dismiss any loading toasts
+        }
+
         const chartData = formatChartData(JSON.parse(event.data));
         renderChart(chartData);
     });

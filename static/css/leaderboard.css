@@ -51,3 +51,8 @@ main {
 #leaderboard-heading {
     text-align: center;
 }
+
+/* https://github.com/sweetalert2/sweetalert2/issues/2508#issuecomment-1263293979 (prevent toast from being dismissed) */
+.swal2-close.toast-hidden {
+    display: none !important;
+}
