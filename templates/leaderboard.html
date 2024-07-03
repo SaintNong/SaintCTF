@@ -1,4 +1,4 @@
-{% import 'icons.html' as icons %}
+{% import 'charts.html' as charts %}
 {% extends "base.html" %}
 {% block title %}Leaderboard{% endblock %}
 
@@ -32,18 +32,7 @@
 {% block body %}
     <h2 id="leaderboard-heading">Top 10 scores over time</h2>
 
-    <div id="chart-container">
-        <div class="chart-toolbar">
-            {% set options = 'class="chart-help-icon"' %}
-            <button onclick="chartHelpToast('{{ icons.cursor__1(options) | forceescape }}', '{{ icons.touch__1(options) | forceescape }}')" title="Chart help">{{ icons.help() }}</button>
-            <button onclick="resetChartZoom()" title="Reset zoom">{{ icons.zoom__fit() }}</button>
-            <button onclick="fullscreenChart()" title="Fullscreen chart">
-                {{ icons.maximize('id="maximize-icon"') }}
-                {{ icons.minimize('id="minimize-icon" style="display: none;"') }}
-            </button>
-        </div>
-        <canvas id="leaderboard-chart"></canvas>
-    </div>
+    {{ charts.chart("leaderboard-chart", True) }}
 
     <div class="dashboard-container">
         <section id="leaderboard-section" class="card dashboard-panel">

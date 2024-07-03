@@ -1,4 +1,4 @@
-{% import 'icons.html' as icons %}
+{% import 'charts.html' as charts %}
 {% extends "base.html" %}
 {% block title %}Profile{% endblock %}
 
@@ -36,14 +36,7 @@
         <h2>{{ score }} Points</h2>
     </section>
 
-    <div id="chart-container">
-        <div class="chart-toolbar">
-            {% set options = 'class="chart-help-icon"' %}
-            <button onclick="chartHelpToast('{{ icons.cursor__1(options) | forceescape }}', '{{ icons.touch__1(options) | forceescape }}')" title="Chart help">{{ icons.help() }}</button>
-            <button onclick="resetChartZoom()" title="Reset zoom">{{ icons.zoom__fit() }}</button>
-        </div>
-        <canvas id="score-history"></canvas>
-    </div>
+    {{ charts.chart("score-history", False) }}
 
     <section class="card" id="recent-solves">
         <h2>Solves</h2>
