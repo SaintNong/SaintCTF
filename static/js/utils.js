@@ -23,50 +23,44 @@ function time_ago(time) {
     }
 }
 
-function getChartOptions(options) {
-    const defaults = {
-        scales: {
-            x: {
-                type: 'time',
-                ticks: {
-                    color: '#FFFFFF' // White color for ticks
-                },
-            },
-            y: {
-                beginAtZero: true,
-                ticks: {
-                    color: '#FFFFFF', // White color for ticks
-                },
-                grid: {
-                    color: 'rgba(255,255,255,0.1)' // Lighter grid lines against a dark background
-                },
-                title: {
-                    display: true,
-                    text: 'Score',
-                    color: '#FFFFFF' // Ensuring the title is also white
-                }
+function getChartOptions() {
+    /*const traceX = data.flatMap((trace) => trace.x).sort();
+    const traceY = data.flatMap((trace) => trace.y).sort((a, b) => a - b);*/
+    const layout = {
+        paper_bgcolor: '#121212',
+        plot_bgcolor: '#121212',
+        margin: {
+            b: 40,
+            l: 80,
+            r: 80,
+            t: 0,
+        },
+        font: {
+            color: '#FFFFFF'
+        },
+        xaxis: {
+            /*maxallowed: (new Date(traceX[0])).getTime(),
+            minallowed: (new Date(traceX[traceX.length - 1])).getTime(),*/
+            tickcolor: '#FFFFFF',
+            gridcolor: 'rgba(255,255,255,0.1)'
+        },
+        yaxis: {
+            minallowed: 0,
+            /*maxallowed: traceY[traceY.length - 1],*/
+            tickcolor: '#FFFFFF',
+            gridcolor: 'rgba(255,255,255,0.1)',
+            title: {
+                text: 'Score'
             }
         },
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                position: 'top',
-                labels: {
-                    color: '#FFFFFF' // White color for legend text
-                }
-            }
-        },
-        layout: {
-            padding: {
-                x: 20,
-                y: 0
-            }
-        },
-        backgroundColor: '#333333'
-    }
+    };
 
-    return $.extend(true, {}, defaults, options);
+    const config = {
+        responsive: true,
+        scrollZoom: true,
+    };
+
+    return [layout, config];
 }
 
 // Gets a predictable user color for each username

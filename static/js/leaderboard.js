@@ -61,7 +61,6 @@ $(document).ready(function () {
 });
 
 $(document).ready(function () {
-    const ctx = document.getElementById('leaderboard-chart').getContext('2d');
     let leaderboardChart;
 
     leaderboardEvents.addEventListener("chart", (event) => {
@@ -70,49 +69,37 @@ $(document).ready(function () {
     });
 
     function formatChartData(rawData) {
-        const datasets = {};
+        const data = {};
         rawData.forEach(item => {
-            if (!datasets[item.user]) {
+            if (!data[item.user]) {
                 let color = getUserColor(item.user);
 
-                datasets[item.user] = {
-                    label: item.user,
-                    data: [],
-                    borderColor: color,
-                    backgroundColor: color,
-                    fill: false, // andrew what this do explain plz
-                    stepped: "before"
+                data[item.user] = {
+                    name: item.user,
+                    x: [],
+                    y: [],
+                    marker: {
+                        color: color,
+                    },
+                    line: {
+                        shape: "hv" // "hold value"
+                    }
                 };
             }
-            datasets[item.user].data.push({
-                x: item.time,
-                y: item.points
-            });
+            data[item.user].x.push(item.time);
+            data[item.user].y.push(item.points);
         });
 
-        return Object.values(datasets);
-    }
-
-
-    function updateChart(newData) {
-        newData.forEach(function(newDataset, i) {
-            $.extend(leaderboardChart.data.datasets[i], newDataset);
-        });
-
-        leaderboardChart.update();
+        return Object.values(data);
     }
 
     function renderChart(data) {
+        let func;
         if (leaderboardChart) {
-            updateChart(data);
+            func = Plotly.react;
         } else {
-            leaderboardChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    datasets: data
-                },
-                options: getChartOptions()
-            });
+            func = Plotly.newPlot;
         }
+        leaderboardChart = func("leaderboard-chart-container", data, ...getChartOptions());
     }
 });

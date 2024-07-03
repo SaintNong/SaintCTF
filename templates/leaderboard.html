@@ -14,10 +14,7 @@
     <script src="https://unpkg.com/tippy.js@6" defer></script>
 
 
-    <!-- Chart.js 3.5.1 with date-fns adapter -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.js" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/date-fns/1.30.1/date_fns.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js" defer></script>
+    <script src="https://cdn.plot.ly/plotly-2.32.0.min.js" charset="utf-8"></script>
 
     <script src="{{ url_for('static', filename='js/utils.js') }}" defer></script>
     <script data-username="{{ user.username }}" src="{{ url_for('static', filename='js/leaderboard.js') }}" defer></script>
@@ -25,9 +22,7 @@
 
 {% block body %}
     <h2 id="leaderboard-heading">Top 10 scores over time</h2>
-    <div id="leaderboard-chart-container">
-        <canvas id="leaderboard-chart"></canvas>
-    </div>
+    <div id="leaderboard-chart-container"></div>
     <div class="dashboard-container">
         <section id="leaderboard-section" class="card dashboard-panel">
             <h2>Leaderboard</h2>

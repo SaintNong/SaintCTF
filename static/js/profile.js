@@ -15,31 +15,15 @@ for (const datapoint of datapoints) {
 $(document).ready(function() {
     let userColor = getUserColor(username);
 
-
-    let ctx = document.getElementById('score-history').getContext('2d');
-    let chart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: times,
-            datasets: [{
-                label: username,
-                data: points,
-                stepped: "before",
-
-                backgroundColor: userColor,
-                borderColor: userColor,
-
-                fill: false,
-            }]
+    let chart = Plotly.newPlot("chart-container", [{
+        name: username,
+        x: times,
+        y: points,
+        marker: {
+            color: userColor
         },
-        options: getChartOptions({
-            plugins: {
-                legend: {
-                    // Disable legend click behaviour
-                    // https://github.com/chartjs/Chart.js/issues/2190#issuecomment-203444324
-                    onClick: (event, legendItem, legend) => {}
-                }
-            },
-        })
-    });
+        line: {
+            shape: "hv" // "hold value"
+        }
+    }], ...getChartOptions());
 });
