@@ -76,5 +76,5 @@ body > main ul {
 
 body > main > footer {
     flex-basis: 100%;
-    background-color: var(--form-field-border-color);
+    background-color: var(--light-bg-color);
 }
