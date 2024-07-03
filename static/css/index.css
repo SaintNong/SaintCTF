@@ -78,3 +78,8 @@ body > main > footer {
     flex-basis: 100%;
     background-color: var(--light-bg-color);
 }
+
+#footer-src-link {
+    position: absolute;
+    right: 1em;
+}
