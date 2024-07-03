@@ -159,6 +159,8 @@ function titleTooltip(placement) {
             reference.removeAttribute('title');
             return title;
         },
+        theme: "dark",
+        arrow: tippy.roundArrow,
         delay: [250, null],
         placement: placement
     });
@@ -171,6 +173,8 @@ function absoluteTimeTooltip(o) {
             const date = new Date(reference.getAttribute("datetime"));
             return fmt.format(date);
         },
+        theme: "dark",
+        arrow: tippy.roundArrow,
         delay: [250, null],
         placement: 'top',
     });

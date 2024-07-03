@@ -159,6 +159,16 @@ ol li::marker {
     border: 2px solid var(--form-field-border-color); /* Darker border for a subtle and elegant look */
 }
 
+.tippy-box[data-theme~='dark'] {
+    background-color: var(--light-bg-color);
+    border: 2px solid var(--form-field-border-color);
+    color: var(--fg-color);
+}
+
+.tippy-box[data-theme~='dark'] > .tippy-svg-arrow {
+    fill: var(--form-field-border-color);
+}
+
 /* Leaderboard & Solves History */
 div.link-row {
     display: flex;
