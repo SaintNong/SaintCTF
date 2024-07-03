@@ -6,6 +6,10 @@
     {{ super() }}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
 
+    <!-- Sweet alert 2 -->
+    <!-- as lazy as normal alerts, better than you could make them yourself -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5/dark.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js" defer></script>
 
     <script src="https://unpkg.com/@popperjs/core@2" defer></script>
     <script src="https://unpkg.com/tippy.js@6" defer></script>
@@ -29,11 +33,12 @@
         <h2 id="username-heading">{{ displayed_user.username }}</h2>
         <h2>Rank {{ rank }}</h2>
         <h2>{{ score }} Points</h2>
-        <p>Drag/pinch, or hold shift and use mouse wheel/drag to zoom/pan</p>
     </section>
 
     <div id="chart-container">
         <div class="chart-toolbar">
+            {% set options = 'class="chart-help-icon"' %}
+            <button onclick="chartHelpToast('{{ icons.cursor__1(options) | forceescape }}', '{{ icons.touch__1(options) | forceescape }}')" title="Chart help">{{ icons.help() }}</button>
             <button onclick="resetChartZoom()" title="Reset zoom">{{ icons.zoom__fit() }}</button>
         </div>
         <canvas id="score-history"></canvas>

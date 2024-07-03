@@ -31,9 +31,10 @@
 {% block body %}
     <h2 id="leaderboard-heading">Top 10 scores over time</h2>
 
-    <p>Drag/pinch, or hold shift and use mouse wheel/drag to zoom/pan</p>
     <div id="chart-container">
         <div class="chart-toolbar">
+            {% set options = 'class="chart-help-icon"' %}
+            <button onclick="chartHelpToast('{{ icons.cursor__1(options) | forceescape }}', '{{ icons.touch__1(options) | forceescape }}')" title="Chart help">{{ icons.help() }}</button>
             <button onclick="resetChartZoom()" title="Reset zoom">{{ icons.zoom__fit() }}</button>
             <button onclick="fullscreenChart()" title="Fullscreen chart">
                 {{ icons.maximize('id="maximize-icon"') }}

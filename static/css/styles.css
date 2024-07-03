@@ -199,6 +199,13 @@ div.chart-toolbar button:hover svg {
     fill: lightgrey;
 }
 
+.chart-help-icon {
+    width: 1em;
+    height: 1em;
+    fill: currentColor;
+    margin-right: 0.5em;
+}
+
 div#chart-container {
     height: 50vh;
     width: 90vw;

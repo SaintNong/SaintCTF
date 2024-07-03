@@ -176,6 +176,29 @@ function absoluteTimeTooltip(o) {
     });
 }
 
+// Show chart toast explaining controls
+function chartHelpToast(cursor_icon, touch_icon) {
+    Swal.fire({
+        toast: true,
+        width: '32em',
+        position: 'top-end',
+
+        showConfirmButton: false,
+        showCloseButton: true,
+        timer: 10000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+        },
+
+        icon: "info",
+        title: "Chart help",
+        html: cursor_icon + "Drag on the chart or hold shift while scrolling to zoom. Drag while holding shift to pan.<br>" +
+            touch_icon + "Pinch to zoom the chart and drag to pan.",
+    });
+}
+
 $(document).ready(function () {
     // Periodically update relative times
     setInterval(function () {
