@@ -1,8 +1,9 @@
 {# SVGs from https://carbondesignsystem.com/elements/icons/library #}
 {# all `id="icon"` attributes replaced with `extra` argument #}
+{# any `<title>` elements are removed #}
 
 {% macro link(extra='') -%}
-<svg {{ extra|safe }} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><defs><style>.cls-1{fill:none;}</style></defs><title>link</title><path d="M29.25,6.76a6,6,0,0,0-8.5,0l1.42,1.42a4,4,0,1,1,5.67,5.67l-8,8a4,4,0,1,1-5.67-5.66l1.41-1.42-1.41-1.42-1.42,1.42a6,6,0,0,0,0,8.5A6,6,0,0,0,17,25a6,6,0,0,0,4.27-1.76l8-8A6,6,0,0,0,29.25,6.76Z"/><path d="M4.19,24.82a4,4,0,0,1,0-5.67l8-8a4,4,0,0,1,5.67,0A3.94,3.94,0,0,1,19,14a4,4,0,0,1-1.17,2.85L15.71,19l1.42,1.42,2.12-2.12a6,6,0,0,0-8.51-8.51l-8,8a6,6,0,0,0,0,8.51A6,6,0,0,0,7,28a6.07,6.07,0,0,0,4.28-1.76L9.86,24.82A4,4,0,0,1,4.19,24.82Z"/><rect id="_Transparent_Rectangle_" data-name="&lt;Transparent Rectangle&gt;" class="cls-1" width="32" height="32"/></svg>
+<svg {{ extra|safe }} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><defs><style>.cls-1{fill:none;}</style></defs><path d="M29.25,6.76a6,6,0,0,0-8.5,0l1.42,1.42a4,4,0,1,1,5.67,5.67l-8,8a4,4,0,1,1-5.67-5.66l1.41-1.42-1.41-1.42-1.42,1.42a6,6,0,0,0,0,8.5A6,6,0,0,0,17,25a6,6,0,0,0,4.27-1.76l8-8A6,6,0,0,0,29.25,6.76Z"/><path d="M4.19,24.82a4,4,0,0,1,0-5.67l8-8a4,4,0,0,1,5.67,0A3.94,3.94,0,0,1,19,14a4,4,0,0,1-1.17,2.85L15.71,19l1.42,1.42,2.12-2.12a6,6,0,0,0-8.51-8.51l-8,8a6,6,0,0,0,0,8.51A6,6,0,0,0,7,28a6.07,6.07,0,0,0,4.28-1.76L9.86,24.82A4,4,0,0,1,4.19,24.82Z"/><rect id="_Transparent_Rectangle_" data-name="&lt;Transparent Rectangle&gt;" class="cls-1" width="32" height="32"/></svg>
 {%- endmacro %}
 
 {% macro maximize(extra='') -%}
@@ -54,13 +55,13 @@
 {%- endmacro %}
 
 {% macro cursor__1(extra='') -%}
-<svg {{ extra|safe }} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><defs><style>.cls-1{fill:none;}</style></defs><title>cursor--1</title><path d="M23,28a1,1,0,0,1-.71-.29l-6.13-6.14-3.33,5a1,1,0,0,1-1,.44,1,1,0,0,1-.81-.7l-6-20A1,1,0,0,1,6.29,5l20,6a1,1,0,0,1,.7.81,1,1,0,0,1-.44,1l-5,3.33,6.14,6.13a1,1,0,0,1,0,1.42l-4,4A1,1,0,0,1,23,28Zm0-2.41L25.59,23l-7.16-7.15,5.25-3.5L7.49,7.49l4.86,16.19,3.5-5.25Z"/><rect id="_Transparent_Rectangle_" data-name="&lt;Transparent Rectangle&gt;" class="cls-1" width="32" height="32"/></svg>
+<svg {{ extra|safe }} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><defs><style>.cls-1{fill:none;}</style></defs><path d="M23,28a1,1,0,0,1-.71-.29l-6.13-6.14-3.33,5a1,1,0,0,1-1,.44,1,1,0,0,1-.81-.7l-6-20A1,1,0,0,1,6.29,5l20,6a1,1,0,0,1,.7.81,1,1,0,0,1-.44,1l-5,3.33,6.14,6.13a1,1,0,0,1,0,1.42l-4,4A1,1,0,0,1,23,28Zm0-2.41L25.59,23l-7.16-7.15,5.25-3.5L7.49,7.49l4.86,16.19,3.5-5.25Z"/><rect id="_Transparent_Rectangle_" data-name="&lt;Transparent Rectangle&gt;" class="cls-1" width="32" height="32"/></svg>
 {%- endmacro %}
 
 {% macro touch__1(extra='') -%}
-<svg {{ extra|safe }} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><defs><style>.cls-1{fill:none;}</style></defs><title>touch-1</title><path d="M20,8H18A5,5,0,0,0,8,8H6A7,7,0,0,1,20,8Z"/><path d="M25,15a2.94,2.94,0,0,0-1.47.4A3,3,0,0,0,21,14a2.94,2.94,0,0,0-1.47.4A3,3,0,0,0,16,13.18V8h0a3,3,0,0,0-6,0V19.1L7.77,17.58h0A2.93,2.93,0,0,0,6,17a3,3,0,0,0-2.12,5.13l8,7.3A6.16,6.16,0,0,0,16,31h5a7,7,0,0,0,7-7V18A3,3,0,0,0,25,15Zm1,9a5,5,0,0,1-5,5H16a4.17,4.17,0,0,1-2.76-1L5.29,20.7A1,1,0,0,1,5,20a1,1,0,0,1,1.6-.8L12,22.9V8a1,1,0,0,1,2,0h0V19h2V16a1,1,0,0,1,2,0v3h2V17a1,1,0,0,1,2,0v2h2V18a1,1,0,0,1,2,0Z"/><rect id="_Transparent_Rectangle_" data-name="&lt;Transparent Rectangle&gt;" class="cls-1" width="32" height="32"/></svg>
+<svg {{ extra|safe }} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><defs><style>.cls-1{fill:none;}</style></defs><path d="M20,8H18A5,5,0,0,0,8,8H6A7,7,0,0,1,20,8Z"/><path d="M25,15a2.94,2.94,0,0,0-1.47.4A3,3,0,0,0,21,14a2.94,2.94,0,0,0-1.47.4A3,3,0,0,0,16,13.18V8h0a3,3,0,0,0-6,0V19.1L7.77,17.58h0A2.93,2.93,0,0,0,6,17a3,3,0,0,0-2.12,5.13l8,7.3A6.16,6.16,0,0,0,16,31h5a7,7,0,0,0,7-7V18A3,3,0,0,0,25,15Zm1,9a5,5,0,0,1-5,5H16a4.17,4.17,0,0,1-2.76-1L5.29,20.7A1,1,0,0,1,5,20a1,1,0,0,1,1.6-.8L12,22.9V8a1,1,0,0,1,2,0h0V19h2V16a1,1,0,0,1,2,0v3h2V17a1,1,0,0,1,2,0v2h2V18a1,1,0,0,1,2,0Z"/><rect id="_Transparent_Rectangle_" data-name="&lt;Transparent Rectangle&gt;" class="cls-1" width="32" height="32"/></svg>
 {%- endmacro %}
 
 {% macro help(extra='') -%}
-<svg {{ extra|safe }} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><defs><style>.cls-1{fill:none;}</style></defs><title>help</title><path d="M16,2A14,14,0,1,0,30,16,14,14,0,0,0,16,2Zm0,26A12,12,0,1,1,28,16,12,12,0,0,1,16,28Z"/><circle cx="16" cy="23.5" r="1.5"/><path d="M17,8H15.5A4.49,4.49,0,0,0,11,12.5V13h2v-.5A2.5,2.5,0,0,1,15.5,10H17a2.5,2.5,0,0,1,0,5H15v4.5h2V17a4.5,4.5,0,0,0,0-9Z"/><rect class="cls-1" width="32" height="32"/></svg>
+<svg {{ extra|safe }} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><defs><style>.cls-1{fill:none;}</style></defs><path d="M16,2A14,14,0,1,0,30,16,14,14,0,0,0,16,2Zm0,26A12,12,0,1,1,28,16,12,12,0,0,1,16,28Z"/><circle cx="16" cy="23.5" r="1.5"/><path d="M17,8H15.5A4.49,4.49,0,0,0,11,12.5V13h2v-.5A2.5,2.5,0,0,1,15.5,10H17a2.5,2.5,0,0,1,0,5H15v4.5h2V17a4.5,4.5,0,0,0,0-9Z"/><rect class="cls-1" width="32" height="32"/></svg>
 {%- endmacro %}
