@@ -2,7 +2,7 @@
 {% macro chart(id, has_fullscreen) -%}
     <div id="chart-container">
         <div class="chart-toolbar">
-            {% set options = 'class="chart-help-icon"' %}
+            {%- set options = 'class="chart-help-icon"' -%}
             <button onclick="chartHelpToast('{{ icons.cursor__1(options) | forceescape }}', '{{ icons.touch__1(options) | forceescape }}')" title="Chart help">{{ icons.help() }}</button>
             <button onclick="resetChartZoom()" title="Reset zoom">{{ icons.zoom__fit() }}</button>
             {% if has_fullscreen -%}
