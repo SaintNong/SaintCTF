@@ -1,0 +1,26 @@
+{% macro head() -%}
+    {% if kwargs.sweetalert2 -%}
+        <!-- SweetAlert2 -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5/dark.css"/>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js" defer></script>
+        <!-- as lazy as normal alerts, better than you could make them yourself -->
+    {%- endif %}
+
+    {% if kwargs.tippy -%}
+        <!-- Tippy.js -->
+        <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/dist/svg-arrow.css" />
+        <script src="https://unpkg.com/@popperjs/core@2" defer></script>
+        <script src="https://unpkg.com/tippy.js@6" defer></script>
+    {%- endif %}
+
+    {% if kwargs.chart_js -%}
+        <!-- Chart.js 3.5.1 with date-fns adapter -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/date-fns/1.30.1/date_fns.js" defer></script>
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js" defer></script>
+
+        <!-- chartjs-plugin-zoom 2.0.1 with Hammer.js 2.0.8 (gesture recognition) -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js" integrity="sha512-UXumZrZNiOwnTcZSHLOfcTs0aos2MzBWHXOHOuB0J/R44QB0dwY5JgfbvljXcklVf65Gc4El6RjZ+lnwd2az2g==" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-zoom/2.0.1/chartjs-plugin-zoom.min.js" integrity="sha512-wUYbRPLV5zs6IqvWd88HIqZU/b8TBx+I8LEioQ/UC0t5EMCLApqhIAnUg7EsAzdbhhdgW07TqYDdH3QEXRcPOQ==" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
+    {%- endif %}
+{%- endmacro %}

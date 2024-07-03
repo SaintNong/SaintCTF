@@ -1,3 +1,4 @@
+{% import 'dependencies.html' as dependencies %}
 {% extends "base.html" %}
 {% block title %}Solves{% endblock %}
 
@@ -19,9 +20,7 @@
         }
     </style>
 
-    <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/dist/svg-arrow.css" />
-    <script src="https://unpkg.com/@popperjs/core@2" defer></script>
-    <script src="https://unpkg.com/tippy.js@6" defer></script>
+    {{ dependencies.head(tippy=True) }}
 
     <script src="{{ url_for('static', filename='js/utils.js') }}" defer></script>
     <script src="{{ url_for('static', filename='js/solves.js') }}" defer></script>

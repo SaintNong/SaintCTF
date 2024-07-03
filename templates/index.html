@@ -1,3 +1,4 @@
+{% import 'dependencies.html' as dependencies %}
 {% extends "base.html" %}
 {% block title %}Home{% endblock %}
 
@@ -6,14 +7,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/challenges.css') }}">
 
-    <!-- Sweet alert -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5/dark.css"/>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js" defer></script>
-    <!-- as lazy as normal alerts, better than you could make them yourself -->
-
-    <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/dist/svg-arrow.css" />
-    <script src="https://unpkg.com/@popperjs/core@2" defer></script>
-    <script src="https://unpkg.com/tippy.js@6" defer></script>
+    {{ dependencies.head(sweetalert2=True, tippy=True) }}
 
     <script src="{{ url_for('static', filename='js/index.js') }}" defer></script>
 {% endblock %}

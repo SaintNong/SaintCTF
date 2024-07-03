@@ -1,3 +1,4 @@
+{% import 'dependencies.html' as dependencies %}
 {% extends "base.html" %}
 {% block title %}Register{% endblock %}
 
@@ -5,9 +6,7 @@
     {{ super() }}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/entry.css') }}">
 
-    <!-- Sweet alert -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5/dark.css" />
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js" defer></script>    <!-- as lazy as normal alerts, better than you could make them yourself -->
+    {{ dependencies.head(sweetalert2=True) }}
 
     <script src="{{ url_for('static', filename='js/utils.js') }}" defer></script>
     <script src="{{ url_for('static', filename='js/register.js') }}" defer></script>
