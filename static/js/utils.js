@@ -55,6 +55,35 @@ function getChartOptions(options) {
                 labels: {
                     color: '#FFFFFF' // White color for legend text
                 }
+            },
+            zoom: {
+                pan: {
+                    enabled: true,
+                    modifierKey: 'shift',
+                },
+                limits: {
+                    x: {
+                        min: 'original',
+                        max: 'original',
+                    },
+                    y: {
+                        min: 'original',
+                        max: 'original',
+                    },
+                },
+                zoom: {
+                    wheel: {
+                        enabled: true,
+                        modifierKey: 'shift',
+                    },
+                    pinch: {
+                        enabled: true,
+                    },
+                    drag: {
+                        enabled: true,
+                    },
+                    mode: 'x'
+                },
             }
         },
         layout: {
@@ -130,6 +159,8 @@ function titleTooltip(placement) {
             reference.removeAttribute('title');
             return title;
         },
+        theme: "dark",
+        arrow: tippy.roundArrow,
         delay: [250, null],
         placement: placement
     });
@@ -142,8 +173,33 @@ function absoluteTimeTooltip(o) {
             const date = new Date(reference.getAttribute("datetime"));
             return fmt.format(date);
         },
+        theme: "dark",
+        arrow: tippy.roundArrow,
         delay: [250, null],
         placement: 'top',
+    });
+}
+
+// Show chart toast explaining controls
+function chartHelpToast(cursor_icon, touch_icon) {
+    Swal.fire({
+        toast: true,
+        width: '32em',
+        position: 'top-end',
+
+        showConfirmButton: false,
+        showCloseButton: true,
+        timer: 10000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+        },
+
+        icon: "info",
+        title: "Chart help",
+        html: cursor_icon + "Drag on the chart or hold shift while scrolling to zoom. Drag while holding shift to pan.<br>" +
+            touch_icon + "Pinch to zoom the chart and drag to pan.",
     });
 }
 

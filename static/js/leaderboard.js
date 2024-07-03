@@ -60,6 +60,9 @@ $(document).ready(function () {
     });
 });
 
+let resetChartZoom;
+let fullscreenChart;
+
 $(document).ready(function () {
     const ctx = document.getElementById('leaderboard-chart').getContext('2d');
     let leaderboardChart;
@@ -113,6 +116,19 @@ $(document).ready(function () {
                 },
                 options: getChartOptions()
             });
+
+            resetChartZoom = leaderboardChart.resetZoom;
+            fullscreenChart = () => {
+                if (document.fullscreenElement === null) {
+                    $("#maximize-icon").hide();
+                    $("#minimize-icon").show();
+                    document.getElementById("chart-container").requestFullscreen();
+                } else {
+                    $("#minimize-icon").hide();
+                    $("#maximize-icon").show();
+                    document.exitFullscreen();
+                }
+            };
         }
     }
 });

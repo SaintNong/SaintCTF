@@ -27,6 +27,8 @@ function tagClickHandler(e) {
 
     // Like a normal title tooltip, but only triggered manually
     const t = tippy(e.currentTarget, {
+        theme: 'dark',
+        arrow: tippy.roundArrow,
         delay: [250, null],
         placement: "top",
         trigger: "manual"
