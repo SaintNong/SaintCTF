@@ -60,6 +60,7 @@ function getChartOptions(options) {
                 pan: {
                     enabled: true,
                     modifierKey: 'shift',
+                    mode: 'x',
                 },
                 limits: {
                     x: {
