@@ -333,6 +333,8 @@ class ChallengeManager:
             datapoints.append(
                 {
                     "time": solve.time.isoformat(),
+                    "category": challenge["category"],
+                    "difficulty": challenge["difficulty"],
                     "points": user_score,
                 }
             )
