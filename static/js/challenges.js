@@ -241,7 +241,7 @@ $(document).ready(function () {
         if (document.fullscreenElement === null) {
             $("#maximize-icon").hide();
             $("#minimize-icon").show();
-            document.getElementById("chart-container").requestFullscreen();
+            document.getElementById("challenges-chart-container").requestFullscreen();
         } else {
             $("#minimize-icon").hide();
             $("#maximize-icon").show();

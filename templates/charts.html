@@ -1,6 +1,6 @@
 {% import 'icons.html' as icons %}
 {% macro chart(id, has_toolbar, has_fullscreen) -%}
-    <div id="chart-container">
+    <div class="chart-container" id="{{ id }}-container">
         {% if has_toolbar -%}
             <div class="chart-toolbar">
                 {%- set options = 'class="chart-help-icon"' -%}

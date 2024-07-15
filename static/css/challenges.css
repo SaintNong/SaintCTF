@@ -221,7 +221,7 @@ body > main {
     white-space: nowrap; /* Prevents the text from wrapping */
 }
 
-div#chart-container {
+div.chart-container {
     margin-top: 10px; /* matches margin-top for .challenge */
 
     /* Although the higher rated answer (https://stackoverflow.com/a/52518792) works
@@ -233,7 +233,7 @@ div#chart-container {
     width: 100%; /* override width from styles.css */
 }
 
-div#chart-container canvas {
+div.chart-container canvas {
     /* required so Chart.js resizes correctly when exiting fullscreen */
     max-width: 100%;
 }
