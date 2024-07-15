@@ -74,6 +74,7 @@ $(document).ready(function () {
     });
 });
 
+const effectOptions = {duration: 250, easing: "linear"};
 
 $(document).ready(function () {
     const filters = ['category', 'difficulty'];
@@ -96,8 +97,6 @@ $(document).ready(function () {
                 return sf === "" || challenge.data(f) === sf;
             });
             const matchesUnsolved = challenge.data('solved') === undefined;
-
-            const effectOptions = {duration: 250, easing: "linear"};
 
             if (matchesFilters.every((x) => x) && (matchesUnsolved || showSolved)) {
                 // If a matched filter is not "All <filter type>", highlight it
@@ -141,3 +140,112 @@ window.addEventListener("hashchange", checkHash);
 
 titleTooltip('top'); // filter tags
 absoluteTimeTooltip("time");
+
+// view buttons
+function switchView(id) {
+    const full_id = `#challenge-${id}-view`;
+    $(".view").not(full_id).hide();
+    $(full_id).fadeIn(effectOptions);
+}
+
+// chart
+let resetChartZoom;
+let fullscreenChart;
+$(document).ready(function () {
+    const challengesDataset = {
+        data: [],
+        backgroundColor: [],
+    };
+
+    let averages = {};
+
+    $(".challenge").each((i, e) => {
+        const element = $(e);
+
+        const points_regexp = /\d*/;
+
+        const points = Number(points_regexp.exec(element.find(".points").text())[0]);
+        const difficulty = element.data("difficulty");
+        const category = element.data("category");
+
+        challengesDataset.data.push({
+            x: element.find("header > div > h2 > span").text(),
+            y: points,
+
+            author: element.find("header .author").text(),
+            difficulty: difficulty,
+            category: category,
+        });
+
+        challengesDataset.backgroundColor.push(element.css("borderLeftColor"));
+
+        if (difficulty in averages) {
+            averages[difficulty].push(points);
+        } else {
+            averages[difficulty] = [points];
+        }
+    });
+
+    Object.keys(averages).forEach(diff => {
+        averages[diff] = averages[diff].reduce((a, x) => a + x, 0) / averages[diff].length;
+    })
+
+    const averagesDataset = {
+        type: 'line',
+        data: [],
+        stepped: 'middle',
+        borderColor: "#FFFFFF",
+        backgroundColor: "#343434",
+        fill: 'origin',
+        pointRadius: 0,
+    };
+
+    $(".challenge").each((i, e) => {
+        const element = $(e);
+        averagesDataset.data.push(averages[element.data("difficulty")]);
+    })
+
+    const ctx = document.getElementById('challenges-chart').getContext('2d');
+
+    const challengesChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            datasets: [challengesDataset, averagesDataset],
+        },
+        options: getChartOptions({
+            scales: {
+                x: {
+                    type: 'category'
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        beforeBody: function(items) {
+                            return items.map(item => item.raw.author);
+                        },
+                        afterBody: function(items) {
+                            return items.map(item => item.raw.difficulty + ", " + item.raw.category);
+                        }
+                    }
+                }
+            }
+        }),
+    });
+
+    resetChartZoom = challengesChart.resetZoom;
+    fullscreenChart = () => {
+        if (document.fullscreenElement === null) {
+            $("#maximize-icon").hide();
+            $("#minimize-icon").show();
+            document.getElementById("challenges-chart-container").requestFullscreen();
+        } else {
+            $("#minimize-icon").hide();
+            $("#maximize-icon").show();
+            document.exitFullscreen();
+        }
+    };
+});

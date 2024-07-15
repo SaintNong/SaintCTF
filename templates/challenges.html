@@ -4,6 +4,7 @@
     {% endif %}
 {%- endmacro %}
 {% import 'dependencies.html' as dependencies %}
+{% import 'charts.html' as charts %}
 {% import 'icons.html' as icons %}
 {% extends "base.html" %}
 {% block title %}Challenges{% endblock %}
@@ -12,7 +13,7 @@
     {{ super() }}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/challenges.css') }}">
 
-    {{ dependencies.head(sweetalert2=True, tippy=True) }}
+    {{ dependencies.head(sweetalert2=True, tippy=True, chart_js=True) }}
 
     <script src="{{ url_for('static', filename='js/utils.js') }}" defer></script>
     <script src="{{ url_for('static', filename='js/challenges.js') }}" defer></script>
@@ -71,105 +72,119 @@
     </div>
 
     <section id="challenge-list">
-        <p>{{ unsolved_count }} challenge(s) left to solve</p>
+        <div id="top-row">
+            <p>{{ unsolved_count }} challenge(s) left to solve</p>
+            <div id="view-selector">
+                <input type="radio" id="radio-list" name="view" onclick="switchView('list')" checked />
+                <label for="radio-list" title="List">{{ icons.list() }}</label>
+                <input type="radio" id="radio-chart" name="view" onclick="switchView('chart')" />
+                <label for="radio-chart" title="Chart">{{ icons.chart__bar() }}</label>
+            </div>
+        </div>
 
-        {% for id, challenge in challenges.items()|sort(attribute='1.points') %}
-            <article class="card challenge" id="{{ id | challenge_anchor_id }}"
-                     data-category="{{ challenge.category }}"
-                     data-difficulty="{{ challenge.difficulty }}"
-                     {% call challenge_solved(id) %}
-                         data-solved style="display: none;"
-                     {% endcall %}
-                 >
-                <!-- Challenge info -->
-                <header>
-                    <div>
-                        <h2><span>{{ challenge.name }}</span>
-                            <a href="#{{ id | challenge_anchor_id }}" title="Link to this challenge">
-                                {{ icons.link() }}
-                            </a>
-                        </h2>
-                        <p class="author">{{ challenge.author }}</p>
-                    </div>
-
-                    <div class="info-block">
-                        <div class="filter-tags">
-                            <a class="filter-tag" href="javascript:void(0);" data-filter-type="difficulty" title="Filter by difficulty">{{ challenge.difficulty }}</a>
-                            <a class="filter-tag" href="javascript:void(0);" data-filter-type="category" title="Filter by category">{{ challenge.category }}</a>
+        <div class="view" id="challenge-list-view">
+            {% for id, challenge in challenges.items()|sort(attribute='1.points') %}
+                <article class="card challenge" id="{{ id | challenge_anchor_id }}"
+                         data-category="{{ challenge.category }}"
+                         data-difficulty="{{ challenge.difficulty }}"
+                         {% call challenge_solved(id) %}
+                             data-solved style="display: none;"
+                         {% endcall %}
+                     >
+                    <!-- Challenge info -->
+                    <header>
+                        <div>
+                            <h2><span>{{ challenge.name }}</span>
+                                <a href="#{{ id | challenge_anchor_id }}" title="Link to this challenge">
+                                    {{ icons.link() }}
+                                </a>
+                            </h2>
+                            <p class="author">{{ challenge.author }}</p>
                         </div>
-                        <p class="points">{{ challenge.points }} points</p>
-                    </div>
-                </header>
-                <p class="description"> {{ challenge.description | safe }} </p>
 
-                {% if challenge.files %}
-                    <!-- Challenge downloads -->
-                    <div class="files">
-                        <h3>Files</h3>
-                        <ul>
-                            {% for file in challenge.files %}
-                                <li><a href="downloads/{{ id }}/{{ file }}" download="{{ file }}">{{ file }}</a></li>
+                        <div class="info-block">
+                            <div class="filter-tags">
+                                <a class="filter-tag" href="javascript:void(0);" data-filter-type="difficulty" title="Filter by difficulty">{{ challenge.difficulty }}</a>
+                                <a class="filter-tag" href="javascript:void(0);" data-filter-type="category" title="Filter by category">{{ challenge.category }}</a>
+                            </div>
+                            <p class="points">{{ challenge.points }} points</p>
+                        </div>
+                    </header>
+                    <p class="description"> {{ challenge.description | safe }} </p>
 
-                            {% endfor %}
-                        </ul>
-                    </div>
-                {% endif %}
+                    {% if challenge.files %}
+                        <!-- Challenge downloads -->
+                        <div class="files">
+                            <h3>Files</h3>
+                            <ul>
+                                {% for file in challenge.files %}
+                                    <li><a href="downloads/{{ id }}/{{ file }}" download="{{ file }}">{{ file }}</a></li>
 
-                {% if challenge.container %}
-                    <!-- Challenge Links-->
-                    <div class = "files">
-                        <h3>Link</h3>
-                        <ul>
-                            <li><a href="{{ challenge.container.url }}">{{ challenge.container.url }}</a></li>
-                        </ul>
-                    </div>
-                {% endif %}
-
-                {% if challenge.container.related %}
-                    <!-- Related challenge backlinks -->
-                    <div class="files">
-                        <h3>Related</h3>
-                        <ul>
-                            {% for related_id in challenge.container.related %}
-                                <li><a href="#{{ related_id | challenge_anchor_id }}"
-                                        {% call challenge_solved(related_id) %}
-                                            class="related-solved"
-                                        {% endcall %}
-                                        >{{ challenges[related_id].name }}</a></li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                {% endif %}
-
-                <footer>
-                    {% if solves[id] %}
-                        <details class="solves-count">
-                            <summary>{{ solves[id]|length }} solve(s)</summary>
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Username</th>
-                                        <th>Time</th>
-                                    </tr>
-                                </thead>
-                                {% for solve in solves[id] %}
-                                    <tr {% if solve.user.username == current_user.username %}
-                                        class="highlight"
-                                        {% endif %}
-                                        >
-                                        <td>{{solve.user.username}}</td>
-                                        <td><time datetime="{{ solve.time.isoformat() }}">{{solve.time | time_ago}}</time></td>
-                                    </tr>
                                 {% endfor %}
-                            </table>
-                        </details>
-                    {% else %}
-                        <p class="solves-count">0 solves</p>
+                            </ul>
+                        </div>
                     {% endif %}
-                </footer>
+
+                    {% if challenge.container %}
+                        <!-- Challenge Links-->
+                        <div class = "files">
+                            <h3>Link</h3>
+                            <ul>
+                                <li><a href="{{ challenge.container.url }}">{{ challenge.container.url }}</a></li>
+                            </ul>
+                        </div>
+                    {% endif %}
+
+                    {% if challenge.container.related %}
+                        <!-- Related challenge backlinks -->
+                        <div class="files">
+                            <h3>Related</h3>
+                            <ul>
+                                {% for related_id in challenge.container.related %}
+                                    <li><a href="#{{ related_id | challenge_anchor_id }}"
+                                            {% call challenge_solved(related_id) %}
+                                                class="related-solved"
+                                            {% endcall %}
+                                            >{{ challenges[related_id].name }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+
+                    <footer>
+                        {% if solves[id] %}
+                            <details class="solves-count">
+                                <summary>{{ solves[id]|length }} solve(s)</summary>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Username</th>
+                                            <th>Time</th>
+                                        </tr>
+                                    </thead>
+                                    {% for solve in solves[id] %}
+                                        <tr {% if solve.user.username == current_user.username %}
+                                            class="highlight"
+                                            {% endif %}
+                                            >
+                                            <td>{{solve.user.username}}</td>
+                                            <td><time datetime="{{ solve.time.isoformat() }}">{{solve.time | time_ago}}</time></td>
+                                        </tr>
+                                    {% endfor %}
+                                </table>
+                            </details>
+                        {% else %}
+                            <p class="solves-count">0 solves</p>
+                        {% endif %}
+                    </footer>
 
 
-            </article>
-        {% endfor %}
+                </article>
+            {% endfor %}
+        </div>
+
+        <div class="view" id="challenge-chart-view" style="display: none;">
+            {{ charts.chart("challenges-chart", True, True) }}
+        </div>
     </section>
 {% endblock %}

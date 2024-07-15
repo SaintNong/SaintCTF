@@ -1,4 +1,5 @@
 {% import 'dependencies.html' as dependencies %}
+{% import 'charts.html' as charts %}
 {% extends "base.html" %}
 {% block title %}Solves{% endblock %}
 
@@ -15,18 +16,23 @@
         main > * {
             margin-bottom: 1em;
         }
+        #chart-heading {
+            text-align: center;
+        }
         #scroll-container {
             overflow-x: auto;
         }
     </style>
 
-    {{ dependencies.head(tippy=True) }}
+    {{ dependencies.head(sweetalert2=True, tippy=True, chart_js=True) }}
 
     <script src="{{ url_for('static', filename='js/utils.js') }}" defer></script>
     <script src="{{ url_for('static', filename='js/solves.js') }}" defer></script>
 {% endblock %}
 
 {% block body %}
+    <h2 id="chart-heading">Top 10 solved challenges</h2>
+    {{ charts.chart("solves-chart", True, True) }}
     <section class="card">
         <div class="link-row">
             <h2>Solve History</h2>

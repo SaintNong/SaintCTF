@@ -221,7 +221,7 @@ div.chart-toolbar button:hover svg {
     margin-right: 0.5em;
 }
 
-div#chart-container {
+div.chart-container {
     height: 50vh;
     width: 90vw;
     max-width: 100%;

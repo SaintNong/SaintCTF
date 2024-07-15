@@ -25,6 +25,47 @@ body > main {
     background: var(--bg-color);
 }
 
+#top-row {
+    display: flex;
+    justify-content: space-between;
+}
+
+#view-selector {
+    display: flex;
+}
+
+/* https://blog.bitsrc.io/customise-radio-buttons-without-compromising-accessibility-b03061b5ba93 */
+#view-selector input[type="radio"] {
+    opacity: 0;
+    position: absolute;
+}
+
+#view-selector input[type="radio"]:focus-visible + label {
+    outline: auto 3px;
+}
+
+#view-selector label {
+    border: 2px solid var(--form-field-border-color);
+    display: block;
+}
+
+#view-selector label svg {
+    width: 2em;
+    height: 2em;
+    fill: grey;
+    transition: fill 0.3s ease;
+
+    vertical-align: middle;
+}
+
+#view-selector label svg:hover {
+    fill: lightgrey;
+}
+
+#view-selector input[type="radio"]:checked + label svg {
+    fill: white;
+}
+
 .challenge > * {
     margin-bottom: 0.3em;
 }
@@ -178,6 +219,23 @@ body > main {
 .files li {
     margin-right: var(--spacing); /* Adds some space between file links */
     white-space: nowrap; /* Prevents the text from wrapping */
+}
+
+div.chart-container {
+    margin-top: 10px; /* matches margin-top for .challenge */
+
+    /* Although the higher rated answer (https://stackoverflow.com/a/52518792) works
+     * when applying overflow: hidden; to #challenge-list, it prevents the <main>
+     * flexbox from correctly wrapping. */
+
+    /* required so Chart.js resizes correctly when exiting fullscreen */
+    /* https://stackoverflow.com/a/73510990 */
+    width: 100%; /* override width from styles.css */
+}
+
+div.chart-container canvas {
+    /* required so Chart.js resizes correctly when exiting fullscreen */
+    max-width: 100%;
 }
 
 
