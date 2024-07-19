@@ -81,7 +81,9 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager, csrf):
                     map(lambda x: x["points"], challenge_manager.challenges.values())
                 ),
             },
-            "players": db.session.scalar(db.select(db.func.count(User.id)).filter(User.admin == False)),
+            "players": db.session.scalar(
+                db.select(db.func.count(User.id)).filter(User.admin == False)
+            ),
         }
         return render_template("index.html", user=current_user, stats=statistics)
 
@@ -172,13 +174,45 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager, csrf):
     @login_required
     def delete_account():
         name = User.query.filter(User.id == current_user.id).first().username
-        app.logger.debug(f"Deleted account {name}")
+
         Solve.query.filter(Solve.user_id == current_user.id).delete()
         User.query.filter(User.id == current_user.id).delete()
+        app.logger.debug(f"Deleted account {name}")
 
         db.session.commit()
 
         return redirect("/")
+
+    # Ban account endpoint
+    @app.route("/admin", methods=["GET"])
+    @login_required
+    def admin_panel():
+        if current_user.admin == False:
+            abort(401)
+        return render_template("admin.html", user=current_user)
+
+    # Ban account endpoint
+    @app.route("/ban_account", methods=["POST"])
+    @login_required
+    def ban_account():
+
+        if current_user.admin == False:
+            abort(401)
+
+        name = request.form.get("username")
+        # we cant let the admin ban themselves
+        if name == current_user.username:
+            abort(400)
+
+        victim = db.session.query(User).filter(User.username == name).first()
+        if victim:
+            Solve.query.filter(Solve.user_id == victim.id).delete()
+            User.query.filter(User.id == victim.id).delete()
+            db.session.commit()
+            app.logger.debug(f"Banned account {name}")
+        else:
+            app.logger.debug(f"No account of that name exists")
+        return redirect("/admin")
 
     # Signup page
     @app.route("/register", methods=["GET", "POST"])
@@ -279,7 +313,12 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager, csrf):
     # Shows the profile of specific user with uid
     @app.route("/profile/<int:user_id>")
     def profile(user_id):
-        if db.session.query(User).filter(User.id == user_id).filter(User.admin == True).first():
+        if (
+            db.session.query(User)
+            .filter(User.id == user_id)
+            .filter(User.admin == True)
+            .first()
+        ):
             admin = True
         else:
             admin = False

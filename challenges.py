@@ -265,7 +265,12 @@ class ChallengeManager:
             return tomlkit.load(file)
 
     def solve_challenge(self, id_, user):
-        if not db.session.query(User).filter(User.id == user.id).filter(User.admin == True).first():
+        if (
+            not db.session.query(User)
+            .filter(User.id == user.id)
+            .filter(User.admin == True)
+            .first()
+        ):
             solve = Solve(user_id=user.id, challenge_id=id_)
             db.session.add(solve)
             db.session.commit()
@@ -294,7 +299,9 @@ class ChallengeManager:
                 "score": self.get_total_points(user.solves),
             }
             for user in db.session.scalars(
-                db.select(User).options(db.load_only(User.id, User.username)).filter(User.admin == False)
+                db.select(User)
+                .options(db.load_only(User.id, User.username))
+                .filter(User.admin == False)
             ).all()
         ]
         return sorted(top_players, key=lambda x: x["score"], reverse=True)

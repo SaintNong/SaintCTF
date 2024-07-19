@@ -47,10 +47,10 @@ def load_secret(app):
 
 
 def get_default_config(app):
-    
-    with app.open_resource(constants.WORDLIST_FILE, 'r') as wordlist:
+
+    with app.open_resource(constants.WORDLIST_FILE, "r") as wordlist:
         words = [word.strip() for word in wordlist]
-        password = ' '.join(secrets.choice(words) for i in range(7))
+        password = " ".join(secrets.choice(words) for i in range(7))
 
     default_config = {
         "SQLALCHEMY_DATABASE_URI": {
@@ -170,9 +170,6 @@ def create_app():
     # Register app routes
     register_routes(app, db, bcrypt, challenge_manager, csrf)
 
-    
-
-
     # Reset the database if data reset flag is checked
     with app.app_context():
         if app.config["RESET_DATABASE"]:
@@ -184,26 +181,29 @@ def create_app():
 
         db.create_all()
 
-        
         admin = db.session.query(User).filter(User.admin == True).first()
         if admin:
             app.logger.info(f'Admin User "{admin.username}" already exists')
         else:
 
-            #create admin account
-            
+            # create admin account
+
             # Hash password before storing
-            hashed_password = bcrypt.generate_password_hash(app.config['DEFAULT_ADMIN_PASSWORD'])
+            hashed_password = bcrypt.generate_password_hash(
+                app.config["DEFAULT_ADMIN_PASSWORD"]
+            )
             user = User()
-            user.username = app.config['DEFAULT_ADMIN_USERNAME']
-            
+            user.username = app.config["DEFAULT_ADMIN_USERNAME"]
+
             user.password = hashed_password
             user.admin = True
             # Add user to database
             db.session.add(user)
-        
-            app.logger.info(f'Created Admin Account "{user.username}" with Password: "{app.config['DEFAULT_ADMIN_PASSWORD']}"')
-        
+
+            app.logger.info(
+                f'Created Admin Account "{user.username}" with Password: "{app.config['DEFAULT_ADMIN_PASSWORD']}"'
+            )
+
         db.session.commit()
 
     return app
