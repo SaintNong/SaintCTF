@@ -77,7 +77,7 @@ $(document).ready(function () {
 
             const first_blood = solve.first_blood ? '<span title="First blood">🏆</span>' : "";
 
-            tbody.append(`<tr ${highlight}><td><a href="/profile/${solve.solver_id}">${solve.solver}</a></td><td>${first_blood}</td><td><a href="/challenges#${solve.challenge_id}">${solve.challenge.name}</a></td><td><time datetime="${solve.time}">${relative_time}</time></td></tr>`);
+            tbody.append(`<tr ${highlight}><td><a href="/profile/${solve.solver_id}">${solve.solver}</a></td><td>${first_blood}</td><td><a href="/challenges#${solve.challenge_id}">${solve.challenge_name}</a></td><td><time datetime="${solve.time}">${relative_time}</time></td></tr>`);
         });
         recentTable.append(tbody);
 

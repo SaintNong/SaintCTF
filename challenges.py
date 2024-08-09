@@ -360,7 +360,7 @@ class ChallengeManager:
                 "challenge_id": challenge_anchor_id(
                     self.app.jinja_env, solve.challenge_id
                 ),
-                "challenge": self.challenges[solve.challenge_id],
+                "challenge_name": self.challenges[solve.challenge_id]["name"],
                 "time": solve.time.isoformat(timespec="milliseconds"),
                 "first_blood": solve.id in first_blood,
             }
