@@ -39,6 +39,14 @@
                     <li><a href="javascript:void(0);" onclick="performLogout()">Logout</a></li>
                     {{ nav_item("profile", "Profile", user_id=user.id) }}
                 {% endif %}
+
+                
+
+                {% if user.admin %}
+                    <li>|</li>
+                    {{ nav_item("admin_panel", "Admin Panel") }}
+                {% endif %}
+
             </ul>
         </nav>
         <!-- Submit CSRF token when logging out -->

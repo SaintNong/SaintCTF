@@ -1,5 +1,6 @@
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import Boolean
 from sqlalchemy.orm import Mapped
 from typing import List
 from datetime import datetime
@@ -12,6 +13,7 @@ class User(db.Model, UserMixin):
     id: Mapped[int] = db.mapped_column(primary_key=True)
     username: Mapped[str] = db.mapped_column(unique=True)
     password: Mapped[str]
+    admin: Mapped[bool]
 
     solves: Mapped[List["Solve"]] = db.relationship(back_populates="user")
 
