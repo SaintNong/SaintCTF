@@ -187,9 +187,10 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager, csrf):
     @app.route("/admin", methods=["GET"])
     @login_required
     def admin_panel():
+        users = User.query.filter(User.admin == False).all()
         if current_user.admin == False:
             abort(401)
-        return render_template("admin.html", user=current_user)
+        return render_template("admin.html", user=current_user, users=users)
 
     # Ban account endpoint
     @app.route("/ban_account", methods=["POST"])
@@ -210,6 +211,30 @@ def register_routes(app, db, bcrypt, challenge_manager: ChallengeManager, csrf):
             User.query.filter(User.id == victim.id).delete()
             db.session.commit()
             app.logger.debug(f"Banned account {name}")
+        else:
+            app.logger.debug(f"No account of that name exists")
+        return redirect("/admin")
+
+    # Rename account endpoint
+    @app.route("/rename_account", methods=["POST"])
+    @login_required
+    def rename_account():
+
+        if current_user.admin == False:
+            abort(401)
+
+        name = request.form.get("username")
+        new_name = request.form.get("new_username")
+
+        victim = db.session.query(User).filter(User.username == name).first()
+        new_user = db.session.query(User).filter(User.username == new_name).first()
+        if victim:
+            if not new_user:
+                User.query.filter(User.id == victim.id).update({'username': new_name})
+                db.session.commit()
+                app.logger.debug(f"Renamed account {name} to {new_name}")
+            else:
+                app.logger.debug(f"User of {new_name} already exists")
         else:
             app.logger.debug(f"No account of that name exists")
         return redirect("/admin")

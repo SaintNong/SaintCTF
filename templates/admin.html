@@ -33,9 +33,27 @@
 
         <h1>Ban a dingus</h1>
         <form id="login-form" action="/ban_account" method="POST">
-            <input type="text" name="username" placeholder="Username" required="required" autocapitalize="none" autofocus>
+            <select name="username">
+                {% for user in users %}
+                <option value="{{ user.username }}">{{ user.username }}</option>
+                {% endfor %}
+            </select>
 
             <input type="submit" value="BAAAAANNNNNNN HAAAAMMMMMEEEERRRRRR">
+
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        </form>
+        <h1>Rename a dingus</h1>
+        <form id="login-form" action="/rename_account" method="POST">
+            <select name="username">
+                {% for user in users %}
+                <option value="{{ user.username }}">{{ user.username }}</option>
+                {% endfor %}
+            </select>
+
+            <input type="text" name="new_username" placeholder="New Username" required="required" autocapitalize="none" autofocus>
+
+            <input type="submit" value="Get renamed idiot">
 
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         </form>
